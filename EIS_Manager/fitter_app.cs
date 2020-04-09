@@ -26,6 +26,10 @@ namespace EIS_Manager
         public string[] pre_test;
         public string[] post_test;
         public string temp;
+        public List<string> to_export = new List<string>();
+        public string curr_path;
+        public int bad_index = new int();
+        public List<String> lst_fits = new List<String>();
 
         //public string[] folder_files = new string[]();
         public Fitter()
@@ -46,6 +50,25 @@ namespace EIS_Manager
             nvyquist.ChartAreas[0].CursorY.Interval = 0;
             nvyquist.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             nvyquist.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
+
+            first_twenty.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+            first_twenty.ChartAreas[0].CursorX.IsUserEnabled = true;
+            first_twenty.ChartAreas[0].CursorX.LineColor = Color.Transparent;
+            first_twenty.ChartAreas[0].CursorX.SelectionColor = Color.Lime;
+            first_twenty.ChartAreas[0].CursorX.Interval = 0;
+            first_twenty.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            first_twenty.ChartAreas[0].AxisX2.ScaleView.Zoomable = true;
+
+            first_twenty.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+            first_twenty.ChartAreas[0].CursorY.IsUserEnabled = true;
+            first_twenty.ChartAreas[0].CursorY.LineColor = Color.Transparent;
+            first_twenty.ChartAreas[0].CursorY.SelectionColor = Color.Lime;
+            first_twenty.ChartAreas[0].CursorY.Interval = 0;
+            first_twenty.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+            first_twenty.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
+            
+            
+            to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
         }
         private void python_scripts_Click(object sender, EventArgs e)
         {
@@ -302,7 +325,7 @@ namespace EIS_Manager
         {
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
-                folder_label.Text = folderBrowserDialog1.SelectedPath.ToString();
+                curr_path = folderBrowserDialog1.SelectedPath.ToString();
                 file_display.Items.Clear();
                 
                 string box_form = string.Join(", ", path_listing(folderBrowserDialog1.SelectedPath));
@@ -365,40 +388,33 @@ namespace EIS_Manager
 
         }
 
-        public event EventHandler Customize
-        {
-            add
-            {
-
-            }
-            remove
-            {
-
-            }
-        }
-        private void file_select_Click(object sender, EventArgs e)
+        private void file_display_SelectedIndexChanged(object sender, EventArgs e)
         {
             freq.Clear();
             re.Clear();
             im.Clear();
             fit_re.Clear();
             fit_im.Clear();
+            fit_coeffs_box.Clear();
 
-            
             foreach (var series in nvyquist.Series)
+            {
+                series.Points.Clear();
+            }
+            foreach (var series in first_twenty.Series)
             {
                 series.Points.Clear();
             }
             try
             {
-                if (string.Join("", post_test).Length>0)
+                if (string.Join("", post_test).Length > 0)
                 {
                     path_list_box.Text = string.Join("", post_test);
                 }
-                
+
 
                 string mpt_file = Regex.Replace(file_display.SelectedItem.ToString(), @"\t|\n|\r", "");
-                string raw_path = folder_label.Text;
+                string raw_path = curr_path;
                 file_display_label.Text = mpt_file;
                 string[] output = mpt_dataframe(raw_path, file_display.SelectedItem.ToString());
                 List<string> pre = output.ToList();
@@ -435,8 +451,8 @@ namespace EIS_Manager
                 //MessageBox.Show(freq.Count().ToString());
                 //string to_return = String.Join(string.Join("", freq), string.Join("", re), string.Join("", im));
                 //MessageBox.Show(to_return);
-                dataframe_box.Text = box_form;
-                error_box.Text = "";
+                //dataframe_box.Text = box_form;
+                //error_box.Text = "";
 
 
                 //nvyquist.ChartAreas[0].CursorX.IsUserEnabled = true;
@@ -452,36 +468,79 @@ namespace EIS_Manager
 
 
                 nvyquist.MouseWheel += nvyquist_mousewheel;
+                first_twenty.MouseWheel += nvyquist_mousewheel;
+
+                first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), re.GetRange(0, 20));
                 nvyquist.Series[0].Points.DataBindXY(re, im);
+
                 //nvyquist.Series.Add("Nyvquist").Points.DataBindXY(re, im);
                 //nvyquist.ForeColor = Color.ForestGreen;
                 //MessageBox.Show(nvyquist.ChartAreas[0].AxisX.Maximum.ToString());
                 //MessageBox.Show(nvyquist.ChartAreas[0].AxisY.Maximum.ToString());
-                
+
                 x_min.Text = Math.Round(nvyquist.ChartAreas[0].AxisX.Minimum, 2).ToString();
                 x_max.Text = Math.Round(nvyquist.ChartAreas[0].AxisX.Maximum, 2).ToString();
                 y_min.Text = Math.Round(nvyquist.ChartAreas[0].AxisY.Minimum, 2).ToString();
                 y_max.Text = Math.Round(nvyquist.ChartAreas[0].AxisY.Maximum, 2).ToString();
-                
+
             }
             catch (NullReferenceException nullspot)
             {
                 MessageBox.Show("Select a Value");
             }
 
-
         }
+
 
         private void masker1_CheckedChanged(object sender, EventArgs e)
         {
             try
             {
                 string mpt_file = file_display.SelectedItem.ToString();
-                string raw_path = folder_label.Text;
-                string[] output = masker(raw_path, mpt_file, "1");
-              
-                string box_form = string.Join("", output);
-                mask_limits.Text = output[0].ToString();
+                string raw_path = curr_path;
+                string[] mask_mpt = masked_mpt(raw_path, mpt_file, "1");
+
+                //MessageBox.Show(string.Join(" ", output));
+
+                List<Double> masked_freq = new List<Double>();
+                List<Double> masked_re = new List<Double>();
+                List<Double> masked_im = new List<Double>();
+
+
+
+                List<string> pre = mask_mpt.ToList();
+                pre.RemoveAt(0);
+                string box_form = string.Join("", pre);
+
+
+                foreach (string sgl in pre)
+                {
+                    Queue<Double> dbl_prep = new Queue<double>();
+                    //MessageBox.Show("NEW LINE");
+                    foreach (var word in sgl.Split(' '))
+                    {
+                        if (word.Length > 5)
+                        {
+                            //MessageBox.Show(word);
+                            dbl_prep.Enqueue(Convert.ToDouble(word));
+                        }
+                    }
+                    if (dbl_prep.Count == 3)
+                    {
+                        masked_freq.Add(dbl_prep.Dequeue());
+                        masked_re.Add(dbl_prep.Dequeue());
+                        masked_im.Add(dbl_prep.Dequeue());
+                    }
+                    else
+                    {
+                        foreach (var word in dbl_prep)
+                        {
+                            MessageBox.Show("VALUE: " + word.ToString());
+                        }
+                    }
+                }
+                //MessageBox.Show(masked_freq.ToList().ToString());
+                nvyquist.Series[2].Points.DataBindXY(masked_re, masked_im);
             }
             catch (NullReferenceException)
             {
@@ -494,10 +553,48 @@ namespace EIS_Manager
             try
             {
                 string mpt_file = file_display.SelectedItem.ToString();
-                string raw_path = folder_label.Text;
-                string[] output = masker(raw_path, mpt_file, "2");
-                string box_form = string.Join(", ", output);
-                mask_limits.Text = box_form;
+                string raw_path = curr_path;
+                string[] mask_mpt = masked_mpt(raw_path, mpt_file, "2");
+
+                List<Double> masked_freq = new List<Double>();
+                List<Double> masked_re = new List<Double>();
+                List<Double> masked_im = new List<Double>();
+
+
+
+                List<string> pre = mask_mpt.ToList();
+                pre.RemoveAt(0);
+                string box_form = string.Join("", pre);
+
+
+                foreach (string sgl in pre)
+                {
+                    Queue<Double> dbl_prep = new Queue<double>();
+                    //MessageBox.Show("NEW LINE");
+                    foreach (var word in sgl.Split(' '))
+                    {
+                        if (word.Length > 5)
+                        {
+                            //MessageBox.Show(word);
+                            dbl_prep.Enqueue(Convert.ToDouble(word));
+                        }
+                    }
+                    if (dbl_prep.Count == 3)
+                    {
+                        masked_freq.Add(dbl_prep.Dequeue());
+                        masked_re.Add(dbl_prep.Dequeue());
+                        masked_im.Add(dbl_prep.Dequeue());
+                    }
+                    else
+                    {
+                        foreach (var word in dbl_prep)
+                        {
+                            MessageBox.Show("VALUE: " + word.ToString());
+                        }
+                    }
+                }
+                //MessageBox.Show(masked_freq.ToList().ToString());
+                nvyquist.Series[2].Points.DataBindXY(masked_re, masked_im);
             }
             catch (NullReferenceException)
             {
@@ -507,13 +604,52 @@ namespace EIS_Manager
 
         private void masker3_CheckedChanged(object sender, EventArgs e)
         {
+            
             try
             {
                 string mpt_file = file_display.SelectedItem.ToString();
-                string raw_path = folder_label.Text;
-                string[] output = masker(raw_path, mpt_file, "3");
-                string box_form = string.Join(", ", output);
-                mask_limits.Text = box_form;
+                string raw_path = curr_path;
+                string[] mask_mpt = masked_mpt(raw_path, mpt_file, "3");
+
+                List<Double> masked_freq = new List<Double>();
+                List<Double> masked_re = new List<Double>();
+                List<Double> masked_im = new List<Double>();
+
+
+
+                List<string> pre = mask_mpt.ToList();
+                pre.RemoveAt(0);
+                string box_form = string.Join("", pre);
+
+
+                foreach (string sgl in pre)
+                {
+                    Queue<Double> dbl_prep = new Queue<double>();
+                    //MessageBox.Show("NEW LINE");
+                    foreach (var word in sgl.Split(' '))
+                    {
+                        if (word.Length > 5)
+                        {
+                            //MessageBox.Show(word);
+                            dbl_prep.Enqueue(Convert.ToDouble(word));
+                        }
+                    }
+                    if (dbl_prep.Count == 3)
+                    {
+                        masked_freq.Add(dbl_prep.Dequeue());
+                        masked_re.Add(dbl_prep.Dequeue());
+                        masked_im.Add(dbl_prep.Dequeue());
+                    }
+                    else
+                    {
+                        foreach (var word in dbl_prep)
+                        {
+                            MessageBox.Show("VALUE: " + word.ToString());
+                        }
+                    }
+                }
+                //Debug.WriteLine()
+                nvyquist.Series[2].Points.DataBindXY(masked_re, masked_im);
             }
             catch (NullReferenceException)
             {
@@ -561,9 +697,9 @@ namespace EIS_Manager
             pre.RemoveRange(0, 3);
 
             string box_form = string.Join("", pre);
-            error_box.Text = box_form;
+            //error_box.Text = box_form;
             string box_form_mpt = string.Join("", masked_df);
-            dataframe_box.Text = box_form_mpt;
+            //dataframe_box.Text = box_form_mpt;
             //string to_export = string.Join(" ", fit_label, fit_coeffs);
             fit_coeffs_box.AppendText(fit_coeffs);
             //fit_coeffs_box.AppendText(fit_coeffs);
@@ -612,7 +748,7 @@ namespace EIS_Manager
             //Console.WriteLine(fit_coeffs);
 
             string box_form = string.Join("", pre);
-            error_box.Text = box_form;
+            //error_box.Text = box_form;
             //string to_export = string.Join(" ", fit_label, fit_coeffs);
             fit_coeffs_box.AppendText(fit_label);
             //fit_coeffs_box.AppendText(fit_coeffs);
@@ -650,31 +786,19 @@ namespace EIS_Manager
         {
             try
             {
+                fit_coeffs_box.Clear();
+
                 
                 string mpt_file = file_display_label.Text;
-                string raw_path = folder_label.Text;
+                string raw_path = curr_path;
                 fit_re.Clear();
                 fit_im.Clear();
 
                 
 
 
-                int bad_index = new int();
-                List<String> lst_fits = new List<String>();
-                foreach (string str in fit_coeffs_box.Lines)
-                {
-                    lst_fits.Add(str);
-                }
-
-                foreach (string str in lst_fits)
-                {
-                    if (str.Contains(mpt_file))
-                    {
-                        MessageBox.Show("HERERERERER");
-                        bad_index = lst_fits.IndexOf(mpt_file);
-                        MessageBox.Show(bad_index.ToString());
-                    }
-                }
+                
+                
 
                 if (entire_fit.Checked == true)
                 {
@@ -706,7 +830,7 @@ namespace EIS_Manager
                     
 
                     string box_form = string.Join("", pre);
-                    error_box.Text = box_form;
+                   // error_box.Text = box_form;
                     
 
                     foreach (string sgl in pre)
@@ -751,10 +875,6 @@ namespace EIS_Manager
                 }
                 else if (window_masker.Checked == true)
                 {
-                    nvyquist.ChartAreas[0].AxisX.Minimum = double.NaN;
-                    nvyquist.ChartAreas[0].AxisY.Minimum = double.NaN;
-
-                    nvyquist.ChartAreas[0].RecalculateAxesScale();
                     x_min.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMinimum.ToString();
                     x_max.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum.ToString();
                     y_min.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum.ToString();
@@ -817,11 +937,38 @@ namespace EIS_Manager
                 //nvyquist.Series.Add("Fitted_Nyvquist").Points.DataBindXY(fit_re, fit_im);
 
                 //nvyquist.ForeColor = Color.ForestGreen;
+                foreach (string st0 in fit_coeffs_box.Lines)
+                {
+                    string st1 = Regex.Replace(st0, "              ", ", ");
+                    string st2 = Regex.Replace(st1, "             ", ", ");
+                    string st3 = Regex.Replace(st2, "            ", ", ");
+                    string st4 = Regex.Replace(st3, "           ", ", ");
+                    string st5 = Regex.Replace(st4, "          ", ", ");
+                    string st6 = Regex.Replace(st5, "         ", ", ");
+                    string st7 = Regex.Replace(st6, "        ", ", ");
+                    string st8 = Regex.Replace(st7, "       ", ", ");
+                    string st9 = Regex.Replace(st8, "      ", ", ");
+                    string s10 = Regex.Replace(st9, "     ", ", ");
+                    string s11 = Regex.Replace(s10, "    ", ", ");
+                    string s12 = Regex.Replace(s11, "   ", ", ");
+                    string new_line = Regex.Replace(s12, "  ", ", ");
+                    string striped_line = Regex.Replace(new_line, "/", "");
+                    //MessageBox.Show(striped_line.Substring(0));
+                    //MessageBox.Show(striped_line);
+                    to_export.Add(striped_line);
+
+                    
+                }
+
+
+
+
+
 
             }
             catch (Exception wide)
             {
-                MessageBox.Show("Bad path or Bad MPT file; Please Select a folder and a file;");
+                MessageBox.Show("Error");
             }
         }
 
@@ -837,35 +984,35 @@ namespace EIS_Manager
 
         private void export_button_Click(object sender, EventArgs e)
         {
-            List<string> to_export = new List<string>();
-            to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
+            string curr;
+            int holder_ind;
+            Dictionary<string, int> dupe_clearer = new Dictionary<string, int>();
+            List<string> pre = new List<string>();
 
-            foreach (string st0 in fit_coeffs_box.Lines)
+            to_export = to_export.Where(s => s.Length > 0).ToList();
+            foreach(string str in to_export)
             {
-                string st1 = Regex.Replace(st0, "              ", ", ");
-                string st2 = Regex.Replace(st1, "             ", ", ");
-                string st3 = Regex.Replace(st2, "            ", ", ");
-                string st4 = Regex.Replace(st3, "           ", ", ");
-                string st5 = Regex.Replace(st4, "          ", ", ");
-                string st6 = Regex.Replace(st5, "         ", ", ");
-                string st7 = Regex.Replace(st6, "        ", ", ");
-                string st8 = Regex.Replace(st7, "       ", ", ");
-                string st9 = Regex.Replace(st8, "      ", ", ");
-                string s10 = Regex.Replace(st9, "     ", ", ");
-                string s11 = Regex.Replace(s10, "    ", ", ");
-                string s12 = Regex.Replace(s11, "   ", ", ");
-                string new_line = Regex.Replace(s12, "  ", ", ");
-                string striped_line = Regex.Replace(new_line, "/", "");
-                //MessageBox.Show(striped_line.Substring(0));
-                //MessageBox.Show(striped_line);
-                to_export.Add(striped_line);
+                string[] lt = str.Split(',');
+                curr = lt[1].ToString();
+                holder_ind = to_export.IndexOf(str);
+                if (dupe_clearer.ContainsKey(curr))
+                {
+                    dupe_clearer.Remove(curr);
+                }
+                dupe_clearer.Add(curr, holder_ind);
             }
-            
+
+            foreach (int val in dupe_clearer.Values)
+            {
+                pre.Add(to_export[val]);
+            }
+
+
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string filename = saveFileDialog1.FileName;
-                File.WriteAllLines(filename, to_export);
+                File.WriteAllLines(filename, pre);
             }
             
         }

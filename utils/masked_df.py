@@ -20,13 +20,18 @@ ex_mpt = mpt_data(path, [data])
 #ex_mpt.mpt_plot()
 
 if mask_choice == str(1):
-    masker = ex_mpt.fast_mask()
+    print(ex_mpt.fast_mask())
+    masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
+    print(masked_mpt.df[0][['f','re','im']])
+   
 elif mask_choice == str(2):
-    masker = ex_mpt.masker0()
+    print(ex_mpt.masker0())
+    masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
+    print(masked_mpt.df[0][['f','re','im']])
 elif mask_choice == str(3):
-    masker = ex_mpt.masker()
+    print(ex_mpt.masker())
+    masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
+    print(masked_mpt.df[0][['f','re','im']])
 else:
     print("Error, not a Masking Function")
-masked_mpt = mpt_data(path, [data], mask = masker)
-#masked_mpt.mpt_plot()
-print(masked_mpt.df_raw[['f', 're', 'im']])
+

@@ -30,38 +30,33 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Fitter));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pathbutton = new System.Windows.Forms.Button();
-            this.dataframe_label = new System.Windows.Forms.Label();
-            this.dataframe_box = new System.Windows.Forms.RichTextBox();
             this.title = new System.Windows.Forms.Label();
             this.logo = new System.Windows.Forms.PictureBox();
-            this.error_box_label = new System.Windows.Forms.Label();
-            this.error_box = new System.Windows.Forms.RichTextBox();
             this.x_max = new System.Windows.Forms.TextBox();
             this.x_min = new System.Windows.Forms.TextBox();
             this.file_display = new System.Windows.Forms.ComboBox();
             this.masker3 = new System.Windows.Forms.RadioButton();
             this.masker2 = new System.Windows.Forms.RadioButton();
             this.masker1 = new System.Windows.Forms.RadioButton();
-            this.file_select = new System.Windows.Forms.Button();
             this.fit_function = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.folder_label = new System.Windows.Forms.Label();
             this.entire_fit = new System.Windows.Forms.RadioButton();
             this.y_min = new System.Windows.Forms.TextBox();
             this.y_max = new System.Windows.Forms.TextBox();
             this.window_masker = new System.Windows.Forms.RadioButton();
-            this.mask_limit_label = new System.Windows.Forms.Label();
-            this.mask_limits = new System.Windows.Forms.Label();
-            this.freim_label = new System.Windows.Forms.Label();
             this.nvyquist = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.fit_coeffs_box = new System.Windows.Forms.RichTextBox();
             this.path_list_box = new System.Windows.Forms.RichTextBox();
-            this.coeffs_label = new System.Windows.Forms.Label();
             this.file_display_label = new System.Windows.Forms.Label();
             this.exported_label = new System.Windows.Forms.Label();
             this.export_button = new System.Windows.Forms.Button();
@@ -70,51 +65,29 @@
             this.fit_coeffs_label = new System.Windows.Forms.Label();
             this.python_scripts = new System.Windows.Forms.Button();
             this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
+            this.first_twenty = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nvyquist)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.first_twenty)).BeginInit();
             this.SuspendLayout();
             // 
             // pathbutton
             // 
             this.pathbutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pathbutton.Location = new System.Drawing.Point(2, 113);
+            this.pathbutton.Location = new System.Drawing.Point(1, 113);
             this.pathbutton.Margin = new System.Windows.Forms.Padding(2);
             this.pathbutton.Name = "pathbutton";
-            this.pathbutton.Size = new System.Drawing.Size(165, 22);
+            this.pathbutton.Size = new System.Drawing.Size(162, 22);
             this.pathbutton.TabIndex = 60;
             this.pathbutton.Text = "Select a Folder";
             this.pathbutton.UseVisualStyleBackColor = true;
             this.pathbutton.Click += new System.EventHandler(this.pathbutton_Click_1);
             // 
-            // dataframe_label
-            // 
-            this.dataframe_label.AutoSize = true;
-            this.dataframe_label.BackColor = System.Drawing.Color.MediumAquamarine;
-            this.dataframe_label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dataframe_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataframe_label.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.dataframe_label.Location = new System.Drawing.Point(173, 39);
-            this.dataframe_label.Name = "dataframe_label";
-            this.dataframe_label.Size = new System.Drawing.Size(87, 22);
-            this.dataframe_label.TabIndex = 59;
-            this.dataframe_label.Text = "Dataframe";
-            // 
-            // dataframe_box
-            // 
-            this.dataframe_box.BackColor = System.Drawing.Color.MediumAquamarine;
-            this.dataframe_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataframe_box.Location = new System.Drawing.Point(173, 87);
-            this.dataframe_box.Name = "dataframe_box";
-            this.dataframe_box.ReadOnly = true;
-            this.dataframe_box.Size = new System.Drawing.Size(290, 296);
-            this.dataframe_box.TabIndex = 58;
-            this.dataframe_box.Text = "";
-            // 
             // title
             // 
             this.title.AutoSize = true;
             this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.title.Location = new System.Drawing.Point(2, 66);
+            this.title.Location = new System.Drawing.Point(-1, 66);
             this.title.Name = "title";
             this.title.Size = new System.Drawing.Size(110, 18);
             this.title.TabIndex = 55;
@@ -127,34 +100,10 @@
             this.logo.Image = ((System.Drawing.Image)(resources.GetObject("logo.Image")));
             this.logo.Location = new System.Drawing.Point(2, 0);
             this.logo.Name = "logo";
-            this.logo.Size = new System.Drawing.Size(165, 63);
+            this.logo.Size = new System.Drawing.Size(161, 63);
             this.logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.logo.TabIndex = 54;
             this.logo.TabStop = false;
-            // 
-            // error_box_label
-            // 
-            this.error_box_label.AutoSize = true;
-            this.error_box_label.BackColor = System.Drawing.Color.MistyRose;
-            this.error_box_label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.error_box_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.error_box_label.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.error_box_label.Location = new System.Drawing.Point(173, 384);
-            this.error_box_label.Name = "error_box_label";
-            this.error_box_label.Size = new System.Drawing.Size(94, 22);
-            this.error_box_label.TabIndex = 53;
-            this.error_box_label.Text = "Fitting Error";
-            // 
-            // error_box
-            // 
-            this.error_box.BackColor = System.Drawing.Color.MistyRose;
-            this.error_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.error_box.Location = new System.Drawing.Point(173, 429);
-            this.error_box.Name = "error_box";
-            this.error_box.ReadOnly = true;
-            this.error_box.Size = new System.Drawing.Size(296, 260);
-            this.error_box.TabIndex = 37;
-            this.error_box.Text = "";
             // 
             // x_max
             // 
@@ -182,11 +131,12 @@
             this.file_display.Items.AddRange(new object[] {
             "option1",
             "option2"});
-            this.file_display.Location = new System.Drawing.Point(5, 140);
+            this.file_display.Location = new System.Drawing.Point(1, 140);
             this.file_display.Name = "file_display";
             this.file_display.Size = new System.Drawing.Size(162, 21);
             this.file_display.TabIndex = 43;
             this.file_display.Text = "Select MPT File";
+            this.file_display.SelectedIndexChanged += new System.EventHandler(this.file_display_SelectedIndexChanged);
             // 
             // masker3
             // 
@@ -224,16 +174,6 @@
             this.masker1.UseVisualStyleBackColor = true;
             this.masker1.CheckedChanged += new System.EventHandler(this.masker1_CheckedChanged);
             // 
-            // file_select
-            // 
-            this.file_select.Location = new System.Drawing.Point(2, 167);
-            this.file_select.Name = "file_select";
-            this.file_select.Size = new System.Drawing.Size(165, 25);
-            this.file_select.TabIndex = 39;
-            this.file_select.Text = "Load MPT";
-            this.file_select.UseVisualStyleBackColor = true;
-            this.file_select.Click += new System.EventHandler(this.file_select_Click);
-            // 
             // fit_function
             // 
             this.fit_function.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -244,17 +184,6 @@
             this.fit_function.Text = "FIT";
             this.fit_function.UseVisualStyleBackColor = true;
             this.fit_function.Click += new System.EventHandler(this.fit_function_Click);
-            // 
-            // folder_label
-            // 
-            this.folder_label.AutoSize = true;
-            this.folder_label.BackColor = System.Drawing.Color.Tomato;
-            this.folder_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.folder_label.Location = new System.Drawing.Point(170, 4);
-            this.folder_label.Name = "folder_label";
-            this.folder_label.Size = new System.Drawing.Size(81, 13);
-            this.folder_label.TabIndex = 62;
-            this.folder_label.Text = "Selected Folder";
             // 
             // entire_fit
             // 
@@ -300,62 +229,31 @@
             this.window_masker.UseVisualStyleBackColor = true;
             this.window_masker.CheckedChanged += new System.EventHandler(this.window_masker_CheckedChanged);
             // 
-            // mask_limit_label
-            // 
-            this.mask_limit_label.AutoSize = true;
-            this.mask_limit_label.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.mask_limit_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mask_limit_label.Location = new System.Drawing.Point(2, 397);
-            this.mask_limit_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.mask_limit_label.Name = "mask_limit_label";
-            this.mask_limit_label.Size = new System.Drawing.Size(75, 13);
-            this.mask_limit_label.TabIndex = 67;
-            this.mask_limit_label.Text = "MASK LIMITS";
-            // 
-            // mask_limits
-            // 
-            this.mask_limits.AutoSize = true;
-            this.mask_limits.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.mask_limits.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mask_limits.Location = new System.Drawing.Point(2, 407);
-            this.mask_limits.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.mask_limits.Name = "mask_limits";
-            this.mask_limits.Size = new System.Drawing.Size(0, 13);
-            this.mask_limits.TabIndex = 68;
-            // 
-            // freim_label
-            // 
-            this.freim_label.AutoSize = true;
-            this.freim_label.BackColor = System.Drawing.Color.MediumAquamarine;
-            this.freim_label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.freim_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.freim_label.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.freim_label.Location = new System.Drawing.Point(173, 62);
-            this.freim_label.Name = "freim_label";
-            this.freim_label.Size = new System.Drawing.Size(244, 22);
-            this.freim_label.TabIndex = 69;
-            this.freim_label.Text = "Frequency       Real       Imaginary";
-            // 
             // nvyquist
             // 
-            chartArea2.Name = "ChartArea1";
-            this.nvyquist.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.nvyquist.Legends.Add(legend2);
-            this.nvyquist.Location = new System.Drawing.Point(466, 0);
+            chartArea1.Name = "ChartArea1";
+            this.nvyquist.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.nvyquist.Legends.Add(legend1);
+            this.nvyquist.Location = new System.Drawing.Point(168, 0);
             this.nvyquist.Name = "nvyquist";
-            this.nvyquist.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Fire;
+            this.nvyquist.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series1.Legend = "Legend1";
+            series1.Name = "nvyquist";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series2.Legend = "Legend1";
+            series2.Name = "Fitted_Nyvquist";
             series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
             series3.Legend = "Legend1";
-            series3.Name = "nvyquist";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series4.Legend = "Legend1";
-            series4.Name = "Fitted_Nyvquist";
+            series3.Name = "masked";
+            this.nvyquist.Series.Add(series1);
+            this.nvyquist.Series.Add(series2);
             this.nvyquist.Series.Add(series3);
-            this.nvyquist.Series.Add(series4);
-            this.nvyquist.Size = new System.Drawing.Size(873, 572);
+            this.nvyquist.Size = new System.Drawing.Size(771, 647);
             this.nvyquist.TabIndex = 70;
             this.nvyquist.Text = "Full Graph";
             this.nvyquist.Click += new System.EventHandler(this.nvyquist_Click);
@@ -364,10 +262,10 @@
             // 
             this.fit_coeffs_box.BackColor = System.Drawing.Color.MistyRose;
             this.fit_coeffs_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fit_coeffs_box.Location = new System.Drawing.Point(466, 575);
+            this.fit_coeffs_box.Location = new System.Drawing.Point(172, 650);
             this.fit_coeffs_box.Name = "fit_coeffs_box";
             this.fit_coeffs_box.ReadOnly = true;
-            this.fit_coeffs_box.Size = new System.Drawing.Size(873, 112);
+            this.fit_coeffs_box.Size = new System.Drawing.Size(1167, 37);
             this.fit_coeffs_box.TabIndex = 71;
             this.fit_coeffs_box.Text = "";
             // 
@@ -375,32 +273,19 @@
             // 
             this.path_list_box.BackColor = System.Drawing.Color.LightSkyBlue;
             this.path_list_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.path_list_box.Location = new System.Drawing.Point(2, 198);
+            this.path_list_box.Location = new System.Drawing.Point(0, 187);
             this.path_list_box.Name = "path_list_box";
             this.path_list_box.ReadOnly = true;
-            this.path_list_box.Size = new System.Drawing.Size(165, 196);
+            this.path_list_box.Size = new System.Drawing.Size(162, 236);
             this.path_list_box.TabIndex = 61;
             this.path_list_box.Text = "Files to Fit";
-            // 
-            // coeffs_label
-            // 
-            this.coeffs_label.AutoSize = true;
-            this.coeffs_label.BackColor = System.Drawing.Color.MistyRose;
-            this.coeffs_label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.coeffs_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.coeffs_label.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.coeffs_label.Location = new System.Drawing.Point(173, 406);
-            this.coeffs_label.Name = "coeffs_label";
-            this.coeffs_label.Size = new System.Drawing.Size(231, 22);
-            this.coeffs_label.TabIndex = 72;
-            this.coeffs_label.Text = "Fitted Real       Fitted Imaginary";
             // 
             // file_display_label
             // 
             this.file_display_label.AutoSize = true;
             this.file_display_label.BackColor = System.Drawing.Color.Magenta;
             this.file_display_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.file_display_label.Location = new System.Drawing.Point(169, 19);
+            this.file_display_label.Location = new System.Drawing.Point(1, 164);
             this.file_display_label.Name = "file_display_label";
             this.file_display_label.Size = new System.Drawing.Size(101, 20);
             this.file_display_label.TabIndex = 73;
@@ -439,23 +324,45 @@
             this.fit_coeffs_label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.fit_coeffs_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fit_coeffs_label.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.fit_coeffs_label.Location = new System.Drawing.Point(466, 550);
+            this.fit_coeffs_label.Location = new System.Drawing.Point(172, 625);
             this.fit_coeffs_label.Name = "fit_coeffs_label";
-            this.fit_coeffs_label.Size = new System.Drawing.Size(140, 22);
+            this.fit_coeffs_label.Size = new System.Drawing.Size(401, 22);
             this.fit_coeffs_label.TabIndex = 76;
-            this.fit_coeffs_label.Text = "Fitted Coefficients";
+            this.fit_coeffs_label.Text = "Fitted Coefficients  - R1, R2, n1, Q1, R3, n2, Q2, n3, Q3";
             // 
             // python_scripts
             // 
             this.python_scripts.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.python_scripts.Location = new System.Drawing.Point(2, 87);
+            this.python_scripts.Location = new System.Drawing.Point(1, 87);
             this.python_scripts.Margin = new System.Windows.Forms.Padding(2);
             this.python_scripts.Name = "python_scripts";
-            this.python_scripts.Size = new System.Drawing.Size(166, 22);
+            this.python_scripts.Size = new System.Drawing.Size(162, 22);
             this.python_scripts.TabIndex = 77;
             this.python_scripts.Text = "Select Python Scripts";
             this.python_scripts.UseVisualStyleBackColor = true;
             this.python_scripts.Click += new System.EventHandler(this.python_scripts_Click);
+            // 
+            // first_twenty
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.first_twenty.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.first_twenty.Legends.Add(legend2);
+            this.first_twenty.Location = new System.Drawing.Point(921, 0);
+            this.first_twenty.Name = "first_twenty";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series4.Legend = "Legend1";
+            series4.Name = "nvyquist";
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series5.Legend = "Legend1";
+            series5.Name = "Fitted_Nyvquist";
+            this.first_twenty.Series.Add(series4);
+            this.first_twenty.Series.Add(series5);
+            this.first_twenty.Size = new System.Drawing.Size(574, 362);
+            this.first_twenty.TabIndex = 78;
+            this.first_twenty.Text = "Full Graph";
             // 
             // Fitter
             // 
@@ -463,28 +370,20 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(1339, 687);
+            this.Controls.Add(this.first_twenty);
             this.Controls.Add(this.python_scripts);
             this.Controls.Add(this.fit_coeffs_label);
             this.Controls.Add(this.export_button);
             this.Controls.Add(this.exported_label);
             this.Controls.Add(this.file_display_label);
-            this.Controls.Add(this.coeffs_label);
             this.Controls.Add(this.fit_coeffs_box);
             this.Controls.Add(this.nvyquist);
-            this.Controls.Add(this.freim_label);
-            this.Controls.Add(this.mask_limits);
-            this.Controls.Add(this.mask_limit_label);
             this.Controls.Add(this.window_masker);
             this.Controls.Add(this.y_max);
             this.Controls.Add(this.y_min);
-            this.Controls.Add(this.error_box);
-            this.Controls.Add(this.error_box_label);
             this.Controls.Add(this.entire_fit);
-            this.Controls.Add(this.folder_label);
             this.Controls.Add(this.path_list_box);
             this.Controls.Add(this.pathbutton);
-            this.Controls.Add(this.dataframe_label);
-            this.Controls.Add(this.dataframe_box);
             this.Controls.Add(this.title);
             this.Controls.Add(this.logo);
             this.Controls.Add(this.x_max);
@@ -493,13 +392,13 @@
             this.Controls.Add(this.masker3);
             this.Controls.Add(this.masker2);
             this.Controls.Add(this.masker1);
-            this.Controls.Add(this.file_select);
             this.Controls.Add(this.fit_function);
             this.Name = "Fitter";
             this.Text = "wildcat_fitter";
             this.Load += new System.EventHandler(this.Fitter_Load);
             ((System.ComponentModel.ISupportInitialize)(this.logo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nvyquist)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.first_twenty)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -507,33 +406,23 @@
 
         #endregion
         private System.Windows.Forms.Button pathbutton;
-        private System.Windows.Forms.Label dataframe_label;
-        private System.Windows.Forms.RichTextBox dataframe_box;
         private System.Windows.Forms.Label title;
         private System.Windows.Forms.PictureBox logo;
-        private System.Windows.Forms.Label error_box_label;
-        private System.Windows.Forms.RichTextBox error_box;
         private System.Windows.Forms.TextBox x_max;
         private System.Windows.Forms.TextBox x_min;
         private System.Windows.Forms.ComboBox file_display;
         private System.Windows.Forms.RadioButton masker3;
         private System.Windows.Forms.RadioButton masker2;
         private System.Windows.Forms.RadioButton masker1;
-        private System.Windows.Forms.Button file_select;
         private System.Windows.Forms.Button fit_function;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.Label folder_label;
         private System.Windows.Forms.RadioButton entire_fit;
         private System.Windows.Forms.TextBox y_min;
         private System.Windows.Forms.TextBox y_max;
         private System.Windows.Forms.RadioButton window_masker;
-        private System.Windows.Forms.Label mask_limit_label;
-        private System.Windows.Forms.Label mask_limits;
-        private System.Windows.Forms.Label freim_label;
         private System.Windows.Forms.DataVisualization.Charting.Chart nvyquist;
         private System.Windows.Forms.RichTextBox fit_coeffs_box;
         private System.Windows.Forms.RichTextBox path_list_box;
-        private System.Windows.Forms.Label coeffs_label;
         private System.Windows.Forms.Label file_display_label;
         private System.Windows.Forms.Label exported_label;
         private System.Windows.Forms.Button export_button;
@@ -542,6 +431,7 @@
         private System.Windows.Forms.Label fit_coeffs_label;
         private System.Windows.Forms.Button python_scripts;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog2;
+        private System.Windows.Forms.DataVisualization.Charting.Chart first_twenty;
     }
 }
 
