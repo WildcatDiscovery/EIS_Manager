@@ -417,10 +417,12 @@ namespace EIS_Manager
                 string raw_path = curr_path;
                 file_display_label.Text = mpt_file;
                 string[] output = mpt_dataframe(raw_path, file_display.SelectedItem.ToString());
+                
+
                 List<string> pre = output.ToList();
                 pre.RemoveAt(0);
                 string box_form = string.Join("", pre);
-
+               
 
                 foreach (string sgl in pre)
                 {
@@ -469,8 +471,12 @@ namespace EIS_Manager
 
                 nvyquist.MouseWheel += nvyquist_mousewheel;
                 first_twenty.MouseWheel += nvyquist_mousewheel;
-
-                first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), re.GetRange(0, 20));
+                
+                foreach (double dbl in freq)
+                {
+                    df_checkbox.Items.Add(dbl);
+                }
+                first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
                 nvyquist.Series[0].Points.DataBindXY(re, im);
 
                 //nvyquist.Series.Add("Nyvquist").Points.DataBindXY(re, im);
@@ -489,6 +495,28 @@ namespace EIS_Manager
                 MessageBox.Show("Select a Value");
             }
 
+        }
+
+
+        private void recal_button_Click(object sender, EventArgs e)
+        {
+            //freq.Clear();
+            //re.Clear();
+            //im.Clear()
+            foreach (double dbl in df_checkbox.Items)
+            {
+                int ind = df_checkbox.Items.IndexOf(dbl);
+                if (df_checkbox.GetItemChecked(ind))
+                {
+                    MessageBox.Show(re[ind].ToString(), im[ind].ToString());
+                    freq.RemoveAt(ind);
+                    re.RemoveAt(ind);
+                    im.RemoveAt(ind);
+                }
+                
+            }
+            first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
+            nvyquist.Series[0].Points.DataBindXY(re, im);
         }
 
 
@@ -787,8 +815,9 @@ namespace EIS_Manager
             try
             {
                 fit_coeffs_box.Clear();
+                nvyquist.Series[2].Points.Clear();
+                nvyquist.Series[3].Points.Clear();
 
-                
                 string mpt_file = file_display_label.Text;
                 string raw_path = curr_path;
                 fit_re.Clear();
@@ -934,33 +963,49 @@ namespace EIS_Manager
                 
 
                 nvyquist.Series[1].Points.DataBindXY(fit_re, fit_im);
+                first_twenty.Series[1].Points.DataBindXY(fit_re.GetRange(0,20), fit_im.GetRange(0,20));
+
                 //nvyquist.Series.Add("Fitted_Nyvquist").Points.DataBindXY(fit_re, fit_im);
 
                 //nvyquist.ForeColor = Color.ForestGreen;
                 foreach (string st0 in fit_coeffs_box.Lines)
                 {
-                    string st1 = Regex.Replace(st0, "              ", ", ");
-                    string st2 = Regex.Replace(st1, "             ", ", ");
-                    string st3 = Regex.Replace(st2, "            ", ", ");
-                    string st4 = Regex.Replace(st3, "           ", ", ");
-                    string st5 = Regex.Replace(st4, "          ", ", ");
-                    string st6 = Regex.Replace(st5, "         ", ", ");
-                    string st7 = Regex.Replace(st6, "        ", ", ");
-                    string st8 = Regex.Replace(st7, "       ", ", ");
-                    string st9 = Regex.Replace(st8, "      ", ", ");
-                    string s10 = Regex.Replace(st9, "     ", ", ");
-                    string s11 = Regex.Replace(s10, "    ", ", ");
-                    string s12 = Regex.Replace(s11, "   ", ", ");
-                    string new_line = Regex.Replace(s12, "  ", ", ");
-                    string striped_line = Regex.Replace(new_line, "/", "");
-                    //MessageBox.Show(striped_line.Substring(0));
-                    //MessageBox.Show(striped_line);
-                    to_export.Add(striped_line);
+                    if (st0.Length > 0)
+                    {
+                        string st1 = Regex.Replace(st0, "              ", ", ");
+                        string st2 = Regex.Replace(st1, "             ", ", ");
+                        string st3 = Regex.Replace(st2, "            ", ", ");
+                        string st4 = Regex.Replace(st3, "           ", ", ");
+                        string st5 = Regex.Replace(st4, "          ", ", ");
+                        string st6 = Regex.Replace(st5, "         ", ", ");
+                        string st7 = Regex.Replace(st6, "        ", ", ");
+                        string st8 = Regex.Replace(st7, "       ", ", ");
+                        string st9 = Regex.Replace(st8, "      ", ", ");
+                        string s10 = Regex.Replace(st9, "     ", ", ");
+                        string s11 = Regex.Replace(s10, "    ", ", ");
+                        string s12 = Regex.Replace(s11, "   ", ", ");
+                        string new_line = Regex.Replace(s12, "  ", ", ");
+                        string striped_line = Regex.Replace(new_line, "/", "");
+                        //MessageBox.Show(striped_line.Substring(0));
+                        //MessageBox.Show(striped_line);
+                        to_export.Add(striped_line);
+                        string[] ls = striped_line.Split(',');
+                        float x_int1 = float.Parse(ls[3]) + float.Parse(ls[6]);
+                        float x_int2 = float.Parse(ls[2]) + float.Parse(ls[3]) + float.Parse(ls[6]);
+                        nvyquist.Series[3].Points.AddXY(x_int1, 0);
+                        nvyquist.Series[3].Points.AddXY(x_int2, 0);
 
-                    
+
+
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                   
                 }
 
-
+                
 
 
 
@@ -971,6 +1016,8 @@ namespace EIS_Manager
                 MessageBox.Show("Error");
             }
         }
+
+        
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -1017,6 +1064,9 @@ namespace EIS_Manager
             
         }
 
-        
+        private void checkbox_label_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -35,10 +35,11 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pathbutton = new System.Windows.Forms.Button();
             this.title = new System.Windows.Forms.Label();
             this.logo = new System.Windows.Forms.PictureBox();
@@ -66,6 +67,11 @@
             this.python_scripts = new System.Windows.Forms.Button();
             this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
             this.first_twenty = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.df_checkbox = new System.Windows.Forms.CheckedListBox();
+            this.recal_button = new System.Windows.Forms.Button();
+            this.checkbox_label = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.gen_graph_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nvyquist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.first_twenty)).BeginInit();
@@ -237,23 +243,32 @@
             this.nvyquist.Legends.Add(legend1);
             this.nvyquist.Location = new System.Drawing.Point(168, 0);
             this.nvyquist.Name = "nvyquist";
-            this.nvyquist.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
+            this.nvyquist.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.EarthTones;
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
             series1.Legend = "Legend1";
+            series1.MarkerSize = 10;
             series1.Name = "nvyquist";
             series2.ChartArea = "ChartArea1";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
             series2.Legend = "Legend1";
+            series2.MarkerSize = 10;
             series2.Name = "Fitted_Nyvquist";
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
             series3.Legend = "Legend1";
+            series3.MarkerSize = 10;
             series3.Name = "masked";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series4.Legend = "Legend1";
+            series4.MarkerSize = 15;
+            series4.Name = "x_ints";
             this.nvyquist.Series.Add(series1);
             this.nvyquist.Series.Add(series2);
             this.nvyquist.Series.Add(series3);
-            this.nvyquist.Size = new System.Drawing.Size(771, 647);
+            this.nvyquist.Series.Add(series4);
+            this.nvyquist.Size = new System.Drawing.Size(771, 641);
             this.nvyquist.TabIndex = 70;
             this.nvyquist.Text = "Full Graph";
             this.nvyquist.Click += new System.EventHandler(this.nvyquist_Click);
@@ -262,10 +277,10 @@
             // 
             this.fit_coeffs_box.BackColor = System.Drawing.Color.MistyRose;
             this.fit_coeffs_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fit_coeffs_box.Location = new System.Drawing.Point(172, 650);
+            this.fit_coeffs_box.Location = new System.Drawing.Point(172, 644);
             this.fit_coeffs_box.Name = "fit_coeffs_box";
             this.fit_coeffs_box.ReadOnly = true;
-            this.fit_coeffs_box.Size = new System.Drawing.Size(1167, 37);
+            this.fit_coeffs_box.Size = new System.Drawing.Size(1167, 43);
             this.fit_coeffs_box.TabIndex = 71;
             this.fit_coeffs_box.Text = "";
             // 
@@ -324,7 +339,7 @@
             this.fit_coeffs_label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.fit_coeffs_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fit_coeffs_label.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.fit_coeffs_label.Location = new System.Drawing.Point(172, 625);
+            this.fit_coeffs_label.Location = new System.Drawing.Point(172, 619);
             this.fit_coeffs_label.Name = "fit_coeffs_label";
             this.fit_coeffs_label.Size = new System.Drawing.Size(401, 22);
             this.fit_coeffs_label.TabIndex = 76;
@@ -348,28 +363,89 @@
             this.first_twenty.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             this.first_twenty.Legends.Add(legend2);
-            this.first_twenty.Location = new System.Drawing.Point(921, 0);
+            this.first_twenty.Location = new System.Drawing.Point(760, 87);
             this.first_twenty.Name = "first_twenty";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series4.Legend = "Legend1";
-            series4.Name = "nvyquist";
             series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series5.Legend = "Legend1";
-            series5.Name = "Fitted_Nyvquist";
-            this.first_twenty.Series.Add(series4);
+            series5.Name = "nvyquist";
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series6.Legend = "Legend1";
+            series6.Name = "Fitted_Nyvquist";
             this.first_twenty.Series.Add(series5);
-            this.first_twenty.Size = new System.Drawing.Size(574, 362);
+            this.first_twenty.Series.Add(series6);
+            this.first_twenty.Size = new System.Drawing.Size(579, 522);
             this.first_twenty.TabIndex = 78;
             this.first_twenty.Text = "Full Graph";
+            // 
+            // df_checkbox
+            // 
+            this.df_checkbox.BackColor = System.Drawing.Color.BlanchedAlmond;
+            this.df_checkbox.FormattingEnabled = true;
+            this.df_checkbox.Location = new System.Drawing.Point(1193, 169);
+            this.df_checkbox.Name = "df_checkbox";
+            this.df_checkbox.Size = new System.Drawing.Size(146, 469);
+            this.df_checkbox.TabIndex = 79;
+            // 
+            // recal_button
+            // 
+            this.recal_button.Location = new System.Drawing.Point(1264, 615);
+            this.recal_button.Name = "recal_button";
+            this.recal_button.Size = new System.Drawing.Size(75, 23);
+            this.recal_button.TabIndex = 80;
+            this.recal_button.Text = "Recalibrate";
+            this.recal_button.UseVisualStyleBackColor = true;
+            this.recal_button.Click += new System.EventHandler(this.recal_button_Click);
+            // 
+            // checkbox_label
+            // 
+            this.checkbox_label.AutoSize = true;
+            this.checkbox_label.BackColor = System.Drawing.Color.BlanchedAlmond;
+            this.checkbox_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkbox_label.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkbox_label.Location = new System.Drawing.Point(1189, 146);
+            this.checkbox_label.Name = "checkbox_label";
+            this.checkbox_label.Size = new System.Drawing.Size(150, 20);
+            this.checkbox_label.TabIndex = 81;
+            this.checkbox_label.Text = "Recalibration Box";
+            this.checkbox_label.Click += new System.EventHandler(this.checkbox_label_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Snow;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label1.Location = new System.Drawing.Point(934, 39);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(224, 24);
+            this.label1.TabIndex = 82;
+            this.label1.Text = "High Frequency Graph";
+            // 
+            // gen_graph_label
+            // 
+            this.gen_graph_label.AutoSize = true;
+            this.gen_graph_label.BackColor = System.Drawing.Color.Snow;
+            this.gen_graph_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gen_graph_label.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.gen_graph_label.Location = new System.Drawing.Point(446, 0);
+            this.gen_graph_label.Name = "gen_graph_label";
+            this.gen_graph_label.Size = new System.Drawing.Size(108, 24);
+            this.gen_graph_label.TabIndex = 83;
+            this.gen_graph_label.Text = "Full Graph";
             // 
             // Fitter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Menu;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1339, 687);
+            this.Controls.Add(this.gen_graph_label);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.checkbox_label);
+            this.Controls.Add(this.recal_button);
+            this.Controls.Add(this.df_checkbox);
             this.Controls.Add(this.first_twenty);
             this.Controls.Add(this.python_scripts);
             this.Controls.Add(this.fit_coeffs_label);
@@ -432,6 +508,11 @@
         private System.Windows.Forms.Button python_scripts;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog2;
         private System.Windows.Forms.DataVisualization.Charting.Chart first_twenty;
+        private System.Windows.Forms.CheckedListBox df_checkbox;
+        private System.Windows.Forms.Button recal_button;
+        private System.Windows.Forms.Label checkbox_label;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label gen_graph_label;
     }
 }
 
