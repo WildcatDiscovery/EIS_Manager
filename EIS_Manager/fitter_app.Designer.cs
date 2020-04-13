@@ -375,7 +375,7 @@
             series6.Name = "Fitted_Nyvquist";
             this.first_twenty.Series.Add(series5);
             this.first_twenty.Series.Add(series6);
-            this.first_twenty.Size = new System.Drawing.Size(579, 522);
+            this.first_twenty.Size = new System.Drawing.Size(579, 503);
             this.first_twenty.TabIndex = 78;
             this.first_twenty.Text = "Full Graph";
             // 
@@ -383,9 +383,9 @@
             // 
             this.df_checkbox.BackColor = System.Drawing.Color.BlanchedAlmond;
             this.df_checkbox.FormattingEnabled = true;
-            this.df_checkbox.Location = new System.Drawing.Point(1193, 169);
+            this.df_checkbox.Location = new System.Drawing.Point(1172, 169);
             this.df_checkbox.Name = "df_checkbox";
-            this.df_checkbox.Size = new System.Drawing.Size(146, 469);
+            this.df_checkbox.Size = new System.Drawing.Size(167, 469);
             this.df_checkbox.TabIndex = 79;
             // 
             // recal_button
@@ -404,7 +404,7 @@
             this.checkbox_label.BackColor = System.Drawing.Color.BlanchedAlmond;
             this.checkbox_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkbox_label.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkbox_label.Location = new System.Drawing.Point(1189, 146);
+            this.checkbox_label.Location = new System.Drawing.Point(1168, 146);
             this.checkbox_label.Name = "checkbox_label";
             this.checkbox_label.Size = new System.Drawing.Size(150, 20);
             this.checkbox_label.TabIndex = 81;

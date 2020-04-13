@@ -30,6 +30,9 @@ namespace EIS_Manager
         public string curr_path;
         public int bad_index = new int();
         public List<String> lst_fits = new List<String>();
+        public List<Double> hold_freq = new List<double>();
+        public List<Double> hold_re = new List<double>();
+        public List<Double> hold_im = new List<double>();
 
         //public string[] folder_files = new string[]();
         public Fitter()
@@ -472,12 +475,37 @@ namespace EIS_Manager
                 nvyquist.MouseWheel += nvyquist_mousewheel;
                 first_twenty.MouseWheel += nvyquist_mousewheel;
                 
+                for (int i = 0; i < 20; i++)
+                {
+                    string marker = String.Concat(re[i].ToString(), " , ", im[i].ToString());
+                    df_checkbox.Items.Add(marker);
+                }
+
+                /*
                 foreach (double dbl in freq)
                 {
                     df_checkbox.Items.Add(dbl);
+                }*/
+                for (int i = 0; i < freq.Count; i++)
+                {
+                    DataPoint point = new DataPoint();
+                    point.SetValueXY(re[i], im[i]);
+                    point.ToolTip = string.Format("{0}, {1}", re[i], im[i]);
+                    nvyquist.Series[0].Points.Add(point);
                 }
-                first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
-                nvyquist.Series[0].Points.DataBindXY(re, im);
+
+                for (int i = 0; i < 20; i++)
+                {
+                    DataPoint point = new DataPoint();
+                    point.SetValueXY(re[i], im[i]);
+                    point.ToolTip = string.Format("{0}, {1}", re[i], im[i]);
+                    first_twenty.Series[0].Points.Add(point);
+                }
+
+
+                //first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
+                //nvyquist.Series[0].Points.DataBindXY(re, im);
+                
 
                 //nvyquist.Series.Add("Nyvquist").Points.DataBindXY(re, im);
                 //nvyquist.ForeColor = Color.ForestGreen;
@@ -500,20 +528,23 @@ namespace EIS_Manager
 
         private void recal_button_Click(object sender, EventArgs e)
         {
-            //freq.Clear();
-            //re.Clear();
-            //im.Clear()
-            foreach (double dbl in df_checkbox.Items)
+            
+            
+            
+            foreach (string str in df_checkbox.Items)
             {
-                int ind = df_checkbox.Items.IndexOf(dbl);
-                if (df_checkbox.GetItemChecked(ind))
+                if (df_checkbox.GetItemChecked(df_checkbox.Items.IndexOf(str)))
                 {
-                    MessageBox.Show(re[ind].ToString(), im[ind].ToString());
-                    freq.RemoveAt(ind);
-                    re.RemoveAt(ind);
-                    im.RemoveAt(ind);
+                    MessageBox.Show(str, " is being removed.");
+                    freq.RemoveAt(df_checkbox.Items.IndexOf(str));
+                    re.RemoveAt(df_checkbox.Items.IndexOf(str));
+                    im.RemoveAt(df_checkbox.Items.IndexOf(str));
                 }
-                
+                //{
+                //MessageBox.Show(re[ind].ToString(), im[ind].ToString());
+
+                //}
+
             }
             first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
             nvyquist.Series[0].Points.DataBindXY(re, im);
