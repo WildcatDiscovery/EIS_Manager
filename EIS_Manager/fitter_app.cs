@@ -549,6 +549,14 @@ namespace EIS_Manager
             }
             first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
             nvyquist.Series[0].Points.DataBindXY(re, im);
+
+            df_checkbox.Items.Clear();
+
+            for (int i = 0; i < 20; i++)
+            {
+                string marker = String.Concat(re[i].ToString(), " , ", im[i].ToString());
+                df_checkbox.Items.Add(marker);
+            }
         }
 
 
