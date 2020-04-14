@@ -366,16 +366,18 @@
             this.first_twenty.Location = new System.Drawing.Point(760, 87);
             this.first_twenty.Name = "first_twenty";
             series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
             series5.Legend = "Legend1";
-            series5.Name = "nvyquist";
+            series5.MarkerSize = 10;
+            series5.Name = "Fitted_Nyvquist";
             series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series6.Legend = "Legend1";
-            series6.Name = "Fitted_Nyvquist";
+            series6.MarkerSize = 10;
+            series6.Name = "nvyquist";
             this.first_twenty.Series.Add(series5);
             this.first_twenty.Series.Add(series6);
-            this.first_twenty.Size = new System.Drawing.Size(579, 503);
+            this.first_twenty.Size = new System.Drawing.Size(567, 554);
             this.first_twenty.TabIndex = 78;
             this.first_twenty.Text = "Full Graph";
             // 

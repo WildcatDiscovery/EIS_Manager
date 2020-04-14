@@ -54,6 +54,8 @@ namespace EIS_Manager
             nvyquist.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             nvyquist.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
 
+
+
             first_twenty.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
             first_twenty.ChartAreas[0].CursorX.IsUserEnabled = true;
             first_twenty.ChartAreas[0].CursorX.LineColor = Color.Transparent;
@@ -490,7 +492,7 @@ namespace EIS_Manager
                 {
                     DataPoint point = new DataPoint();
                     point.SetValueXY(re[i], im[i]);
-                    point.ToolTip = string.Format("{0}, {1}", re[i], im[i]);
+                    point.ToolTip = string.Format("X Value: {0}, Y Value {1}", re[i], im[i]);
                     nvyquist.Series[0].Points.Add(point);
                 }
 
@@ -498,14 +500,18 @@ namespace EIS_Manager
                 {
                     DataPoint point = new DataPoint();
                     point.SetValueXY(re[i], im[i]);
-                    point.ToolTip = string.Format("{0}, {1}", re[i], im[i]);
+                    point.ToolTip = string.Format("X Value: {0}, Y Value {1}", re[i], im[i]);
                     first_twenty.Series[0].Points.Add(point);
                 }
 
+                nvyquist.Series[0].ToolTip = "X Value: #VALX, Y Value: #VALY";
+                nvyquist.Series[1].ToolTip = "FITTED X Value: #VALX, FITTED Y Value: #VALY";
+                nvyquist.Series[2].ToolTip = "X Value: #VALX, Y Value: #VALY";
 
-                //first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
-                //nvyquist.Series[0].Points.DataBindXY(re, im);
-                
+                first_twenty.Series[0].ToolTip = "X Value: #VALX, Y Value: #VALY";
+                first_twenty.Series[1].ToolTip = "FITTED X Value: #VALX, FITTED Y Value: #VALY";
+               
+
 
                 //nvyquist.Series.Add("Nyvquist").Points.DataBindXY(re, im);
                 //nvyquist.ForeColor = Color.ForestGreen;
@@ -531,19 +537,14 @@ namespace EIS_Manager
             
             
             
-            foreach (string str in df_checkbox.Items)
+            foreach (string str in df_checkbox.CheckedItems)
             {
-                if (df_checkbox.GetItemChecked(df_checkbox.Items.IndexOf(str)))
-                {
-                    MessageBox.Show(str, " is being removed.");
-                    freq.RemoveAt(df_checkbox.Items.IndexOf(str));
-                    re.RemoveAt(df_checkbox.Items.IndexOf(str));
-                    im.RemoveAt(df_checkbox.Items.IndexOf(str));
-                }
-                //{
-                //MessageBox.Show(re[ind].ToString(), im[ind].ToString());
-
-                //}
+                
+                MessageBox.Show(str, " is being removed.");
+                freq.RemoveAt(df_checkbox.Items.IndexOf(str));
+                re.RemoveAt(df_checkbox.Items.IndexOf(str));
+                im.RemoveAt(df_checkbox.Items.IndexOf(str));
+                //df_checkbox.Items.RemoveAt(df_checkbox.Items.IndexOf(str));
 
             }
             first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
