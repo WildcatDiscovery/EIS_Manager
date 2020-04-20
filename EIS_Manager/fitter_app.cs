@@ -71,8 +71,8 @@ namespace EIS_Manager
             first_twenty.ChartAreas[0].CursorY.Interval = 0;
             first_twenty.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             first_twenty.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
-            
-            
+
+            python_script_location = "C:/Users/cjang.WILDCAT/Desktop/EIS_Manager/utils/";
             to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
         }
         private void python_scripts_Click(object sender, EventArgs e)
@@ -80,7 +80,7 @@ namespace EIS_Manager
             if (folderBrowserDialog2.ShowDialog() == DialogResult.OK)
             {
                 python_script_location = folderBrowserDialog2.SelectedPath.ToString();
-                Debug.WriteLine(python_script_location);
+                MessageBox.Show(python_script_location);
             }
         }
 
@@ -95,19 +95,11 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-
-            // call hello.py to concatenate passed parameters
-
-            //"from tools import *; print(mpt_data(path=r'C:\Users\cjang\Desktop\Kyler_Speed_Circuit\data\\',data = ['DE_49_8_30.mpt']).guess_and_plot(mask = [1000018.6, 28]))"
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path.ToString());
             proc.Start();
 
             StreamReader sReader = proc.StandardOutput;
             string[] output = sReader.ReadToEnd().Split(splitter);
-
-            //foreach (string s in output)
-            //Console.WriteLine(s);
-
             return output;
         }
 
@@ -140,22 +132,11 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-
-            // call hello.py to concatenate passed parameters
-
-            //"from tools import *; print(mpt_data(path=r'C:\Users\cjang\Desktop\Kyler_Speed_Circuit\data\\',data = ['DE_49_8_30.mpt']).guess_and_plot(mask = [1000018.6, 28]))"
-            
             proc.StartInfo.Arguments = progToRun + " " + raw_path + " " + mpt_file + " ";
-           
-            //Console.WriteLine("Processing...");
-            
             proc.Start();
             MessageBox.Show("Python is Processing; Error Box will fill when process is finished");
             StreamReader sReader = proc.StandardOutput;
             string[] output = sReader.ReadToEnd().Split(splitter);
-            
-            //foreach (string s in output)
-            //Console.WriteLine(s);
             return output;
         }
 
@@ -171,12 +152,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-
-            // call hello.py to concatenate passed parameters
-
-            //"from tools import *; print(mpt_data(path=r'C:\Users\cjang\Desktop\Kyler_Speed_Circuit\data\\',data = ['DE_49_8_30.mpt']).guess_and_plot(mask = [1000018.6, 28]))"
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice);
-            //Console.WriteLine("Processing...");
             proc.Start();
 
             StreamReader sReader = proc.StandardOutput;
@@ -195,12 +171,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-
-            // call hello.py to concatenate passed parameters
-
-            //"from tools import *; print(mpt_data(path=r'C:\Users\cjang\Desktop\Kyler_Speed_Circuit\data\\',data = ['DE_49_8_30.mpt']).guess_and_plot(mask = [1000018.6, 28]))"
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice);
-            //Console.WriteLine("Processing...");
             proc.Start();
 
             StreamReader sReader = proc.StandardOutput;
@@ -219,12 +190,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-
-            // call hello.py to concatenate passed parameters
-
-            //"from tools import *; print(mpt_data(path=r'C:\Users\cjang\Desktop\Kyler_Speed_Circuit\data\\',data = ['DE_49_8_30.mpt']).guess_and_plot(mask = [1000018.6, 28]))"
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice);
-            //Console.WriteLine("Processing...");
             proc.Start();
 
             StreamReader sReader = proc.StandardOutput;
@@ -243,12 +209,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-
-            // call hello.py to concatenate passed parameters
-
-            //"from tools import *; print(mpt_data(path=r'C:\Users\cjang\Desktop\Kyler_Speed_Circuit\data\\',data = ['DE_49_8_30.mpt']).guess_and_plot(mask = [1000018.6, 28]))"
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max);
-            //Console.WriteLine("Processing...");
             proc.Start();
 
             StreamReader sReader = proc.StandardOutput;
@@ -267,12 +228,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-
-            // call hello.py to concatenate passed parameters
-
-            //"from tools import *; print(mpt_data(path=r'C:\Users\cjang\Desktop\Kyler_Speed_Circuit\data\\',data = ['DE_49_8_30.mpt']).guess_and_plot(mask = [1000018.6, 28]))"
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max);
-            //Console.WriteLine("Processing...");
             proc.Start();
 
             StreamReader sReader = proc.StandardOutput;
@@ -291,12 +247,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-
-            // call hello.py to concatenate passed parameters
-
-            //"from tools import *; print(mpt_data(path=r'C:\Users\cjang\Desktop\Kyler_Speed_Circuit\data\\',data = ['DE_49_8_30.mpt']).guess_and_plot(mask = [1000018.6, 28]))"
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max);
-            //Console.WriteLine("Processing...");
             proc.Start();
 
             StreamReader sReader = proc.StandardOutput;
@@ -371,8 +322,7 @@ namespace EIS_Manager
                 {
                     xAxis.ScaleView.ZoomReset();
                     yAxis.ScaleView.ZoomReset();
-                    //MessageBox.Show("RESET" + xMin.ToString());
-                    //essageBox.Show("RESET" + xMax.ToString());
+                    
                 }
                 else if (e.Delta > 0) // Scrolled up.
                 {
@@ -384,8 +334,7 @@ namespace EIS_Manager
 
                     xAxis.ScaleView.Zoom(posXStart, posXFinish);
                     yAxis.ScaleView.Zoom(posYStart, posYFinish);
-                    //MessageBox.Show("zoom in: " + posXStart.ToString());
-                    //MessageBox.Show("zoom in: " + posXFinish.ToString());
+                  
                 }
                 
             }
@@ -401,6 +350,7 @@ namespace EIS_Manager
             fit_re.Clear();
             fit_im.Clear();
             fit_coeffs_box.Clear();
+            df_checkbox.Items.Clear();
 
             foreach (var series in nvyquist.Series)
             {
@@ -432,12 +382,10 @@ namespace EIS_Manager
                 foreach (string sgl in pre)
                 {
                     Queue<Double> dbl_prep = new Queue<double>();
-                    //MessageBox.Show("NEW LINE");
                     foreach (var word in sgl.Split(' '))
                     {
                         if (word.Length > 5)
                         {
-                            //MessageBox.Show(word);
                             dbl_prep.Enqueue(Convert.ToDouble(word));
                         }
                     }
@@ -455,25 +403,7 @@ namespace EIS_Manager
                         }
                     }
                 }
-                //MessageBox.Show(freq.Count().ToString());
-                //string to_return = String.Join(string.Join("", freq), string.Join("", re), string.Join("", im));
-                //MessageBox.Show(to_return);
-                //dataframe_box.Text = box_form;
-                //error_box.Text = "";
-
-
-                //nvyquist.ChartAreas[0].CursorX.IsUserEnabled = true;
-                //nvyquist.ChartAreas[0].CursorY.IsUserEnabled = true;
-
-
-
-                //nvyquist.ChartAreas[0].RecalculateAxesScale();
-
-
-
-
-
-
+                
                 nvyquist.MouseWheel += nvyquist_mousewheel;
                 first_twenty.MouseWheel += nvyquist_mousewheel;
                 
@@ -481,13 +411,9 @@ namespace EIS_Manager
                 {
                     string marker = String.Concat(re[i].ToString(), " , ", im[i].ToString());
                     df_checkbox.Items.Add(marker);
+                    df_checkbox.SetItemChecked(i, true);
                 }
-
-                /*
-                foreach (double dbl in freq)
-                {
-                    df_checkbox.Items.Add(dbl);
-                }*/
+               
                 for (int i = 0; i < freq.Count; i++)
                 {
                     DataPoint point = new DataPoint();
@@ -511,13 +437,6 @@ namespace EIS_Manager
                 first_twenty.Series[0].ToolTip = "X Value: #VALX, Y Value: #VALY";
                 first_twenty.Series[1].ToolTip = "FITTED X Value: #VALX, FITTED Y Value: #VALY";
                
-
-
-                //nvyquist.Series.Add("Nyvquist").Points.DataBindXY(re, im);
-                //nvyquist.ForeColor = Color.ForestGreen;
-                //MessageBox.Show(nvyquist.ChartAreas[0].AxisX.Maximum.ToString());
-                //MessageBox.Show(nvyquist.ChartAreas[0].AxisY.Maximum.ToString());
-
                 x_min.Text = Math.Round(nvyquist.ChartAreas[0].AxisX.Minimum, 2).ToString();
                 x_max.Text = Math.Round(nvyquist.ChartAreas[0].AxisX.Maximum, 2).ToString();
                 y_min.Text = Math.Round(nvyquist.ChartAreas[0].AxisY.Minimum, 2).ToString();
@@ -534,28 +453,38 @@ namespace EIS_Manager
 
         private void recal_button_Click(object sender, EventArgs e)
         {
-            
-            
-            
-            foreach (string str in df_checkbox.CheckedItems)
-            {
-                
-                MessageBox.Show(str, " is being removed.");
-                freq.RemoveAt(df_checkbox.Items.IndexOf(str));
-                re.RemoveAt(df_checkbox.Items.IndexOf(str));
-                im.RemoveAt(df_checkbox.Items.IndexOf(str));
-                //df_checkbox.Items.RemoveAt(df_checkbox.Items.IndexOf(str));
 
+            List<int> bad_ints = new List<int>();
+            
+            foreach (Object str in df_checkbox.Items)
+            {
+                if (!df_checkbox.CheckedItems.Contains(str))
+                {
+                    bad_ints.Add(df_checkbox.Items.IndexOf(str));
+                }
             }
+
+            foreach(int ind in bad_ints)
+            {
+                //MessageBox.Show(ind.ToString());
+                freq.RemoveAt(ind);
+                re.RemoveAt(ind);
+                im.RemoveAt(ind);
+            }
+
+            
+
             first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
             nvyquist.Series[0].Points.DataBindXY(re, im);
 
             df_checkbox.Items.Clear();
+            bad_ints.Clear();
 
             for (int i = 0; i < 20; i++)
             {
                 string marker = String.Concat(re[i].ToString(), " , ", im[i].ToString());
                 df_checkbox.Items.Add(marker);
+                df_checkbox.SetItemChecked(i, true);
             }
         }
 
@@ -567,8 +496,6 @@ namespace EIS_Manager
                 string mpt_file = file_display.SelectedItem.ToString();
                 string raw_path = curr_path;
                 string[] mask_mpt = masked_mpt(raw_path, mpt_file, "1");
-
-                //MessageBox.Show(string.Join(" ", output));
 
                 List<Double> masked_freq = new List<Double>();
                 List<Double> masked_re = new List<Double>();
@@ -872,8 +799,6 @@ namespace EIS_Manager
                 if (entire_fit.Checked == true)
                 {
                     MessageBox.Show(mpt_file, raw_path);
-                    //string[] output = masked_guesser(raw_path, mpt_file, "1");
-                    //string[] masked_df = masked_mpt(raw_path, mpt_file, "1");
                     string[] output = guesser(raw_path, mpt_file);
                     List<string> pre = output.ToList();
                     try
@@ -882,15 +807,8 @@ namespace EIS_Manager
                         string fit_coeffs = pre[1];
 
                         pre.RemoveRange(0, 3);
-                        
-                        
-                        //string to_export = string.Join(" ", fit_label, fit_coeffs);
-                        //fit_coeffs_box.AppendText(fit_label);
+                       
                         fit_coeffs_box.AppendText(fit_coeffs);
-
-                        //MessageBox.Show(mpt_file);
-                        
-
                     }
                     catch (ArgumentOutOfRangeException range_error)
                     {
@@ -899,19 +817,14 @@ namespace EIS_Manager
                     
 
                     string box_form = string.Join("", pre);
-                   // error_box.Text = box_form;
-                    
-
+                  
                     foreach (string sgl in pre)
                     {
                         Queue<Double> dbl_prep = new Queue<double>();
-                        //MessageBox.Show("NEW LINE
-                        //MessageBox.Show(sgl);
                         foreach (var word in sgl.Split(','))
                         {
                             if (word.Length > 1)
                             {
-                                //MessageBox.Show(word);
                                 dbl_prep.Enqueue(Convert.ToDouble(word));
                             }
                         }
@@ -995,19 +908,11 @@ namespace EIS_Manager
                 }
 
                 MessageBox.Show("Completed Fitting of " + fit_re.Count().ToString() + " values.");
-                //string to_return = String.Join(string.Join("", freq), string.Join("", re), string.Join("", im));
-                //MessageBox.Show(to_return);
-                //dataframe_box.Text = box_form;
-                
-                
                 
 
                 nvyquist.Series[1].Points.DataBindXY(fit_re, fit_im);
                 first_twenty.Series[1].Points.DataBindXY(fit_re.GetRange(0,20), fit_im.GetRange(0,20));
 
-                //nvyquist.Series.Add("Fitted_Nyvquist").Points.DataBindXY(fit_re, fit_im);
-
-                //nvyquist.ForeColor = Color.ForestGreen;
                 foreach (string st0 in fit_coeffs_box.Lines)
                 {
                     if (st0.Length > 0)
@@ -1026,8 +931,7 @@ namespace EIS_Manager
                         string s12 = Regex.Replace(s11, "   ", ", ");
                         string new_line = Regex.Replace(s12, "  ", ", ");
                         string striped_line = Regex.Replace(new_line, "/", "");
-                        //MessageBox.Show(striped_line.Substring(0));
-                        //MessageBox.Show(striped_line);
+                      
                         to_export.Add(striped_line);
                         string[] ls = striped_line.Split(',');
                         float x_int1 = float.Parse(ls[3]) + float.Parse(ls[6]);
@@ -1035,21 +939,37 @@ namespace EIS_Manager
                         nvyquist.Series[3].Points.AddXY(x_int1, 0);
                         nvyquist.Series[3].Points.AddXY(x_int2, 0);
 
-
-
+                        string r1 = String.Concat("R1 = ", ls[2]);
+                        ls[2] = r1;
+                        string r2 = String.Concat(" , R2 = ", ls[3]);
+                        ls[3] = r2;
+                        string n1 = String.Concat(" , N1 = ", ls[4]);
+                        ls[4] = n1;
+                        string q1 = String.Concat(" , Q1 = ", ls[5]);
+                        ls[5] = q1;
+                        string r3 = String.Concat(" , R3 = ", ls[6]);
+                        ls[6] = r3;
+                        string n2 = String.Concat(" , N2 = ", ls[7]);
+                        ls[7] = n2;
+                        string q2 = String.Concat(" , Q2 = ", ls[8]);
+                        ls[8] = q2;
+                        string n3 = String.Concat(" , N3 = ", ls[9]);
+                        ls[9] = n3;
+                        string q3 = String.Concat(" , Q3 = ", ls[10]);
+                        ls[10] = q3;
+                        fit_coeffs_box.Clear();
+                        ls[0] = "";
+                        ls[1] = "";
+                        foreach(string str in ls)
+                        {
+                            fit_coeffs_box.AppendText(str);
+                        }
                     }
                     else
                     {
                         continue;
                     }
-                   
                 }
-
-                
-
-
-
-
             }
             catch (Exception wide)
             {
@@ -1106,7 +1026,6 @@ namespace EIS_Manager
 
         private void checkbox_label_Click(object sender, EventArgs e)
         {
-
         }
     }
 }
