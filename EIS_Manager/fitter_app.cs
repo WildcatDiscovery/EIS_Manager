@@ -33,8 +33,7 @@ namespace EIS_Manager
         public List<Double> hold_freq = new List<double>();
         public List<Double> hold_re = new List<double>();
         public List<Double> hold_im = new List<double>();
-
-        //public string[] folder_files = new string[]();
+        public bool recalibrated = new bool();
         public Fitter()
         {
             InitializeComponent();
@@ -256,6 +255,25 @@ namespace EIS_Manager
             return output;
         }
 
+        private string[] recal_guesser(string path, string mpt_file, string mask_choice, string indices)
+        {
+            string pt1 = python_script_location;
+            string progToRun = pt1 + "\\recal_guesser.py";
+            char[] splitter = { '\r' };
+
+            Process proc = new Process();
+            proc.StartInfo.FileName = "python.exe";
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices);
+            proc.Start();
+
+            StreamReader sReader = proc.StandardOutput;
+            string[] output = sReader.ReadToEnd().Split(splitter);
+
+            return output;
+        }
+
 
         private void btnFit_Click(object sender, EventArgs e)
         {
@@ -344,6 +362,7 @@ namespace EIS_Manager
 
         private void file_display_SelectedIndexChanged(object sender, EventArgs e)
         {
+            recalibrated = false;
             freq.Clear();
             re.Clear();
             im.Clear();
@@ -453,7 +472,7 @@ namespace EIS_Manager
 
         private void recal_button_Click(object sender, EventArgs e)
         {
-
+            recalibrated = true;
             List<int> bad_ints = new List<int>();
             
             foreach (Object str in df_checkbox.Items)
@@ -789,12 +808,6 @@ namespace EIS_Manager
                 string raw_path = curr_path;
                 fit_re.Clear();
                 fit_im.Clear();
-
-                
-
-
-                
-                
 
                 if (entire_fit.Checked == true)
                 {
