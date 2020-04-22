@@ -72,7 +72,7 @@ namespace EIS_Manager
             first_twenty.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             first_twenty.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
 
-            python_script_location = "C:/Users/cjang.WILDCAT/Desktop/EIS_Manager/utils/";
+            python_script_location = "C:/Users/instruments/Desktop/EIS_Manager-master/utils";
             to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
         }
         private void python_scripts_Click(object sender, EventArgs e)
@@ -274,6 +274,24 @@ namespace EIS_Manager
             return output;
         }
 
+        private string[] recal_window_guesser(string path, string mpt_file, string x_min, string x_max, string y_min, string y_max, string indices)
+        {
+            string pt1 = python_script_location;
+            string progToRun = pt1 + "\\window_guesser.py";
+            char[] splitter = { '\r' };
+
+            Process proc = new Process();
+            proc.StartInfo.FileName = "python.exe";
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max, " ", indices);
+            proc.Start();
+
+            StreamReader sReader = proc.StandardOutput;
+            string[] output = sReader.ReadToEnd().Split(splitter);
+
+            return output;
+        }
 
         private void btnFit_Click(object sender, EventArgs e)
         {
@@ -781,6 +799,8 @@ namespace EIS_Manager
             
         }
 
+
+
         private void window_masker_fit(string raw_path, string mpt_file, string xmin, string xmax, string ymin, string ymax)
         {
             //string[] masked_df = masked_mpt(raw_path, mpt_file, masker_choice);
@@ -829,6 +849,56 @@ namespace EIS_Manager
                 }
             }
             
+        }
+
+        private void recal_window_fit(string raw_path, string mpt_file, string xmin, string xmax, string ymin, string ymax, string indices)
+        {
+            //string[] masked_df = masked_mpt(raw_path, mpt_file, masker_choice);
+            string[] output = recal_window_guesser(raw_path, mpt_file, xmin, xmax, ymin, ymax, indices);
+            //string[] masked_df = window_mask
+            List<string> pre = output.ToList();
+
+
+            string fit_label = pre[1];
+            string fit_coeffs = pre[2];
+
+            pre.RemoveRange(0, 3);
+
+            //Console.WriteLine(fit_label);
+            //Console.WriteLine(fit_coeffs);
+
+            string box_form = string.Join("", pre);
+            //error_box.Text = box_form;
+            //string to_export = string.Join(" ", fit_label, fit_coeffs);
+            fit_coeffs_box.AppendText(fit_label);
+            //fit_coeffs_box.AppendText(fit_coeffs);
+
+            foreach (string sgl in pre)
+            {
+                Queue<Double> dbl_prep = new Queue<double>();
+
+                foreach (var word in sgl.Split(','))
+                {
+                    if (word.Length > 1)
+                    {
+                        //MessageBox.Show("WORD: " + word);
+                        dbl_prep.Enqueue(Convert.ToDouble(word));
+                    }
+                }
+                if (dbl_prep.Count == 2)
+                {
+                    fit_re.Add(dbl_prep.Dequeue());
+                    fit_im.Add(dbl_prep.Dequeue());
+                }
+                else
+                {
+                    foreach (var word in dbl_prep)
+                    {
+                        MessageBox.Show("Ununsual Value: " + word.ToString());
+                    }
+                }
+            }
+
         }
 
 
@@ -935,8 +1005,14 @@ namespace EIS_Manager
                     x_max.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum.ToString();
                     y_min.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum.ToString();
                     y_max.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum.ToString();
-                    window_masker_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text);
-
+                    if (recalibrated)
+                    {
+                        recal_window_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text, indices);
+                    }
+                    else
+                    {
+                        window_masker_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text);
+                    }
                 }
                 else
                 {
