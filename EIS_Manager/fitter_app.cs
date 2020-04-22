@@ -261,7 +261,6 @@ namespace EIS_Manager
             string pt1 = python_script_location;
             string progToRun = pt1 + "\\recal_guesser.py";
             char[] splitter = { '\r' };
-
             Process proc = new Process();
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
@@ -495,7 +494,7 @@ namespace EIS_Manager
 
             first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
             nvyquist.Series[0].Points.DataBindXY(re, im);
-            /*
+            
             df_checkbox.Items.Clear();
             //bad_ints.Clear();
 
@@ -505,7 +504,7 @@ namespace EIS_Manager
                 df_checkbox.Items.Add(marker);
                 df_checkbox.SetItemChecked(i, true);
             }
-            */
+            
         }
 
 
@@ -743,7 +742,7 @@ namespace EIS_Manager
         private void recal_fit(string raw_path, string mpt_file, string masker_choice, string indices)
         {
             string[] output = recal_guesser(raw_path, mpt_file, masker_choice, indices);
-            /*
+            
             List<string> pre = output.ToList();
 
 
@@ -779,7 +778,7 @@ namespace EIS_Manager
                     }
                 }
             }
-            */
+            
         }
 
         private void window_masker_fit(string raw_path, string mpt_file, string xmin, string xmax, string ymin, string ymax)
@@ -850,6 +849,10 @@ namespace EIS_Manager
                 
                 if (entire_fit.Checked == true)
                 {
+                    if (recalibrated)
+                    {
+                        recal_fit(raw_path, mpt_file, "4", indices);
+                    }
                     MessageBox.Show(mpt_file, raw_path);
                     string[] output = guesser(raw_path, mpt_file);
                     List<string> pre = output.ToList();
