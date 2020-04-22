@@ -34,6 +34,7 @@ namespace EIS_Manager
         public List<Double> hold_re = new List<double>();
         public List<Double> hold_im = new List<double>();
         public bool recalibrated = new bool();
+        List<int> bad_ints = new List<int>();
         public Fitter()
         {
             InitializeComponent();
@@ -370,6 +371,7 @@ namespace EIS_Manager
             fit_im.Clear();
             fit_coeffs_box.Clear();
             df_checkbox.Items.Clear();
+            bad_ints.Clear();
 
             foreach (var series in nvyquist.Series)
             {
@@ -473,8 +475,6 @@ namespace EIS_Manager
         private void recal_button_Click(object sender, EventArgs e)
         {
             recalibrated = true;
-            List<int> bad_ints = new List<int>();
-            
             foreach (Object str in df_checkbox.Items)
             {
                 if (!df_checkbox.CheckedItems.Contains(str))
@@ -495,9 +495,9 @@ namespace EIS_Manager
 
             first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
             nvyquist.Series[0].Points.DataBindXY(re, im);
-
+            /*
             df_checkbox.Items.Clear();
-            bad_ints.Clear();
+            //bad_ints.Clear();
 
             for (int i = 0; i < 20; i++)
             {
@@ -505,6 +505,7 @@ namespace EIS_Manager
                 df_checkbox.Items.Add(marker);
                 df_checkbox.SetItemChecked(i, true);
             }
+            */
         }
 
 
@@ -711,17 +712,11 @@ namespace EIS_Manager
             pre.RemoveRange(0, 3);
 
             string box_form = string.Join("", pre);
-            //error_box.Text = box_form;
             string box_form_mpt = string.Join("", masked_df);
-            //dataframe_box.Text = box_form_mpt;
-            //string to_export = string.Join(" ", fit_label, fit_coeffs);
             fit_coeffs_box.AppendText(fit_coeffs);
-            //fit_coeffs_box.AppendText(fit_coeffs);
-
             foreach (string sgl in pre)
             {
                 Queue<Double> dbl_prep = new Queue<double>();
-
                 foreach (var word in sgl.Split(','))
                 {
                     if (word.Length > 1)
@@ -743,6 +738,48 @@ namespace EIS_Manager
                     }
                 }
             }
+        }
+
+        private void recal_fit(string raw_path, string mpt_file, string masker_choice, string indices)
+        {
+            string[] output = recal_guesser(raw_path, mpt_file, masker_choice, indices);
+            /*
+            List<string> pre = output.ToList();
+
+
+            string fit_label = pre[1];
+            string fit_coeffs = pre[2];
+            //Console.WriteLine(fit_label);
+            pre.RemoveRange(0, 3);
+
+            string box_form = string.Join("", pre);
+            //string box_form_mpt = string.Join("", masked_df);
+            fit_coeffs_box.AppendText(fit_coeffs);
+            foreach (string sgl in pre)
+            {
+                Queue<Double> dbl_prep = new Queue<double>();
+                foreach (var word in sgl.Split(','))
+                {
+                    if (word.Length > 1)
+                    {
+                        //MessageBox.Show("WORD: " + word);
+                        dbl_prep.Enqueue(Convert.ToDouble(word));
+                    }
+                }
+                if (dbl_prep.Count == 2)
+                {
+                    fit_re.Add(dbl_prep.Dequeue());
+                    fit_im.Add(dbl_prep.Dequeue());
+                }
+                else
+                {
+                    foreach (var word in dbl_prep)
+                    {
+                        MessageBox.Show("Ununsual Value: " + word.ToString());
+                    }
+                }
+            }
+            */
         }
 
         private void window_masker_fit(string raw_path, string mpt_file, string xmin, string xmax, string ymin, string ymax)
@@ -808,7 +845,9 @@ namespace EIS_Manager
                 string raw_path = curr_path;
                 fit_re.Clear();
                 fit_im.Clear();
-
+                String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+                bad_ints.Clear();
+                
                 if (entire_fit.Checked == true)
                 {
                     MessageBox.Show(mpt_file, raw_path);
@@ -818,9 +857,7 @@ namespace EIS_Manager
                     {
                         string fit_label = pre[0];
                         string fit_coeffs = pre[1];
-
                         pre.RemoveRange(0, 3);
-                       
                         fit_coeffs_box.AppendText(fit_coeffs);
                     }
                     catch (ArgumentOutOfRangeException range_error)
@@ -828,7 +865,6 @@ namespace EIS_Manager
                         MessageBox.Show("The guessing Function has not completed; Please fit a mask or fit again and wait");
                     }
                     
-
                     string box_form = string.Join("", pre);
                   
                     foreach (string sgl in pre)
@@ -858,15 +894,37 @@ namespace EIS_Manager
                 }
                 else if (masker1.Checked == true)
                 {
-                    masker_fit(raw_path, mpt_file, "1");
+                    if (recalibrated)
+                    {
+                        recal_fit(raw_path, mpt_file, "1", indices);
+                    }
+                    else
+                    {
+                        masker_fit(raw_path, mpt_file, "1");
+                    }
                 }
                 else if (masker2.Checked == true)
                 {
-                    masker_fit(raw_path, mpt_file, "2");
+                    if (recalibrated)
+                    {
+                        recal_fit(raw_path, mpt_file, "2", indices);
+                    }
+                    else
+                    {
+                        masker_fit(raw_path, mpt_file, "2");
+                    }
                 }
                 else if (masker3.Checked == true)
                 {
-                    masker_fit(raw_path, mpt_file, "3");
+                    if (recalibrated)
+                    {
+                        MessageBox.Show(indices);
+                        recal_fit(raw_path, mpt_file, "3", indices);
+                    }
+                    else
+                    {
+                        masker_fit(raw_path, mpt_file, "3");
+                    }
                 }
                 else if (window_masker.Checked == true)
                 {
@@ -1026,17 +1084,12 @@ namespace EIS_Manager
             {
                 pre.Add(to_export[val]);
             }
-
-
-
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string filename = saveFileDialog1.FileName;
                 File.WriteAllLines(filename, pre);
             }
-            
         }
-
         private void checkbox_label_Click(object sender, EventArgs e)
         {
         }

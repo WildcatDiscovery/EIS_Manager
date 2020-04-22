@@ -41,5 +41,11 @@ elif mask_choice == str(3):
     print(masked_mpt.guesser())
     for i in masked_mpt.circuit_fit[0]:
             print(i.real, ", ", -i.imag)
+elif mask_choice == str(4):
+    for ind in bad_inds:
+        ex_mpt.df[0] = ex_mpt.df[0].drop(ind)
+    print(ex_mpt.guesser())
+    for i in ex_mpt.circuit_fit[0]:
+            print(i.real, ", ", -i.imag)
 else:
     print("Incorrect Input")
