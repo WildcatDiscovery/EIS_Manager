@@ -35,6 +35,7 @@ namespace EIS_Manager
         public List<Double> hold_im = new List<double>();
         public bool recalibrated = new bool();
         List<int> bad_ints = new List<int>();
+        List<int> recal_ints = new List<int>();
         public Fitter()
         {
             InitializeComponent();
@@ -492,37 +493,31 @@ namespace EIS_Manager
         private void recal_button_Click(object sender, EventArgs e)
         {
             recalibrated = true;
-            foreach (Object str in df_checkbox.Items)
+            int count = df_checkbox.Items.Count;
+            for (int index = count; index > 0; index--)
             {
-                if (!df_checkbox.CheckedItems.Contains(str))
+               if (!df_checkbox.CheckedItems.Contains(df_checkbox.Items[index - 1]))
                 {
-                    bad_ints.Add(df_checkbox.Items.IndexOf(str));
+                    recal_ints.Add((index-1));
+                    bad_ints.Add((index - 1));
+                    df_checkbox.Items.RemoveAt(index - 1);
                 }
+
             }
 
-            foreach(int ind in bad_ints)
+            foreach (int ind in recal_ints)
             {
                 //MessageBox.Show(ind.ToString());
                 freq.RemoveAt(ind);
                 re.RemoveAt(ind);
                 im.RemoveAt(ind);
             }
-
             
-
+            
             first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
             nvyquist.Series[0].Points.DataBindXY(re, im);
-            
-            df_checkbox.Items.Clear();
-            //bad_ints.Clear();
-
-            for (int i = 0; i < 20; i++)
-            {
-                string marker = String.Concat(re[i].ToString(), " , ", im[i].ToString());
-                df_checkbox.Items.Add(marker);
-                df_checkbox.SetItemChecked(i, true);
-            }
-            
+            recal_ints.Clear();
+           
         }
 
 
