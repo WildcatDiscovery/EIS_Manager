@@ -185,7 +185,7 @@
             this.fit_function.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fit_function.Location = new System.Drawing.Point(5, 587);
             this.fit_function.Name = "fit_function";
-            this.fit_function.Size = new System.Drawing.Size(143, 40);
+            this.fit_function.Size = new System.Drawing.Size(68, 40);
             this.fit_function.TabIndex = 38;
             this.fit_function.Text = "FIT";
             this.fit_function.UseVisualStyleBackColor = true;
@@ -322,7 +322,7 @@
             this.export_button.Location = new System.Drawing.Point(5, 632);
             this.export_button.Margin = new System.Windows.Forms.Padding(2);
             this.export_button.Name = "export_button";
-            this.export_button.Size = new System.Drawing.Size(143, 44);
+            this.export_button.Size = new System.Drawing.Size(68, 44);
             this.export_button.TabIndex = 75;
             this.export_button.Text = "Export Coefficients";
             this.export_button.UseVisualStyleBackColor = true;

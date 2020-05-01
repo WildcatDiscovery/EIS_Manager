@@ -14,6 +14,8 @@ using System.Text.RegularExpressions;
 
 namespace EIS_Manager
 {
+   
+
     public partial class Fitter : Form
     {
         public List<Double> freq = new List<double>();
@@ -36,6 +38,40 @@ namespace EIS_Manager
         public bool recalibrated = new bool();
         List<int> bad_ints = new List<int>();
         List<int> recal_ints = new List<int>();
+
+        public class mpt
+        {
+            public string Name
+            { get; set; }
+
+            public string Mask_choice
+            { get; set; }
+
+            public bool Recal
+            { get; set; }
+
+            public double X_min
+            { get; set; }
+
+            public double X_max
+            { get; set; }
+
+            public double Y_min
+            { get; set; }
+
+            public double Y_max
+            { get; set; }
+
+            public List<int> bad_indices = new List<int>();
+
+            public Dictionary<Double, Tuple<Double, Double>> mpt_dict = new Dictionary<Double, Tuple<Double, Double>>();
+        }
+
+        public mpt curr_mpt = new mpt();
+
+        //Development version will be using either a class or dictionary or both
+        public List<mpt> saved_files = new List<mpt>();
+        
         public Fitter()
         {
             InitializeComponent();
@@ -76,6 +112,7 @@ namespace EIS_Manager
             python_script_location = "C:/Users/instruments/Desktop/EIS_Manager-master/utils";
             to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
         }
+        
         private void python_scripts_Click(object sender, EventArgs e)
         {
             if (folderBrowserDialog2.ShowDialog() == DialogResult.OK)
@@ -390,6 +427,7 @@ namespace EIS_Manager
             fit_coeffs_box.Clear();
             df_checkbox.Items.Clear();
             bad_ints.Clear();
+            curr_mpt = new mpt();
 
             foreach (var series in nvyquist.Series)
             {
@@ -408,6 +446,9 @@ namespace EIS_Manager
 
 
                 string mpt_file = Regex.Replace(file_display.SelectedItem.ToString(), @"\t|\n|\r", "");
+                
+                curr_mpt.Name = mpt_file;
+
                 string raw_path = curr_path;
                 file_display_label.Text = mpt_file;
                 string[] output = mpt_dataframe(raw_path, file_display.SelectedItem.ToString());
@@ -430,9 +471,8 @@ namespace EIS_Manager
                     }
                     if (dbl_prep.Count == 3)
                     {
-                        freq.Add(dbl_prep.Dequeue());
-                        re.Add(dbl_prep.Dequeue());
-                        im.Add(dbl_prep.Dequeue());
+          
+                        curr_mpt.mpt_dict.Add(dbl_prep.Dequeue(), new Tuple<double, double>(dbl_prep.Dequeue(), dbl_prep.Dequeue()));
                     }
                     else
                     {
@@ -448,24 +488,24 @@ namespace EIS_Manager
                 
                 for (int i = 0; i < 20; i++)
                 {
-                    string marker = String.Concat(re[i].ToString(), " , ", im[i].ToString());
+                    string marker = String.Concat(curr_mpt.mpt_dict.Values.ElementAt(i).Item1.ToString(), " , ", curr_mpt.mpt_dict.Values.ElementAt(i).Item2.ToString());
                     df_checkbox.Items.Add(marker);
                     df_checkbox.SetItemChecked(i, true);
                 }
                
-                for (int i = 0; i < freq.Count; i++)
+                for (int i = 0; i < curr_mpt.mpt_dict.Count; i++)
                 {
                     DataPoint point = new DataPoint();
-                    point.SetValueXY(re[i], im[i]);
-                    point.ToolTip = string.Format("X Value: {0}, Y Value {1}", re[i], im[i]);
+                    point.SetValueXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
+                    point.ToolTip = string.Format("X Value: {0}, Y Value {1}", curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
                     nvyquist.Series[0].Points.Add(point);
                 }
 
                 for (int i = 0; i < 20; i++)
                 {
                     DataPoint point = new DataPoint();
-                    point.SetValueXY(re[i], im[i]);
-                    point.ToolTip = string.Format("X Value: {0}, Y Value {1}", re[i], im[i]);
+                    point.SetValueXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
+                    point.ToolTip = string.Format("X Value: {0}, Y Value {1}", curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
                     first_twenty.Series[0].Points.Add(point);
                 }
 
@@ -508,14 +548,24 @@ namespace EIS_Manager
             foreach (int ind in recal_ints)
             {
                 //MessageBox.Show(ind.ToString());
-                freq.RemoveAt(ind);
+                curr_mpt.mpt_dict.Remove(curr_mpt.mpt_dict.ElementAt(ind).Key);
+                /*
                 re.RemoveAt(ind);
                 im.RemoveAt(ind);
+                */
             }
             
-            
-            first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
-            nvyquist.Series[0].Points.DataBindXY(re, im);
+            for (int i = 0; i < curr_mpt.mpt_dict.Count; i++)
+            {
+                nvyquist.Series[0].Points.AddXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
+            }
+
+            for (int i = 0; i < 20; i++)
+            {
+                nvyquist.Series[0].Points.AddXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
+            }
+            //first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
+            //nvyquist.Series[0].Points.DataBindXY(re, im);
             recal_ints.Clear();
            
         }
@@ -528,6 +578,8 @@ namespace EIS_Manager
                 string mpt_file = file_display.SelectedItem.ToString();
                 string raw_path = curr_path;
                 string[] mask_mpt = masked_mpt(raw_path, mpt_file, "1");
+
+                curr_mpt.Mask_choice = "1";
 
                 List<Double> masked_freq = new List<Double>();
                 List<Double> masked_re = new List<Double>();
@@ -582,6 +634,8 @@ namespace EIS_Manager
                 string mpt_file = file_display.SelectedItem.ToString();
                 string raw_path = curr_path;
                 string[] mask_mpt = masked_mpt(raw_path, mpt_file, "2");
+
+                curr_mpt.Mask_choice = "2";
 
                 List<Double> masked_freq = new List<Double>();
                 List<Double> masked_re = new List<Double>();
@@ -638,6 +692,8 @@ namespace EIS_Manager
                 string raw_path = curr_path;
                 string[] mask_mpt = masked_mpt(raw_path, mpt_file, "3");
 
+                curr_mpt.Mask_choice = "3";
+
                 List<Double> masked_freq = new List<Double>();
                 List<Double> masked_re = new List<Double>();
                 List<Double> masked_im = new List<Double>();
@@ -685,18 +741,28 @@ namespace EIS_Manager
         }
         private void entire_fit_CheckedChanged(object sender, EventArgs e)
         {
+            curr_mpt.Mask_choice = "4";
         }
 
         private void window_masker_CheckedChanged(object sender, EventArgs e)
         {
             try
             {
+                curr_mpt.Mask_choice = "5";
+
                 if (window_masker.Checked == true)
                 {
                     nvyquist.ChartAreas[0].AxisX.Minimum = double.NaN;
                     nvyquist.ChartAreas[0].AxisY.Minimum = double.NaN;
 
                     nvyquist.ChartAreas[0].RecalculateAxesScale();
+
+                    curr_mpt.X_min = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMinimum;
+                    curr_mpt.X_max = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum;
+                    curr_mpt.Y_min = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum;
+                    curr_mpt.Y_max = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum;
+
+
                     x_min.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMinimum.ToString();
                     x_max.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum.ToString();
                     y_min.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum.ToString();

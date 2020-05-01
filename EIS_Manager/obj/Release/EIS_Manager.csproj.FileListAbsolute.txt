@@ -10,10 +10,10 @@ C:\Users\cjang.WILDCAT\Desktop\EIS\EIS_Manager\obj\Release\EIS_Manager.pdb
 C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\bin\Release\EIS_Manager.exe.config
 C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\bin\Release\EIS_Manager.exe
 C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\bin\Release\EIS_Manager.pdb
-C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\obj\Release\EIS_Manager.Fitter.resources
 C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\obj\Release\EIS_Manager.Properties.Resources.resources
 C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\obj\Release\EIS_Manager.csproj.GenerateResource.cache
 C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\obj\Release\EIS_Manager.csproj.CoreCompileInputs.cache
 C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\obj\Release\EIS_Manager.exe
 C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\obj\Release\EIS_Manager.pdb
 C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\obj\Release\EIS_Manager.csprojAssemblyReference.cache
+C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\EIS_Manager\obj\Release\EIS_Manager.Fitter.resources
