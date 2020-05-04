@@ -1233,5 +1233,10 @@ namespace EIS_Manager
         private void checkbox_label_Click(object sender, EventArgs e)
         {
         }
+
+        private void save_button_Click(object sender, EventArgs e)
+        {
+            saved_files.Add(curr_mpt);
+        }
     }
 }
