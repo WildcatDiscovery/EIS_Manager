@@ -109,12 +109,13 @@ namespace EIS_Manager
             first_twenty.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             first_twenty.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
 
-            python_script_location = "C:/Users/instruments/Desktop/EIS_Manager-master/utils";
+            python_script_location = "C:\\Users\\kcarroll\\Desktop\\EIS_Manager\\utils";
             to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
         }
         
         private void python_scripts_Click(object sender, EventArgs e)
         {
+            MessageBox.Show(python_script_location);
             if (folderBrowserDialog2.ShowDialog() == DialogResult.OK)
             {
                 python_script_location = folderBrowserDialog2.SelectedPath.ToString();
@@ -554,7 +555,7 @@ namespace EIS_Manager
                 im.RemoveAt(ind);
                 */
             }
-            
+
             for (int i = 0; i < curr_mpt.mpt_dict.Count; i++)
             {
                 nvyquist.Series[0].Points.AddXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
@@ -562,7 +563,7 @@ namespace EIS_Manager
 
             for (int i = 0; i < 20; i++)
             {
-                nvyquist.Series[0].Points.AddXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
+                first_twenty.Series[0].Points.AddXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
             }
             //first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
             //nvyquist.Series[0].Points.DataBindXY(re, im);
@@ -976,6 +977,7 @@ namespace EIS_Manager
                 fit_re.Clear();
                 fit_im.Clear();
                 String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+                MessageBox.Show(indices);
                 bad_ints.Clear();
                 
                 if (entire_fit.Checked == true)
@@ -1052,7 +1054,7 @@ namespace EIS_Manager
                 {
                     if (recalibrated)
                     {
-                        MessageBox.Show(indices);
+                        //MessageBox.Show(indices);
                         recal_fit(raw_path, mpt_file, "3", indices);
                     }
                     else
@@ -1145,8 +1147,8 @@ namespace EIS_Manager
                       
                         to_export.Add(striped_line);
                         string[] ls = striped_line.Split(',');
-                        float x_int1 = float.Parse(ls[3]) + float.Parse(ls[6]);
-                        float x_int2 = float.Parse(ls[2]) + float.Parse(ls[3]) + float.Parse(ls[6]);
+                        float x_int1 = float.Parse(ls[3]) + float.Parse(ls[7]);
+                        float x_int2 = float.Parse(ls[2]) + float.Parse(ls[3]) + float.Parse(ls[7]);
                         nvyquist.Series[3].Points.AddXY(x_int1, 0);
                         nvyquist.Series[3].Points.AddXY(x_int2, 0);
 
@@ -1156,25 +1158,33 @@ namespace EIS_Manager
                         ls[3] = r2;
                         string n1 = String.Concat(" , N1 = ", ls[4]);
                         ls[4] = n1;
-                        string q1 = String.Concat(" , Q1 = ", ls[5]);
+                        string fs1 = String.Concat(" , fs1 = ", ls[5]);
+                        //ls[5] = fs1;
+                        string q1 = String.Concat(" , Q1 = ", ls[6]);
                         ls[5] = q1;
-                        string r3 = String.Concat(" , R3 = ", ls[6]);
+                        string r3 = String.Concat(" , R3 = ", ls[7]);
                         ls[6] = r3;
-                        string n2 = String.Concat(" , N2 = ", ls[7]);
+                        string n2 = String.Concat(" , N2 = ", ls[8]);
                         ls[7] = n2;
-                        string q2 = String.Concat(" , Q2 = ", ls[8]);
+                        string fs2 = String.Concat(" , fs2 = ", ls[9]);
+                        //ls[9] = fs2;
+                        string q2 = String.Concat(" , Q2 = ", ls[10]);
                         ls[8] = q2;
-                        string n3 = String.Concat(" , N3 = ", ls[9]);
-                        ls[9] = n3;
-                        string q3 = String.Concat(" , Q3 = ", ls[10]);
-                        ls[10] = q3;
+                        string q3 = String.Concat(" , Q3 = ", ls[11]);
+                        ls[9] = q3;
+                        string n3 = String.Concat(" , N3 = ", ls[12]);
+                        ls[10] = n3;
                         fit_coeffs_box.Clear();
                         ls[0] = "";
                         ls[1] = "";
+                        ls[11] = "";
+                        ls[12] = "";
                         foreach(string str in ls)
                         {
                             fit_coeffs_box.AppendText(str);
                         }
+                        fit_re.Clear();
+                        fit_im.Clear();
                     }
                     else
                     {

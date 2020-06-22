@@ -9,7 +9,7 @@ from __future__ import division
 import pandas as pd
 import numpy as np
 from scipy.constants import codata
-from pylab import *
+#from pylab import *
 from scipy.optimize import curve_fit
 import mpmath as mp
 from lmfit import minimize, Minimizer, Parameters, Parameter, report_fit
@@ -43,7 +43,7 @@ pd.options.mode.chained_assignment = None
 
 
 #USE THIS FOR COMMAND LINE TESTING
-#>python3 -c "from tools import *; print(mpt_data(path = r'C:\Users\cjang\Desktop\Kyler_Speed_Circuit\data\\', data = ['DE_40_1_30.mpt']))"
+#>python3 -c "from tools import *; print(mpt_data(path = r'C:\Users\cjang.WILDCAT\Desktop\EIS_Manager\data\\', data = ['DE_49_9_30.mpt']).df_raw)"
 
 
 
@@ -130,6 +130,42 @@ def correct_text_EIS(text_header):
         return 'Ns_changes'
     else:
         return text_header
+    
+#BASIC ELEMENTS
+def elem_Q(w,Q,n):
+    '''
+    Simulation Function: -Q-
+    
+    Inputs
+    ----------
+    w = Angular frequency [1/s]
+    Q = Constant phase element [s^n/ohm]
+    n = Constant phase elelment exponent [-]
+    '''
+    #print(type(Q), type(w*1j), type(n))
+    return 1/(Q*(w*1j)**n)
+def cir_RQ(w, R='none', Q='none', n='none', fs='none'):
+    '''
+    Simulation Function: -RQ-
+    Return the impedance of an Rs-RQ circuit. See details for RQ under cir_RQ_fit()
+    
+    Kristian B. Knudsen (kknu@berkeley.edu / kristianbknudsen@gmail.com)
+    
+    Inputs
+    ----------
+    w = Angular frequency [1/s]
+    R = Resistance [Ohm]
+    Q = Constant phase element [s^n/ohm]
+    n = Constant phase elelment exponent [-]
+    fs = Summit frequency of RQ circuit [Hz]
+    '''
+    if R == 'none':
+        R = (1/(Q*(2*np.pi*fs)**n))
+    elif Q == 'none':
+        Q = (1/(R*(2*np.pi*fs)**n))
+    elif n == 'none':
+        n = np.log(Q*R)/np.log(1/(2*np.pi*fs))
+    return (R/(1+R*Q*(w*1j)**n))
 
 
 class mpt_data:
@@ -295,8 +331,6 @@ class mpt_data:
                 self.label_re_1.append("Z' ("+str(np.round(np.average(self.df[i].E_avg), 2))+' V)')
                 self.label_im_1.append("Z'' ("+str(np.round(np.average(self.df[i].E_avg), 2))+' V)')
                 self.label_cycleno.append(str(np.round(np.average(self.df[i].E_avg), 2))+' V')
-
-       
         ### Nyquist Plot
         ax.plot(self.df[0].re, self.df[0].im, marker='o', ms=4, lw=2, color=colors[i], ls='-', label=self.label_cycleno[i])
         if fitting == 'on':
@@ -313,60 +347,142 @@ class mpt_data:
 
     #FITTING THE FREQUENCY ONTO THE GRAPH. FLIP SWITCH ON PLOT FUNCT TO DISPLAY
     def mpt_fit(self, params, circuit, weight_func='modulus', nan_policy='raise'):
-        assert circuit == 'R-RQ-RQ'
-
         self.Fit = []
         self.circuit_fit = []
         self.fit_E = []
-        self.fit_Rs = []
-        self.fit_R = []
-        self.fit_n = []
-        self.fit_R2 = []
-        self.fit_n2 = []
-        self.fit_fs = []
-        self.fit_fs2 = []
-        self.fit_Q = []
-        self.fit_Q2 = []
-        self.fit_Q3 = []
-        self.fit_n3 = []
-        self.fit_fs3 = []
-
         for i in range(len(self.df)):
-            self.Fit.append(minimize(self.leastsq_errorfunc, params, method='leastsq', args=(self.df[i].w.values, self.df[i].re.values, self.df[i].im.values, circuit, weight_func), nan_policy=nan_policy, maxfev=9999990))
+            fitted_mpt_data = minimize(self.leastsq_errorfunc, params, method='leastsq', args=(self.df[i].w.values, self.df[i].re.values, self.df[i].im.values, circuit, weight_func), nan_policy=nan_policy, maxfev=9999990)
+            self.Fit.append(fitted_mpt_data)
             #print(report_fit(self.Fit[i]))
-            #print(self.Fit)
-            #self.fit_E.append(np.average(self.df[i].E_avg))
-        
-        
-        for i in range(len(self.df)):
-            if "'fs'" in str(self.Fit[i].params.keys()) and "'fs2'" in str(self.Fit[i].params.keys()) and "'fs3'" in str(self.Fit[i].params.keys()):
-                #print('HERE')
-                self.circuit_fit.append(cir_RsRQRQ(w=self.df[i].w, Rs=self.Fit[i].params.get('Rs').value, R=self.Fit[i].params.get('R').value, Q='none', n=self.Fit[i].params.get('n').value, fs=self.Fit[i].params.get('fs').value, R2=self.Fit[i].params.get('R2').value, Q2='none', n2=self.Fit[i].params.get('n2').value, fs2=self.Fit[i].params.get('fs2').value, Q3='none', n3=self.Fit[i].params.get('n3').value,fs3 = self.Fit[i].params.get('fs3').value)),
-                self.fit_Rs.append(self.Fit[i].params.get('Rs').value)
-                self.fit_R.append(self.Fit[i].params.get('R').value)
-                self.fit_n.append(self.Fit[i].params.get('n').value)
-                self.fit_fs.append(self.Fit[i].params.get('fs').value)
-                self.fit_R2.append(self.Fit[i].params.get('R2').value)
-                self.fit_n2.append(self.Fit[i].params.get('n2').value)
-                self.fit_fs2.append(self.Fit[i].params.get('fs2').value)
-                self.fit_fs3.append(self.Fit[i].params.get('fs3').value)
-                self.fit_Q.append(1/(self.fit_R[0] * (self.fit_fs[0] * 2 * np.pi)**self.fit_n[0])) 
-                self.fit_Q2.append(1/(self.fit_R2[0] * (self.fit_fs2[0] * 2 * np.pi)**self.fit_n2[0])) 
-                self.fit_n3.append(self.Fit[i].params.get('n3').value) 
-                #print(self.fit_fs3[0] * 2 * np.pi)
-                #print(self.fit_n3[0])
-                self.fit_Q3.append(1/((self.fit_fs3[0] * 2 * np.pi)**self.fit_n3[0])) 
-            else:
-                print("Circuit Error, check inputs")
-                break
-        #print(self.circuit_fit)
+            self.low_error = self.Fit[i].chisqr
+            #print("CHI-SQ ERROR: ", self.Fit[i].chisqr)
+            #print("PARAMS", self.Fit[i].params)
+            self.fit_E.append(np.average(self.df[i].E_avg))
+        if circuit == 'R-RQ-Q':
+            self.fit_Rs = []
+            self.fit_n = []
+            self.fit_R1 = []
+            self.fit_n1 = []
+            self.fit_Q = []
+            self.fit_fs1 = []
+            self.fit_Q1 = []
+            for i in range(len(self.df)):
+                if "'fs1'" in str(self.Fit[i].params.keys()):
+                    self.circuit_fit.append(cir_RsRQQ(w=self.df[i].w, Rs=self.Fit[i].params.get('Rs').value, Q=self.Fit[i].params.get('Q').value, n=self.Fit[i].params.get('n').value, R1=self.Fit[i].params.get('R1').value, Q1='none', n1=self.Fit[i].params.get('n1').value, fs1=self.Fit[i].params.get('fs1').value))
+                    self.fit_Rs.append(self.Fit[i].params.get('Rs').value)
+                    self.fit_Q.append(self.Fit[i].params.get('Q').value)
+                    self.fit_n.append(self.Fit[i].params.get('n').value)
+                    self.fit_R1.append(self.Fit[i].params.get('R1').value)
+                    self.fit_n1.append(self.Fit[i].params.get('n1').value)
+                    self.fit_fs1.append(self.Fit[i].params.get('fs1').value)
+                elif "'Q1'" in str(self.Fit[i].params.keys()):
+                    self.circuit_fit.append(cir_RsRQQ(w=self.df[i].w, Rs=self.Fit[i].params.get('Rs').value, Q=self.Fit[i].params.get('Q').value, n=self.Fit[i].params.get('n').value, R1=self.Fit[i].params.get('R1').value, Q1=self.Fit[i].params.get('Q1').value, n1=self.Fit[i].params.get('n1').value, fs1='none'))
+                    self.fit_Rs.append(self.Fit[i].params.get('Rs').value)
+                    self.fit_Q.append(self.Fit[i].params.get('Q').value)
+                    self.fit_n.append(self.Fit[i].params.get('n').value)
+                    self.fit_R1.append(self.Fit[i].params.get('R1').value)
+                    self.fit_n1.append(self.Fit[i].params.get('n1').value)
+                    self.fit_Q1.append(self.Fit[i].params.get('Q1').value)
+        elif circuit == 'R-RQ-RQ':
+            self.fit_Rs = []
+            self.fit_R = []
+            self.fit_n = []
+            self.fit_R2 = []
+            self.fit_n2 = []
+            self.fit_fs = []
+            self.fit_fs2 = []
+            self.fit_Q = []
+            self.fit_Q2 = []
+            self.fit_fs3 = []
+            for i in range(len(self.df)):
+                if "'fs'" in str(self.Fit[i].params.keys()) and "'fs2'" in str(self.Fit[i].params.keys()):
+                    self.circuit_fit.append(cir_RsRQRQ(w=self.df[i].w, Rs=self.Fit[i].params.get('Rs').value, R=self.Fit[i].params.get('R').value, Q='none', n=self.Fit[i].params.get('n').value, fs=self.Fit[i].params.get('fs').value, R2=self.Fit[i].params.get('R2').value, Q2='none', n2=self.Fit[i].params.get('n2').value, fs2=self.Fit[i].params.get('fs2').value))
+                    self.fit_Rs.append(self.Fit[i].params.get('Rs').value)
+                    self.fit_R.append(self.Fit[i].params.get('R').value)
+                    self.fit_n.append(self.Fit[i].params.get('n').value)
+                    self.fit_fs.append(self.Fit[i].params.get('fs').value)
+                    self.fit_R2.append(self.Fit[i].params.get('R2').value)
+                    self.fit_n2.append(self.Fit[i].params.get('n2').value)
+                    self.fit_fs2.append(self.Fit[i].params.get('fs2').value)
+                    #self.fit_Q3.append(self.Fit[i].params.get('Q3').value)
+        elif circuit == 'R-RQ-RQ2':
+            self.fit_Rs = []
+            self.fit_R = []
+            self.fit_n = []
+            self.fit_R2 = []
+            self.fit_n2 = []
+            self.fit_fs = []
+            self.fit_fs2 = []
+            self.fit_Q = []
+            self.fit_Q2 = []
+            for i in range(len(self.df)):
+                if "'fs'" in str(self.Fit[i].params.keys()) and "'fs2'" in str(self.Fit[i].params.keys()):
+                    self.circuit_fit.append(cir_RsRQRQ2(w=self.df[i].w, Rs=self.Fit[i].params.get('Rs').value, R=self.Fit[i].params.get('R').value, Q='none', n=self.Fit[i].params.get('n').value, fs=self.Fit[i].params.get('fs').value, R2=self.Fit[i].params.get('R2').value, Q2='none', n2=self.Fit[i].params.get('n2').value, fs2=self.Fit[i].params.get('fs2').value))
+                    self.fit_Rs.append(self.Fit[i].params.get('Rs').value)
+                    self.fit_R.append(self.Fit[i].params.get('R').value)
+                    self.fit_n.append(self.Fit[i].params.get('n').value)
+                    self.fit_fs.append(self.Fit[i].params.get('fs').value)
+                    self.fit_R2.append(self.Fit[i].params.get('R2').value)
+                    self.fit_n2.append(self.Fit[i].params.get('n2').value)
+                    self.fit_fs2.append(self.Fit[i].params.get('fs2').value)
+        elif circuit == 'R-RQ-RQ-Q':
+            self.fit_Rs = []
+            self.fit_R1 = []
+            self.fit_n1 = []
+            self.fit_R2 = []
+            self.fit_n2 = []
+            self.fit_fs1 = []
+            self.fit_fs2 = []
+            self.fit_Q = []
+            self.fit_Q1 = []
+            self.fit_Q2 = []
+            self.fit_n = []
+            for i in range(len(self.df)):
+                if "'fs1'" in str(self.Fit[i].params.keys()) and "'fs2'" in str(self.Fit[i].params.keys()) and "'Q'" in str(self.Fit[i].params.keys()):
+                    self.circuit_fit.append(cir_RsRQRQQ(w=self.df[i].w, Rs=self.Fit[i].params.get('Rs').value, Q=self.Fit[i].params.get('Q').value, n=self.Fit[i].params.get('n').value, R1=self.Fit[i].params.get('R1').value, Q1='none', n1=self.Fit[i].params.get('n1').value, fs1=self.Fit[i].params.get('fs1').value, R2=self.Fit[i].params.get('R2').value, Q2='none', n2=self.Fit[i].params.get('n2').value, fs2=self.Fit[i].params.get('fs2').value))
+                    self.fit_Rs.append(self.Fit[i].params.get('Rs').value)
+                    self.fit_R1.append(self.Fit[i].params.get('R1').value)
+                    self.fit_n1.append(self.Fit[i].params.get('n1').value)
+                    self.fit_fs1.append(self.Fit[i].params.get('fs1').value)
+                    self.fit_R2.append(self.Fit[i].params.get('R2').value)
+                    self.fit_n2.append(self.Fit[i].params.get('n2').value)
+                    self.fit_fs2.append(self.Fit[i].params.get('fs2').value)
+                    self.fit_Q.append(self.Fit[i].params.get('Q').value)
+                    self.fit_n.append(self.Fit[i].params.get('n').value)
+                elif "'Q1'" in str(self.Fit[i].params.keys()) and "'Q2'" in str(self.Fit[i].params.keys()) and "'Q'" in str(self.Fit[i].params.keys()):
+                    self.circuit_fit.append(cir_RsRQRQQ(w=self.df[i].w, Rs=self.Fit[i].params.get('Rs').value, Q=self.Fit[i].params.get('Q').value, n=self.Fit[i].params.get('n').value, R1=self.Fit[i].params.get('R1').value, Q1=self.Fit[i].params.get('Q1').value, n1=self.Fit[i].params.get('n1').value, fs1='None', R2=self.Fit[i].params.get('R2').value, Q2=self.Fit[i].params.get('Q2').value, n2=self.Fit[i].params.get('n2').value, fs2='None'))
+                    self.fit_Rs.append(self.Fit[i].params.get('Rs').value)
+                    self.fit_R1.append(self.Fit[i].params.get('R1').value)
+                    self.fit_n1.append(self.Fit[i].params.get('n1').value)
+                    self.fit_fs1.append(self.Fit[i].params.get('Q1').value)
+                    self.fit_R2.append(self.Fit[i].params.get('R2').value)
+                    self.fit_n2.append(self.Fit[i].params.get('n2').value)
+                    self.fit_fs2.append(self.Fit[i].params.get('Q2').value)
+                    self.fit_Q.append(self.Fit[i].params.get('Q').value)
+                    self.fit_n.append(self.Fit[i].params.get('n').value)
+                else:
+                    print('Not valid')
+        else:
+            print('Circuit was not properly defined, see details described in definition')
+            
+    def leastsq_errorfunc(self, params, w, re, im, circuit, weight_func = 'modulus'):
+        if circuit == 'R-RQ-RQ':
+            re_fit = cir_RsRQRQ_fit(params, w).real
+            im_fit = -cir_RsRQRQ_fit(params, w).imag
+        elif circuit == 'R-RQ-Q':
+            re_fit = cir_RsRQQ_fit(params, w).real
+            im_fit = -cir_RsRQQ_fit(params, w).imag
+        elif circuit == 'R-RQ-RQ2':
+            re_fit = cir_RsRQRQ2_fit(params, w).real
+            im_fit = -cir_RsRQRQ2_fit(params, w).imag
+        elif circuit == 'R-RQ-RQ-Q':
+            re_fit = cir_RsRQRQQ_fit(params, w).real
+            im_fit = -cir_RsRQRQQ_fit(params, w).imag
+        else:
+            print('Circuit is not defined in leastsq_errorfunc()')
 
-    def leastsq_errorfunc(self, params, w, re, im, circuit, weight_func):
-        re_fit = cir_RsRQRQ_fit(params, w).real
-        im_fit = -cir_RsRQRQ_fit(params, w).imag
-        error = [(re-re_fit)**2, (im-im_fit)**2] #sum of squares
-        #print('MPT FILE : ', self.data[0], ' ERROR: ', sum(error))
-        self.low_error = sum(error)
+        error = ([(re-re_fit)**2, (im-im_fit)**2]) #sum of squares
+        
         #Different Weighing options, see Lasia
         if weight_func == 'modulus':
             weight = [1/((re_fit**2 + im_fit**2)**(1/2)), 1/((re_fit**2 + im_fit**2)**(1/2))]
@@ -379,35 +495,40 @@ class mpt_data:
             weight = [unity_1s, unity_1s]
         else:
             print('weight not defined in leastsq_errorfunc()')
-            
+        
         S = np.array(weight) * error #weighted sum of squares 
         return S
     
     #Updated Guesser
     def guesser(self, csv_container = None):
-        Rs_guess = 1e3
-        R_guess = 1 
-        n_guess = 0.8 
-        fs_guess = 1 
-        R2_guess = 100 
-        n2_guess = 0.8 
-        fs2_guess = 0.2 
-        n3_guess = 0.8
-        fs3_guess = 1
-
+        
+        Rs_guess = min(self.df_raw['re'])
+        R1_guess = max(self.df_raw['re'])//4
+        n1_guess = .61219110 
+        fs1_guess = 15320.8584 
+        R2_guess = 3*max(self.df_raw['re'])//4
+        n2_guess = 0.92134519 
+        fs2_guess = 20.0517197 
+        Q3_guess = 10**-7
+        n3_guess = .5
 
         params = Parameters()
-        #adding to the parameters package to send to the fitting function
-        params.add('Rs', value=Rs_guess, min=Rs_guess*.01, max=10**6)
-        params.add('R', value=R_guess, min=Rs_guess*.1, max=10**6)
-        params.add('n', value=n_guess, min=.65, max=1)
-        params.add('fs', value=fs_guess, min=10**0.5, max=10**6)
-        params.add('R2', value=R2_guess, min=R2_guess*.1, max=10**6)
-        params.add('n2', value=n2_guess, min=.65, max=1)
-        params.add('fs2', value=fs2_guess, min=10**-2, max=10**6)
-        params.add('n3', value=n3_guess, min=.65, max=1)
-        params.add('fs3', value=fs3_guess, min=10**-2, max=10**6)
-        self.mpt_fit(params, circuit = 'R-RQ-RQ')
+        params.add('Rs', value=Rs_guess, min=Rs_guess*.01, max=Rs_guess*100)
+
+        params.add('R1', value=R1_guess, min=R1_guess*.1, max=R1_guess*10)
+        params.add('n1', value=n1_guess, min=.1, max=1)
+        params.add('fs1', value=fs1_guess, min=10**-2, max=10**10)
+        #params.add('Q', value=fs_guess, min=10**0.5, max=10**6)
+
+        params.add('R2', value=R2_guess, min=R2_guess*.1, max=R2_guess*10)
+        params.add('n2', value=n2_guess, min=.1, max=1)
+        params.add('fs2', value=fs2_guess, min=fs2_guess**.1, max=10**10)
+        #params.add('Q2', value=fs2_guess, min=10**-2, max=10**2)
+
+        params.add('Q', value=Q3_guess, min=10**-10, max=10**0)
+        params.add('n', value=n3_guess, min=.1, max=1)
+
+        self.mpt_fit(params, circuit = 'R-RQ-RQ-Q')
 
         counter = 0
 
@@ -417,47 +538,48 @@ class mpt_data:
                 #print('ITERATION NO. : ', counter)
                 Rs_guess = self.fit_Rs[0]
 
-                R_guess = self.fit_R[0]
-                n_guess = self.fit_n[0]
-                fs_guess = self.fit_fs[0]
+                R1_guess = self.fit_R1[0]
+                n1_guess = self.fit_n1[0]
+                Q1_guess = self.fit_fs1[0]
 
                 R2_guess = self.fit_R2[0]
                 n2_guess = self.fit_n2[0]
-                fs2_guess = self.fit_fs2[0]
+                Q2_guess = self.fit_fs2[0]
 
-                n3_guess = self.fit_n3[0]
-                fs3_guess = self.fit_fs3[0]
+                n_guess = self.fit_n[0]
+                Q_guess = self.fit_Q[0]
 
-                guess_package = [Rs_guess, R_guess, n_guess, fs_guess, R2_guess, n2_guess, fs2_guess, n3_guess, fs3_guess]
+                guess_package = [Rs_guess, R1_guess, n1_guess, Q1_guess, R2_guess, n2_guess, Q2_guess, n_guess, Q_guess]
                 #adding to the parameters package to send to the fitting function
                 params = Parameters()
                 params.add('Rs', value=guess_package[0], min=guess_package[0]*.01, max=guess_package[0]*100)
-                params.add('R', value=guess_package[1], min=guess_package[1]*.1, max=guess_package[1]*10)
-                params.add('n', value=guess_package[2], min=.65, max=1)
-                params.add('fs', value=guess_package[3], min=10**0.5, max=10**6)
+                params.add('R1', value=guess_package[1], min=guess_package[1]*.1, max=guess_package[1]*10)
+                params.add('n1', value=guess_package[2], min=.65, max=1)
+                params.add('fs1', value=guess_package[3], min=10**0.5, max=10**6)
                 params.add('R2', value=guess_package[4], min=guess_package[4]*.1, max=guess_package[4]*10)
                 params.add('n2', value=guess_package[5], min=.65, max=1)
                 params.add('fs2', value=guess_package[6], min=10**-2, max=10**1)
-                params.add('n3', value=guess_package[7], min=.65, max=1)
-                params.add('fs3', value=guess_package[8], min=10**-2, max=10**1)
-                self.mpt_fit(params, circuit = 'R-RQ-RQ')
+                params.add('n', value=guess_package[7], min=.65, max=1)
+                params.add('Q', value=guess_package[8], min=10**-2, max=10**1)
+                self.mpt_fit(params, circuit = 'R-RQ-RQ-Q')
 
 
             except KeyboardInterrupt:
                 print('Interrupted!!')
-                #print([self.fit_Rs[0],self.fit_R[0],self.fit_n[0],self.fit_Q[0],self.fit_R2[0],self.fit_n2[0],self.fit_Q2[0]])
-        #self.set_new_gph_dims(50,50)
-        #self.mpt_plot(fitting = 'on')
+        #print(self.data)
+        #print(self.fit_Rs,self.fit_R1,self.fit_n1,self.fit_fs1,self.fit_R2,self.fit_n2,self.fit_fs2, self.fit_n,self.fit_Q)
         self.fitted = pd.DataFrame({'file':self.data,
-                    'fit_R':self.fit_Rs,
-                "fit_Rs":self.fit_R,
-                "fit_n":self.fit_n,
-                "fit_Q":self.fit_Q,
+                    'fit_Rs':self.fit_Rs,
+                "fit_R1":self.fit_R1,
+                "fit_n1":self.fit_n1,
+                "fit_fs1":self.fit_fs1,
+                "fit_Q1":(1/(self.fit_R1[0]*(2*np.pi*self.fit_fs1[0])**self.fit_n1[0])),                   
                 "fit_R2":self.fit_R2,
                 "fit_n2":self.fit_n2,
-                "fit_Q2":self.fit_Q2,
-                "fit_n3":self.fit_n3,
-                "fit_Q3":self.fit_Q3})
+                "fit_fs2":self.fit_fs2,
+                "fit_Q2":(1/(self.fit_R2[0]*(2*np.pi*self.fit_fs2[0])**self.fit_n2[0])),
+                "fit_Q3":self.fit_Q,
+                "fit_n3":self.fit_n,})
         out_name = 'fitted_' + self.data[0][:-4]
         if csv_container:
             self.fitted.to_csv(csv_container+out_name, sep='\t')
@@ -474,6 +596,36 @@ class mpt_data:
         else:
             self.guesser()
             self.mpt_plot(fitting = 'on')
+
+def cir_RsRQQ_fit(params, w):
+    Rs = params['Rs']
+    Q = params['Q']
+    n = params['n']
+    Z_Q = 1/(Q*(w*1j)**n)
+
+    if str(params.keys())[10:].find("R1") == -1: #if R == 'none':
+        Q1 = params['Q1']
+        n1 = params['n1']
+        fs1 = params['fs1']
+        R1 = (1/(Q1*(2*np.pi*fs1)**n1))
+    if str(params.keys())[10:].find("Q1") == -1: #elif Q == 'none':
+        R1 = params['R1']
+        n1 = params['n1']
+        fs1 = params['fs1']
+        Q1 = (1/(R1*(2*np.pi*fs1)**n1))
+    if str(params.keys())[10:].find("n1") == -1: #elif n == 'none':
+        R1 = params['R1']
+        Q1 = params['Q1']
+        fs1 = params['fs1']
+        n1 = np.log(Q1*R1)/np.log(1/(2*np.pi*fs1))
+    if str(params.keys())[10:].find("fs1") == -1: #elif fs == 'none':
+        R1 = params['R1']
+        n1 = params['n1']
+        Q1 = params['Q1']
+    Z_RQ = (R1/(1+R1*Q1*(w*1j)**n1))
+    
+    return Rs + Z_RQ + Z_Q
+
 
 def cir_RsRQRQ_fit(params, w):
     '''
@@ -521,29 +673,190 @@ def cir_RsRQRQ_fit(params, w):
         R2 = params['R2']
         Q2 = params['Q2']
         n2 = params['n2']
-    
-    n3 = params['n3']
-    Q3 = (1/((2*np.pi*params['fs3'])**n3))
+
     Rs = params['Rs']
-    return Rs + (R/(1+R*Q*(w*1j)**n)) + (R2/(1+R2*Q2*(w*1j)**n2)) + (1/(Q3*(w*1j))**n3)
+    return Rs + (R/(1+R*Q*(w*1j)**n)) + (R2/(1+R2*Q2*(w*1j)**n2))
 
-
-def cir_RsRQRQ(w, Rs, R='none', Q='none', n='none', fs='none', R2='none', Q2='none', n2='none', fs2='none', Q3 = 'none', fs3 = 'none', n3 = 'none'):
-
+def cir_RsRQRQ2_fit(params, w):
+    '''
+    Fit Function: -Rs-RQ-RQ-
+    Return the impedance of an Rs-RQ circuit. See details under cir_RsRQRQ()
     
-    if Q == 'none':
+    Kristian B. Knudsen (kknu@berkeley.edu / kristianbknudsen@gmail.com)
+    '''
+    if str(params.keys())[10:].find("'R'") == -1: #if R == 'none':
+        Q = params['Q']
+        n = params['n']
+        fs = params['fs']
+        R = (1/(Q*(2*np.pi*fs)**n))
+    if str(params.keys())[10:].find("'Q'") == -1: #elif Q == 'none':
+        R = params['R']
+        n = params['n']
+        fs = params['fs']
         Q = (1/(R*(2*np.pi*fs)**n))
-    
-   
-    if Q2 == 'none':
-        Q2 = (1/(R2*(2*np.pi*fs2)**n2))
-    
+    if str(params.keys())[10:].find("'n'") == -1: #elif n == 'none':
+        R = params['R']
+        Q = params['Q']
+        fs = params['fs']
+        n = np.log(Q*R)/np.log(1/(2*np.pi*fs))
+    if str(params.keys())[10:].find("'fs'") == -1: #elif fs == 'none':
+        R = params['R']
+        Q = params['Q']
+        n = params['n']
 
-    if Q3 == 'none':
-        Q3 = (1/(1*(2*np.pi*fs3)**n3))
+    if str(params.keys())[10:].find("'R2'") == -1: #if R == 'none':
+        Q2 = params['Q2']
+        n2 = params['n2']
+        fs2 = params['fs2']
+        R2 = (1/(Q2*(2*np.pi*fs2)**n2))
+    if str(params.keys())[10:].find("'Q2'") == -1: #elif Q == 'none':
+        R2 = params['R2']
+        n2 = params['n2']
+        fs2 = params['fs2']
+        Q2 = (1/(R2*(2*np.pi*fs2)**n2))
+    if str(params.keys())[10:].find("'n2'") == -1: #elif n == 'none':
+        R2 = params['R2']
+        Q2 = params['Q2']
+        fs2 = params['fs2']
+        n2 = np.log(Q2*R2)/np.log(1/(2*np.pi*fs2))
+    if str(params.keys())[10:].find("'fs2'") == -1: #elif fs == 'none':
+        R2 = params['R2']
+        Q2 = params['Q2']
+        n2 = params['n2']
+
+    Rs = params['Rs']
+    return Rs + cir_RQ(w, R=R, Q=Q, n=n, fs=fs) + cir_RQ(w, R=R2, Q=Q2, n=n2, fs=fs2)
+
+def cir_RsRQRQQ_fit(params, w):
+    '''
+    Fit Function: -Rs-RQ-RQ-Q-
+    Return the impedance of an Rs-RQ circuit. See details under cir_RsRQRQ()
     
+    Kristian B. Knudsen (kknu@berkeley.edu / kristianbknudsen@gmail.com)
+    '''
+    if str(params.keys())[10:].find("'R1'") == -1: #if R == 'none':
+        Q1 = params['Q1']
+        n1 = params['n1']
+        fs1 = params['fs1']
+        R1 = (1/(Q*(2*np.pi*fs1)**n1))
+    if str(params.keys())[10:].find("'Q1'") == -1: #elif Q == 'none':
+        R1 = params['R1']
+        n1 = params['n1']
+        fs1 = params['fs1']
+        Q1 = (1/(R1*(2*np.pi*fs1)**n1))
+    if str(params.keys())[10:].find("'n1'") == -1: #elif n == 'none':
+        R1 = params['R1']
+        Q1 = params['Q1']
+        fs1 = params['fs1']
+        n1 = np.log(Q1*R1)/np.log(1/(2*np.pi*fs1))
+    if str(params.keys())[10:].find("'fs1'") == -1: #elif fs == 'none':
+        R1 = params['R1']
+        Q1 = params['Q1']
+        n1 = params['n1']
+        fs1 = 'None'
+
+    if str(params.keys())[10:].find("'R2'") == -1: #if R == 'none':
+        Q2 = params['Q2']
+        n2 = params['n2']
+        fs2 = params['fs2']
+        R2 = (1/(Q2*(2*np.pi*fs2)**n2))
+    if str(params.keys())[10:].find("'Q2'") == -1: #elif Q == 'none':
+        R2 = params['R2']
+        n2 = params['n2']
+        fs2 = params['fs2']
+        Q2 = (1/(R2*(2*np.pi*fs2)**n2))
+    if str(params.keys())[10:].find("'n2'") == -1: #elif n == 'none':
+        R2 = params['R2']
+        Q2 = params['Q2']
+        fs2 = params['fs2']
+        n2 = np.log(Q2*R2)/np.log(1/(2*np.pi*fs2))
+    if str(params.keys())[10:].find("'fs2'") == -1: #elif fs == 'none':
+        R2 = params['R2']
+        Q2 = params['Q2']
+        n2 = params['n2']
+        fs2 = 'none'
+    Rs = params['Rs']
+    Q = params['Q']
+    n = params['n']
+    return Rs + cir_RQ(w, R=R1, Q=Q1, n=n1, fs=fs1) + cir_RQ(w, R=R2, Q=Q2, n=n2, fs=fs2) + elem_Q(w,Q,n)
+
+def cir_RsRQQ(w, Rs, Q, n, R1='none', Q1='none', n1='none', fs1='none'):
+    '''
+    Simulation Function: -Rs-RQ-Q-
+    
+    Inputs
+    ----------
+    w = Angular frequency [1/s]
+    Rs = Series Resistance [ohm]
+    
+    R1 = Resistance in (RQ) circuit [ohm]
+    Q1 = Constant phase element in (RQ) circuit [s^n/ohm]
+    n1 = Constant phase elelment exponent in (RQ) circuit [-]
+    fs1 = Summit frequency of RQ circuit [Hz]
+
+    Q = Constant phase element of series Q [s^n/ohm]
+    n = Constant phase elelment exponent of series Q [-]
+    '''
+    return Rs + cir_RQ(w, R=R1, Q=Q1, n=n1, fs=fs1) + elem_Q(w,Q,n)
+
+def cir_RsRQRQ(w, Rs, R='none', Q='none', n='none', fs='none', R2='none', Q2='none', n2='none', fs2='none'):
+    '''
+    Simulation Function: -Rs-RQ-RQ-
+    Return the impedance of an Rs-RQ circuit. See details for RQ under cir_RQ_fit()
+    
+    Kristian B. Knudsen (kknu@berkeley.edu || kristianbknudsen@gmail.com)
+    
+    Inputs
+    ----------
+    w = Angular frequency [1/s]
+    Rs = Series Resistance [Ohm]
+    
+    R = Resistance [Ohm]
+    Q = Constant phase element [s^n/ohm]
+    n = Constant phase element exponent [-]
+    fs = Summit frequency of RQ circuit [Hz]
+    R2 = Resistance [Ohm]
+    Q2 = Constant phase element [s^n/ohm]
+    n2 = Constant phase element exponent [-]
+    fs2 = Summit frequency of RQ circuit [Hz]
+    '''
+    if R == 'none':
+        R = (1/(Q*(2*np.pi*fs)**n))
+    elif Q == 'none':
+        Q = (1/(R*(2*np.pi*fs)**n))
+    elif n == 'none':
+        n = np.log(Q*R)/np.log(1/(2*np.pi*fs))
+
+    if R2 == 'none':
+        R2 = (1/(Q2*(2*np.pi*fs2)**n2))
+    elif Q2 == 'none':
+        Q2 = (1/(R2*(2*np.pi*fs2)**n2))
+    elif n2 == 'none':
+        n2 = np.log(Q2*R2)/np.log(1/(2*np.pi*fs2))
         
-    return Rs + (R/(1+R*Q*(w*1j)**n)) + (R2/(1+R2*Q2*(w*1j)**n2)) + (1/(Q3*(w*1j))**n3)
+    return Rs + (R/(1+R*Q*(w*1j)**n)) + (R2/(1+R2*Q2*(w*1j)**n2))
+
+def cir_RsRQRQ2(w, Rs, R='none', Q='none', n='none', fs='none', R2='none', Q2='none', n2='none', fs2='none'):
+    '''
+    Simulation Function: -Rs-RQ-Q-
+    
+    Inputs
+    ----------
+    w = Angular frequency [1/s]
+    Rs = Series Resistance [ohm]
+    
+    R1 = Resistance in (RQ) circuit [ohm]
+    Q1 = Constant phase element in (RQ) circuit [s^n/ohm]
+    n1 = Constant phase elelment exponent in (RQ) circuit [-]
+    fs1 = Summit frequency of RQ circuit [Hz]
+
+    Q = Constant phase element of series Q [s^n/ohm]
+    n = Constant phase elelment exponent of series Q [-]
+    '''
+    return Rs + cir_RQ(w, R=R, Q=Q, n=n, fs=fs) + cir_RQ(w, R=R2, Q=Q2, n=n2, fs=fs2)
+
+def cir_RsRQRQQ(w, Rs,Q, n, R1='none', Q1='none', n1='none', fs1='none', R2='none', Q2='none', n2='none', fs2='none'):
+    return Rs + cir_RQ(w, R=R1, Q=Q1, n=n1, fs=fs1) + cir_RQ(w, R=R2, Q=Q2, n=n2, fs=fs2) + elem_Q(w,Q,n)
 
 
 def full_graphing(path, lst = None):
