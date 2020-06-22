@@ -9,7 +9,6 @@ from __future__ import division
 import pandas as pd
 import numpy as np
 from scipy.constants import codata
-#from pylab import *
 from scipy.optimize import curve_fit
 import mpmath as mp
 from lmfit import minimize, Minimizer, Parameters, Parameter, report_fit
@@ -142,7 +141,6 @@ def elem_Q(w,Q,n):
     Q = Constant phase element [s^n/ohm]
     n = Constant phase elelment exponent [-]
     '''
-    #print(type(Q), type(w*1j), type(n))
     return 1/(Q*(w*1j)**n)
 def cir_RQ(w, R='none', Q='none', n='none', fs='none'):
     '''
@@ -506,7 +504,7 @@ class mpt_data:
         R1_guess = max(self.df_raw['re'])//4
         n1_guess = .61219110 
         fs1_guess = 15320.8584 
-        R2_guess = 3*max(self.df_raw['re'])//4
+        R2_guess = 2*max(self.df_raw['re'])//4
         n2_guess = 0.92134519 
         fs2_guess = 20.0517197 
         Q3_guess = 10**-7
@@ -738,7 +736,7 @@ def cir_RsRQRQQ_fit(params, w):
         Q1 = params['Q1']
         n1 = params['n1']
         fs1 = params['fs1']
-        R1 = (1/(Q*(2*np.pi*fs1)**n1))
+        R1 = (1/(Q1*(2*np.pi*fs1)**n1))
     if str(params.keys())[10:].find("'Q1'") == -1: #elif Q == 'none':
         R1 = params['R1']
         n1 = params['n1']

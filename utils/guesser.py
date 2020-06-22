@@ -5,7 +5,6 @@ pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('expand_frame_repr', False)
 #Script to plot the data of mpt
-
 path = sys.argv[1]
 data = sys.argv[2]
 

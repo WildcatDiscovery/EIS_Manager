@@ -109,7 +109,7 @@ namespace EIS_Manager
             first_twenty.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             first_twenty.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
 
-            python_script_location = "C:\\Users\\kcarroll\\Desktop\\EIS_Manager\\utils";
+            python_script_location = "C:\\Users\\cjang.WILDCAT\\Desktop\\EIS_Manager\\utils";
             to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
         }
         
@@ -304,6 +304,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
+            //MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices));
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices);
             proc.Start();
 
@@ -357,6 +358,7 @@ namespace EIS_Manager
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
                 curr_path = folderBrowserDialog1.SelectedPath.ToString();
+                Debug.WriteLine(curr_path);
                 file_display.Items.Clear();
                 
                 string box_form = string.Join(", ", path_listing(folderBrowserDialog1.SelectedPath));
@@ -548,27 +550,31 @@ namespace EIS_Manager
 
             foreach (int ind in recal_ints)
             {
-                //MessageBox.Show(ind.ToString());
                 curr_mpt.mpt_dict.Remove(curr_mpt.mpt_dict.ElementAt(ind).Key);
-                /*
-                re.RemoveAt(ind);
-                im.RemoveAt(ind);
-                */
             }
+
+            nvyquist.Series[0].Points.Clear();
 
             for (int i = 0; i < curr_mpt.mpt_dict.Count; i++)
             {
                 nvyquist.Series[0].Points.AddXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
             }
 
+            first_twenty.Series[0].Points.Clear();
+
             for (int i = 0; i < 20; i++)
             {
                 first_twenty.Series[0].Points.AddXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
             }
-            //first_twenty.Series[0].Points.DataBindXY(re.GetRange(0, 20), im.GetRange(0, 20));
-            //nvyquist.Series[0].Points.DataBindXY(re, im);
-            recal_ints.Clear();
-           
+
+            df_checkbox.Items.Clear();
+
+            for (int i = 0; i < 20; i++)
+            {
+                string marker = String.Concat(curr_mpt.mpt_dict.Values.ElementAt(i).Item1.ToString(), " , ", curr_mpt.mpt_dict.Values.ElementAt(i).Item2.ToString());
+                df_checkbox.Items.Add(marker);
+                df_checkbox.SetItemChecked(i, true);
+            }
         }
 
 
@@ -875,15 +881,8 @@ namespace EIS_Manager
             string fit_coeffs = pre[2];
 
             pre.RemoveRange(0, 3);
-
-            //Console.WriteLine(fit_label);
-            //Console.WriteLine(fit_coeffs);
-
             string box_form = string.Join("", pre);
-            //error_box.Text = box_form;
-            //string to_export = string.Join(" ", fit_label, fit_coeffs);
             fit_coeffs_box.AppendText(fit_label);
-            //fit_coeffs_box.AppendText(fit_coeffs);
 
             foreach (string sgl in pre)
             {
@@ -925,13 +924,7 @@ namespace EIS_Manager
             string fit_coeffs = pre[2];
 
             pre.RemoveRange(0, 3);
-
-            //Console.WriteLine(fit_label);
-            //Console.WriteLine(fit_coeffs);
-
             string box_form = string.Join("", pre);
-            //error_box.Text = box_form;
-            //string to_export = string.Join(" ", fit_label, fit_coeffs);
             fit_coeffs_box.AppendText(fit_label);
             //fit_coeffs_box.AppendText(fit_coeffs);
 
@@ -943,7 +936,6 @@ namespace EIS_Manager
                 {
                     if (word.Length > 1)
                     {
-                        //MessageBox.Show("WORD: " + word);
                         dbl_prep.Enqueue(Convert.ToDouble(word));
                     }
                 }
@@ -960,7 +952,6 @@ namespace EIS_Manager
                     }
                 }
             }
-
         }
 
 
@@ -977,7 +968,7 @@ namespace EIS_Manager
                 fit_re.Clear();
                 fit_im.Clear();
                 String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
-                MessageBox.Show(indices);
+                //MessageBox.Show(indices);
                 bad_ints.Clear();
                 
                 if (entire_fit.Checked == true)
@@ -986,47 +977,49 @@ namespace EIS_Manager
                     {
                         recal_fit(raw_path, mpt_file, "4", indices);
                     }
-                    MessageBox.Show(mpt_file, raw_path);
-                    string[] output = guesser(raw_path, mpt_file);
-                    List<string> pre = output.ToList();
-                    try
+                    else
                     {
-                        string fit_label = pre[0];
-                        string fit_coeffs = pre[1];
-                        pre.RemoveRange(0, 3);
-                        fit_coeffs_box.AppendText(fit_coeffs);
-                    }
-                    catch (ArgumentOutOfRangeException range_error)
-                    {
-                        MessageBox.Show("The guessing Function has not completed; Please fit a mask or fit again and wait");
-                    }
-                    
-                    string box_form = string.Join("", pre);
-                  
-                    foreach (string sgl in pre)
-                    {
-                        Queue<Double> dbl_prep = new Queue<double>();
-                        foreach (var word in sgl.Split(','))
+                        //MessageBox.Show(mpt_file, raw_path);
+                        string[] output = guesser(raw_path, mpt_file);
+                        List<string> pre = output.ToList();
+                        try
                         {
-                            if (word.Length > 1)
+                            string fit_label = pre[0];
+                            string fit_coeffs = pre[1];
+                            pre.RemoveRange(0, 3);
+                            fit_coeffs_box.AppendText(fit_coeffs);
+                        }
+                        catch (ArgumentOutOfRangeException range_error)
+                        {
+                            MessageBox.Show("The guessing Function has not completed; Please fit a mask or fit again and wait");
+                        }
+
+                        string box_form = string.Join("", pre);
+
+                        foreach (string sgl in pre)
+                        {
+                            Queue<Double> dbl_prep = new Queue<double>();
+                            foreach (var word in sgl.Split(','))
                             {
-                                dbl_prep.Enqueue(Convert.ToDouble(word));
+                                if (word.Length > 1)
+                                {
+                                    dbl_prep.Enqueue(Convert.ToDouble(word));
+                                }
+                            }
+                            if (dbl_prep.Count == 2)
+                            {
+                                fit_re.Add(dbl_prep.Dequeue());
+                                fit_im.Add(dbl_prep.Dequeue());
+                            }
+                            else
+                            {
+                                foreach (var word in dbl_prep)
+                                {
+                                    MessageBox.Show("Ununsual Value: " + word.ToString());
+                                }
                             }
                         }
-                        if (dbl_prep.Count == 2)
-                        {
-                            fit_re.Add(dbl_prep.Dequeue());
-                            fit_im.Add(dbl_prep.Dequeue());
-                        }
-                        else
-                        {
-                            foreach (var word in dbl_prep)
-                            {
-                                MessageBox.Show("Ununsual Value: " + word.ToString());
-                            }
-                        }
-                    }
-                    
+                    }     
                 }
                 else if (masker1.Checked == true)
                 {
@@ -1119,7 +1112,7 @@ namespace EIS_Manager
                         path_list_box.Text = string.Join("", post_test);
                     }
                 }
-
+                //Console.WriteLine(string.Join(", ", fit_re));
                 MessageBox.Show("Completed Fitting of " + fit_re.Count().ToString() + " values.");
                 
 
