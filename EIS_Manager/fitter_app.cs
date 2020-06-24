@@ -178,7 +178,7 @@ namespace EIS_Manager
             //MessageBox.Show("Python is Processing; Error Box will fill when process is finished");
             StreamReader sReader = proc.StandardOutput;
             string[] output = sReader.ReadToEnd().Split(splitter);
-            Console.WriteLine(output.Length);
+            //Console.WriteLine(output.Length);
             return output;
         }
 
@@ -307,7 +307,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-            Console.WriteLine(string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices));
+            //Console.WriteLine(string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices));
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices);
             proc.Start();
 
@@ -491,7 +491,7 @@ namespace EIS_Manager
                 nvyquist.MouseWheel += nvyquist_mousewheel;
                 first_twenty.MouseWheel += nvyquist_mousewheel;
                 
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < curr_mpt.mpt_dict.Count; i++)
                 {
                     string marker = String.Concat(curr_mpt.mpt_dict.Values.ElementAt(i).Item1.ToString(), " , ", curr_mpt.mpt_dict.Values.ElementAt(i).Item2.ToString());
                     df_checkbox.Items.Add(marker);
@@ -539,13 +539,15 @@ namespace EIS_Manager
         {
             recalibrated = true;
             int count = df_checkbox.Items.Count;
+            int recal_setting = 0;
             for (int index = count; index > 0; index--)
             {
                if (!df_checkbox.CheckedItems.Contains(df_checkbox.Items[index - 1]))
                 {
                     recal_ints.Add((index-1));
-                    bad_ints.Add((index - 1));
+                    bad_ints.Add(recal_setting + (index - 1));
                     df_checkbox.Items.RemoveAt(index - 1);
+                    recal_setting = bad_ints.Max();
                 }
 
             }
@@ -554,6 +556,8 @@ namespace EIS_Manager
             {
                 curr_mpt.mpt_dict.Remove(curr_mpt.mpt_dict.ElementAt(ind).Key);
             }
+
+            recal_ints.Clear();
 
             nvyquist.Series[0].Points.Clear();
 
@@ -794,10 +798,10 @@ namespace EIS_Manager
 
             string fit_label = pre[1];
             string fit_coeffs = pre[2];
-            //Console.WriteLine(fit_label);
             pre.RemoveRange(0, 3);
 
-            string box_form = string.Join("", pre);
+            string box_form = string.Join("\n", pre);
+            //Console.WriteLine(box_form);
             string box_form_mpt = string.Join("", masked_df);
             fit_coeffs_box.AppendText(fit_coeffs);
             foreach (string sgl in pre)
@@ -807,7 +811,7 @@ namespace EIS_Manager
                 {
                     if (word.Length > 1)
                     {
-                        //MessageBox.Show("WORD: " + word);
+                        MessageBox.Show("WORD: " + word);
                         dbl_prep.Enqueue(Convert.ToDouble(word));
                     }
                 }
@@ -829,14 +833,17 @@ namespace EIS_Manager
         private void recal_fit(string raw_path, string mpt_file, string masker_choice, string indices)
         {
             string[] output = recal_guesser(raw_path, mpt_file, masker_choice, indices);
+            
             List<string> pre = output.ToList();
             string fit_label = pre[1];
             string fit_coeffs = pre[2];
             //Console.WriteLine(fit_label);
             pre.RemoveRange(0, 3);
-            string box_form = string.Join("", pre);
+            string box_form = string.Join("\n", pre);
+            //Console.WriteLine(box_form);
             //string box_form_mpt = string.Join("", masked_df);
-            fit_coeffs_box.AppendText(fit_coeffs);
+            fit_coeffs_box.AppendText(fit_label);
+            
             foreach (string sgl in pre)
             {
                 Queue<Double> dbl_prep = new Queue<double>();
@@ -873,10 +880,10 @@ namespace EIS_Manager
 
 
             string fit_label = pre[1];
-            string fit_coeffs = pre[2];
+            //string fit_coeffs = pre[2];
 
             pre.RemoveRange(0, 3);
-            string box_form = string.Join("", pre);
+            //string box_form = string.Join("", pre);
             fit_coeffs_box.AppendText(fit_label);
 
             foreach (string sgl in pre)
@@ -916,10 +923,10 @@ namespace EIS_Manager
 
 
             string fit_label = pre[1];
-            string fit_coeffs = pre[2];
+            //string fit_coeffs = pre[2];
 
             pre.RemoveRange(0, 3);
-            string box_form = string.Join("", pre);
+            //string box_form = string.Join("", pre);
             fit_coeffs_box.AppendText(fit_label);
             //fit_coeffs_box.AppendText(fit_coeffs);
 
@@ -961,15 +968,19 @@ namespace EIS_Manager
             string raw_path = curr_path;
             fit_re.Clear();
             fit_im.Clear();
-            String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+
+
+            
             Console.WriteLine(String.Concat("[" + String.Join("\n", curr_mpt.mpt_dict.Values) + "]"));
-            Console.WriteLine(curr_mpt.mpt_dict.Count().ToString());
-            bad_ints.Clear();
+            //Console.WriteLine(curr_mpt.mpt_dict.Count().ToString());
+            //bad_ints.Clear();
                 
             if (entire_fit.Checked == true)
             {
                 if (recalibrated)
                 {
+                    String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+                    
                     recal_fit(raw_path, mpt_file, "4", indices);
                 }
                 else
@@ -1020,6 +1031,8 @@ namespace EIS_Manager
             {
                 if (recalibrated)
                 {
+                    String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+                    MessageBox.Show(indices);
                     recal_fit(raw_path, mpt_file, "1", indices);
                 }
                 else
@@ -1031,6 +1044,7 @@ namespace EIS_Manager
             {
                 if (recalibrated)
                 {
+                    String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     recal_fit(raw_path, mpt_file, "2", indices);
                 }
                 else
@@ -1042,6 +1056,7 @@ namespace EIS_Manager
             {
                 if (recalibrated)
                 {
+                    String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     //MessageBox.Show(indices);
                     recal_fit(raw_path, mpt_file, "3", indices);
                 }
@@ -1058,6 +1073,7 @@ namespace EIS_Manager
                 y_max.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum.ToString();
                 if (recalibrated)
                 {
+                    String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     recal_window_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text, indices);
                 }
                 else
@@ -1069,7 +1085,7 @@ namespace EIS_Manager
             {
                 MessageBox.Show("Bad Masking Choice");
             }
-
+            
             if (fit_re.Count() > 0)
             {
                 if (string.Join("", post_test).Length > 0)
@@ -1107,13 +1123,14 @@ namespace EIS_Manager
                     path_list_box.Text = string.Join("", post_test);
                 }
             }
+
             //Console.WriteLine(string.Join(", ", fit_re));
             MessageBox.Show("Completed Fitting of " + fit_re.Count().ToString() + " values.");
                 
 
             nvyquist.Series[1].Points.DataBindXY(fit_re, fit_im);
             first_twenty.Series[1].Points.DataBindXY(fit_re.GetRange(0,20), fit_im.GetRange(0,20));
-
+            
             foreach (string st0 in fit_coeffs_box.Lines)
             {
                 if (st0.Length > 0)
@@ -1135,6 +1152,7 @@ namespace EIS_Manager
                       
                     to_export.Add(striped_line);
                     string[] ls = striped_line.Split(',');
+                    Console.WriteLine(ls.Length);
                     float x_int1 = float.Parse(ls[3]) + float.Parse(ls[7]);
                     float x_int2 = float.Parse(ls[2]) + float.Parse(ls[3]) + float.Parse(ls[7]);
                     nvyquist.Series[3].Points.AddXY(x_int1, 0);
@@ -1178,6 +1196,7 @@ namespace EIS_Manager
                 {
                     continue;
                 }
+                //Console.WriteLine("reached the strt of the fit coeffs organizer");
             }
         }
 
