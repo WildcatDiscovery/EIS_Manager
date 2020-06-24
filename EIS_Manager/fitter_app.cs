@@ -65,6 +65,8 @@ namespace EIS_Manager
             public List<int> bad_indices = new List<int>();
 
             public Dictionary<Double, Tuple<Double, Double>> mpt_dict = new Dictionary<Double, Tuple<Double, Double>>();
+
+            public int recal_setting = 0;
         }
 
         public mpt curr_mpt = new mpt();
@@ -435,6 +437,7 @@ namespace EIS_Manager
             bad_ints.Clear();
             curr_mpt = new mpt();
 
+
             foreach (var series in nvyquist.Series)
             {
                 series.Points.Clear();
@@ -539,18 +542,20 @@ namespace EIS_Manager
         {
             recalibrated = true;
             int count = df_checkbox.Items.Count;
-            int recal_setting = 0;
+
             for (int index = count; index > 0; index--)
             {
                if (!df_checkbox.CheckedItems.Contains(df_checkbox.Items[index - 1]))
                 {
                     recal_ints.Add((index-1));
-                    bad_ints.Add(recal_setting + (index - 1));
+                    bad_ints.Add((curr_mpt.recal_setting + 1) + (index - 1));
                     df_checkbox.Items.RemoveAt(index - 1);
-                    recal_setting = bad_ints.Max();
+                    
                 }
 
             }
+            
+            curr_mpt.recal_setting = bad_ints.Max();
 
             foreach (int ind in recal_ints)
             {
@@ -575,7 +580,7 @@ namespace EIS_Manager
 
             df_checkbox.Items.Clear();
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < curr_mpt.mpt_dict.Count; i++)
             {
                 string marker = String.Concat(curr_mpt.mpt_dict.Values.ElementAt(i).Item1.ToString(), " , ", curr_mpt.mpt_dict.Values.ElementAt(i).Item2.ToString());
                 df_checkbox.Items.Add(marker);
