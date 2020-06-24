@@ -7,7 +7,6 @@ import sys
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('expand_frame_repr', False)
-print(sys.argv)
 path = sys.argv[1]
 data = sys.argv[2]
 data_edit = data.strip('\n')
@@ -22,6 +21,7 @@ ex_mpt = mpt_data(path, [data])
 
 pre_inds = bad_inds.strip('][').split(',') 
 edited_inds = [int(i) for i in pre_inds]
+#print(edited_inds)
 if mask_choice == str(1):
     masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
     for ind in edited_inds:

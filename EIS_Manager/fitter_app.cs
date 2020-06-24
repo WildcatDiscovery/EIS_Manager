@@ -163,6 +163,8 @@ namespace EIS_Manager
 
         private string[] guesser(string raw_path, string mpt_file)
         {
+            //Console.WriteLine(raw_path);
+            //Console.WriteLine(mpt_file);
             string pt1 = python_script_location;
             string progToRun = pt1 + "\\guesser.py";
             char[] splitter = { '\r' };
@@ -171,11 +173,12 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.Arguments = progToRun + " " + raw_path + " " + mpt_file + " ";
+            proc.StartInfo.Arguments = progToRun + " " + raw_path + " " + mpt_file;
             proc.Start();
-            MessageBox.Show("Python is Processing; Error Box will fill when process is finished");
+            //MessageBox.Show("Python is Processing; Error Box will fill when process is finished");
             StreamReader sReader = proc.StandardOutput;
             string[] output = sReader.ReadToEnd().Split(splitter);
+            Console.WriteLine(output.Length);
             return output;
         }
 
@@ -304,7 +307,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-            //MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices));
+            Console.WriteLine(string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices));
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices);
             proc.Start();
 
@@ -449,7 +452,6 @@ namespace EIS_Manager
 
 
                 string mpt_file = Regex.Replace(file_display.SelectedItem.ToString(), @"\t|\n|\r", "");
-                
                 curr_mpt.Name = mpt_file;
 
                 string raw_path = curr_path;
@@ -663,7 +665,6 @@ namespace EIS_Manager
                     {
                         if (word.Length > 5)
                         {
-                            //MessageBox.Show(word);
                             dbl_prep.Enqueue(Convert.ToDouble(word));
                         }
                     }
@@ -828,15 +829,11 @@ namespace EIS_Manager
         private void recal_fit(string raw_path, string mpt_file, string masker_choice, string indices)
         {
             string[] output = recal_guesser(raw_path, mpt_file, masker_choice, indices);
-            
             List<string> pre = output.ToList();
-
-
             string fit_label = pre[1];
             string fit_coeffs = pre[2];
             //Console.WriteLine(fit_label);
             pre.RemoveRange(0, 3);
-
             string box_form = string.Join("", pre);
             //string box_form_mpt = string.Join("", masked_df);
             fit_coeffs_box.AppendText(fit_coeffs);
@@ -863,10 +860,8 @@ namespace EIS_Manager
                         MessageBox.Show("Ununsual Value: " + word.ToString());
                     }
                 }
-            }
-            
+            }  
         }
-
 
 
         private void window_masker_fit(string raw_path, string mpt_file, string xmin, string xmax, string ymin, string ymax)
@@ -957,237 +952,232 @@ namespace EIS_Manager
 
         private void fit_function_Click(object sender, EventArgs e)
         {
-            try
-            {
-                fit_coeffs_box.Clear();
-                nvyquist.Series[2].Points.Clear();
-                nvyquist.Series[3].Points.Clear();
 
-                string mpt_file = file_display_label.Text;
-                string raw_path = curr_path;
-                fit_re.Clear();
-                fit_im.Clear();
-                String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
-                //MessageBox.Show(indices);
-                bad_ints.Clear();
+            fit_coeffs_box.Clear();
+            nvyquist.Series[2].Points.Clear();
+            nvyquist.Series[3].Points.Clear();
+
+            string mpt_file = file_display_label.Text;
+            string raw_path = curr_path;
+            fit_re.Clear();
+            fit_im.Clear();
+            String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+            Console.WriteLine(String.Concat("[" + String.Join("\n", curr_mpt.mpt_dict.Values) + "]"));
+            Console.WriteLine(curr_mpt.mpt_dict.Count().ToString());
+            bad_ints.Clear();
                 
-                if (entire_fit.Checked == true)
+            if (entire_fit.Checked == true)
+            {
+                if (recalibrated)
                 {
-                    if (recalibrated)
-                    {
-                        recal_fit(raw_path, mpt_file, "4", indices);
-                    }
-                    else
-                    {
-                        //MessageBox.Show(mpt_file, raw_path);
-                        string[] output = guesser(raw_path, mpt_file);
-                        List<string> pre = output.ToList();
-                        try
-                        {
-                            string fit_label = pre[0];
-                            string fit_coeffs = pre[1];
-                            pre.RemoveRange(0, 3);
-                            fit_coeffs_box.AppendText(fit_coeffs);
-                        }
-                        catch (ArgumentOutOfRangeException range_error)
-                        {
-                            MessageBox.Show("The guessing Function has not completed; Please fit a mask or fit again and wait");
-                        }
-
-                        string box_form = string.Join("", pre);
-
-                        foreach (string sgl in pre)
-                        {
-                            Queue<Double> dbl_prep = new Queue<double>();
-                            foreach (var word in sgl.Split(','))
-                            {
-                                if (word.Length > 1)
-                                {
-                                    dbl_prep.Enqueue(Convert.ToDouble(word));
-                                }
-                            }
-                            if (dbl_prep.Count == 2)
-                            {
-                                fit_re.Add(dbl_prep.Dequeue());
-                                fit_im.Add(dbl_prep.Dequeue());
-                            }
-                            else
-                            {
-                                foreach (var word in dbl_prep)
-                                {
-                                    MessageBox.Show("Ununsual Value: " + word.ToString());
-                                }
-                            }
-                        }
-                    }     
-                }
-                else if (masker1.Checked == true)
-                {
-                    if (recalibrated)
-                    {
-                        recal_fit(raw_path, mpt_file, "1", indices);
-                    }
-                    else
-                    {
-                        masker_fit(raw_path, mpt_file, "1");
-                    }
-                }
-                else if (masker2.Checked == true)
-                {
-                    if (recalibrated)
-                    {
-                        recal_fit(raw_path, mpt_file, "2", indices);
-                    }
-                    else
-                    {
-                        masker_fit(raw_path, mpt_file, "2");
-                    }
-                }
-                else if (masker3.Checked == true)
-                {
-                    if (recalibrated)
-                    {
-                        //MessageBox.Show(indices);
-                        recal_fit(raw_path, mpt_file, "3", indices);
-                    }
-                    else
-                    {
-                        masker_fit(raw_path, mpt_file, "3");
-                    }
-                }
-                else if (window_masker.Checked == true)
-                {
-                    x_min.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMinimum.ToString();
-                    x_max.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum.ToString();
-                    y_min.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum.ToString();
-                    y_max.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum.ToString();
-                    if (recalibrated)
-                    {
-                        recal_window_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text, indices);
-                    }
-                    else
-                    {
-                        window_masker_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text);
-                    }
+                    recal_fit(raw_path, mpt_file, "4", indices);
                 }
                 else
                 {
-                    MessageBox.Show("Bad Masking Choice");
-                }
-
-                if (fit_re.Count() > 0)
-                {
-                    if (string.Join("", post_test).Length > 0)
-                    {
-                        for (int counter = 0; counter < post_test.Length; counter++)
-                        {
-                            string striped = Regex.Replace(Regex.Replace(post_test[counter], @"\n", ""), @",", "");
-                            if (striped == mpt_file)
-                            {
-                                post_test[counter] = ((striped + " FITTED\n"));
-                            }
-                            else
-                            {
-                                post_test[counter] = ((striped + "\n"));
-                            }
-                        }
-                        temp = string.Join("", post_test);
-                        path_list_box.Text = string.Join("", post_test);
-                    }
-                    else
-                    {
-                        for (int counter = 0; counter < pre_test.Length; counter++)
-                        {
-                            string striped = Regex.Replace(Regex.Replace(pre_test[counter], @"\n", ""), @",", "");
-                            if (striped == mpt_file)
-                            {
-                                post_test[counter] = ((striped + " FITTED\n"));
-                            }
-                            else
-                            {
-                                post_test[counter] = ((striped + "\n"));
-                            }
-                        }
-                        temp = string.Join("", post_test);
-                        path_list_box.Text = string.Join("", post_test);
-                    }
-                }
-                //Console.WriteLine(string.Join(", ", fit_re));
-                MessageBox.Show("Completed Fitting of " + fit_re.Count().ToString() + " values.");
-                
-
-                nvyquist.Series[1].Points.DataBindXY(fit_re, fit_im);
-                first_twenty.Series[1].Points.DataBindXY(fit_re.GetRange(0,20), fit_im.GetRange(0,20));
-
-                foreach (string st0 in fit_coeffs_box.Lines)
-                {
-                    if (st0.Length > 0)
-                    {
-                        string st1 = Regex.Replace(st0, "              ", ", ");
-                        string st2 = Regex.Replace(st1, "             ", ", ");
-                        string st3 = Regex.Replace(st2, "            ", ", ");
-                        string st4 = Regex.Replace(st3, "           ", ", ");
-                        string st5 = Regex.Replace(st4, "          ", ", ");
-                        string st6 = Regex.Replace(st5, "         ", ", ");
-                        string st7 = Regex.Replace(st6, "        ", ", ");
-                        string st8 = Regex.Replace(st7, "       ", ", ");
-                        string st9 = Regex.Replace(st8, "      ", ", ");
-                        string s10 = Regex.Replace(st9, "     ", ", ");
-                        string s11 = Regex.Replace(s10, "    ", ", ");
-                        string s12 = Regex.Replace(s11, "   ", ", ");
-                        string new_line = Regex.Replace(s12, "  ", ", ");
-                        string striped_line = Regex.Replace(new_line, "/", "");
+                    //MessageBox.Show("HERE");
+                    //MessageBox.Show(mpt_file, raw_path);
+                    /*
+                    string[] output = guesser(raw_path, mpt_file);
+                    List<string> pre = output.ToList();
+                    
+                        
+                    string fit_label = pre[0];
+                    string fit_coeffs = pre[1];
+                    pre.RemoveRange(0, 3);
+                    fit_coeffs_box.AppendText(fit_coeffs);
+                        
                       
-                        to_export.Add(striped_line);
-                        string[] ls = striped_line.Split(',');
-                        float x_int1 = float.Parse(ls[3]) + float.Parse(ls[7]);
-                        float x_int2 = float.Parse(ls[2]) + float.Parse(ls[3]) + float.Parse(ls[7]);
-                        nvyquist.Series[3].Points.AddXY(x_int1, 0);
-                        nvyquist.Series[3].Points.AddXY(x_int2, 0);
 
-                        string r1 = String.Concat("R1 = ", ls[2]);
-                        ls[2] = r1;
-                        string r2 = String.Concat(" , R2 = ", ls[3]);
-                        ls[3] = r2;
-                        string n1 = String.Concat(" , N1 = ", ls[4]);
-                        ls[4] = n1;
-                        string fs1 = String.Concat(" , fs1 = ", ls[5]);
-                        //ls[5] = fs1;
-                        string q1 = String.Concat(" , Q1 = ", ls[6]);
-                        ls[5] = q1;
-                        string r3 = String.Concat(" , R3 = ", ls[7]);
-                        ls[6] = r3;
-                        string n2 = String.Concat(" , N2 = ", ls[8]);
-                        ls[7] = n2;
-                        string fs2 = String.Concat(" , fs2 = ", ls[9]);
-                        //ls[9] = fs2;
-                        string q2 = String.Concat(" , Q2 = ", ls[10]);
-                        ls[8] = q2;
-                        string q3 = String.Concat(" , Q3 = ", ls[11]);
-                        ls[9] = q3;
-                        string n3 = String.Concat(" , N3 = ", ls[12]);
-                        ls[10] = n3;
-                        fit_coeffs_box.Clear();
-                        ls[0] = "";
-                        ls[1] = "";
-                        ls[11] = "";
-                        ls[12] = "";
-                        foreach(string str in ls)
-                        {
-                            fit_coeffs_box.AppendText(str);
-                        }
-                        fit_re.Clear();
-                        fit_im.Clear();
-                    }
-                    else
+                    string box_form = string.Join("", pre);
+
+                    foreach (string sgl in pre)
                     {
-                        continue;
-                    }
+                        Queue<Double> dbl_prep = new Queue<double>();
+                        foreach (var word in sgl.Split(','))
+                        {
+                            if (word.Length > 1)
+                            {
+                                dbl_prep.Enqueue(Convert.ToDouble(word));
+                            }
+                        }
+                        if (dbl_prep.Count == 2)
+                        {
+                            fit_re.Add(dbl_prep.Dequeue());
+                            fit_im.Add(dbl_prep.Dequeue());
+                        }
+                        else
+                        {
+                            foreach (var word in dbl_prep)
+                            {
+                                MessageBox.Show("Ununsual Value: " + word.ToString());
+                            }
+                        }
+                    }*/
+                    masker_fit(raw_path, mpt_file, "4");
+                }     
+            }
+            else if (masker1.Checked == true)
+            {
+                if (recalibrated)
+                {
+                    recal_fit(raw_path, mpt_file, "1", indices);
+                }
+                else
+                {
+                    masker_fit(raw_path, mpt_file, "1");
                 }
             }
-            catch (Exception wide)
+            else if (masker2.Checked == true)
             {
-                MessageBox.Show("Error");
+                if (recalibrated)
+                {
+                    recal_fit(raw_path, mpt_file, "2", indices);
+                }
+                else
+                {
+                    masker_fit(raw_path, mpt_file, "2");
+                }
+            }
+            else if (masker3.Checked == true)
+            {
+                if (recalibrated)
+                {
+                    //MessageBox.Show(indices);
+                    recal_fit(raw_path, mpt_file, "3", indices);
+                }
+                else
+                {
+                    masker_fit(raw_path, mpt_file, "3");
+                }
+            }
+            else if (window_masker.Checked == true)
+            {
+                x_min.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMinimum.ToString();
+                x_max.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum.ToString();
+                y_min.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum.ToString();
+                y_max.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum.ToString();
+                if (recalibrated)
+                {
+                    recal_window_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text, indices);
+                }
+                else
+                {
+                    window_masker_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Bad Masking Choice");
+            }
+
+            if (fit_re.Count() > 0)
+            {
+                if (string.Join("", post_test).Length > 0)
+                {
+                    for (int counter = 0; counter < post_test.Length; counter++)
+                    {
+                        string striped = Regex.Replace(Regex.Replace(post_test[counter], @"\n", ""), @",", "");
+                        if (striped == mpt_file)
+                        {
+                            post_test[counter] = ((striped + " FITTED\n"));
+                        }
+                        else
+                        {
+                            post_test[counter] = ((striped + "\n"));
+                        }
+                    }
+                    temp = string.Join("", post_test);
+                    path_list_box.Text = string.Join("", post_test);
+                }
+                else
+                {
+                    for (int counter = 0; counter < pre_test.Length; counter++)
+                    {
+                        string striped = Regex.Replace(Regex.Replace(pre_test[counter], @"\n", ""), @",", "");
+                        if (striped == mpt_file)
+                        {
+                            post_test[counter] = ((striped + " FITTED\n"));
+                        }
+                        else
+                        {
+                            post_test[counter] = ((striped + "\n"));
+                        }
+                    }
+                    temp = string.Join("", post_test);
+                    path_list_box.Text = string.Join("", post_test);
+                }
+            }
+            //Console.WriteLine(string.Join(", ", fit_re));
+            MessageBox.Show("Completed Fitting of " + fit_re.Count().ToString() + " values.");
+                
+
+            nvyquist.Series[1].Points.DataBindXY(fit_re, fit_im);
+            first_twenty.Series[1].Points.DataBindXY(fit_re.GetRange(0,20), fit_im.GetRange(0,20));
+
+            foreach (string st0 in fit_coeffs_box.Lines)
+            {
+                if (st0.Length > 0)
+                {
+                    string st1 = Regex.Replace(st0, "              ", ", ");
+                    string st2 = Regex.Replace(st1, "             ", ", ");
+                    string st3 = Regex.Replace(st2, "            ", ", ");
+                    string st4 = Regex.Replace(st3, "           ", ", ");
+                    string st5 = Regex.Replace(st4, "          ", ", ");
+                    string st6 = Regex.Replace(st5, "         ", ", ");
+                    string st7 = Regex.Replace(st6, "        ", ", ");
+                    string st8 = Regex.Replace(st7, "       ", ", ");
+                    string st9 = Regex.Replace(st8, "      ", ", ");
+                    string s10 = Regex.Replace(st9, "     ", ", ");
+                    string s11 = Regex.Replace(s10, "    ", ", ");
+                    string s12 = Regex.Replace(s11, "   ", ", ");
+                    string new_line = Regex.Replace(s12, "  ", ", ");
+                    string striped_line = Regex.Replace(new_line, "/", "");
+                      
+                    to_export.Add(striped_line);
+                    string[] ls = striped_line.Split(',');
+                    float x_int1 = float.Parse(ls[3]) + float.Parse(ls[7]);
+                    float x_int2 = float.Parse(ls[2]) + float.Parse(ls[3]) + float.Parse(ls[7]);
+                    nvyquist.Series[3].Points.AddXY(x_int1, 0);
+                    nvyquist.Series[3].Points.AddXY(x_int2, 0);
+
+                    string r1 = String.Concat("R1 = ", ls[2]);
+                    ls[2] = r1;
+                    string r2 = String.Concat(" , R2 = ", ls[3]);
+                    ls[3] = r2;
+                    string n1 = String.Concat(" , N1 = ", ls[4]);
+                    ls[4] = n1;
+                    string fs1 = String.Concat(" , fs1 = ", ls[5]);
+                    //ls[5] = fs1;
+                    string q1 = String.Concat(" , Q1 = ", ls[6]);
+                    ls[5] = q1;
+                    string r3 = String.Concat(" , R3 = ", ls[7]);
+                    ls[6] = r3;
+                    string n2 = String.Concat(" , N2 = ", ls[8]);
+                    ls[7] = n2;
+                    string fs2 = String.Concat(" , fs2 = ", ls[9]);
+                    //ls[9] = fs2;
+                    string q2 = String.Concat(" , Q2 = ", ls[10]);
+                    ls[8] = q2;
+                    string q3 = String.Concat(" , Q3 = ", ls[11]);
+                    ls[9] = q3;
+                    string n3 = String.Concat(" , N3 = ", ls[12]);
+                    ls[10] = n3;
+                    fit_coeffs_box.Clear();
+                    ls[0] = "";
+                    ls[1] = "";
+                    ls[11] = "";
+                    ls[12] = "";
+                    foreach(string str in ls)
+                    {
+                        fit_coeffs_box.AppendText(str);
+                    }
+                    fit_re.Clear();
+                    fit_im.Clear();
+                }
+                else
+                {
+                    continue;
+                }
             }
         }
 

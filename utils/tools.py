@@ -349,6 +349,9 @@ class mpt_data:
         self.circuit_fit = []
         self.fit_E = []
         for i in range(len(self.df)):
+            #for ix in range(len(self.df[i].w.values)):
+             #   print(self.df[i].re.values[ix], self.df[i].im.values[ix])
+            #print(len(self.df[i].w.values), len(self.df[i].re.values), len(self.df[i].im.values))
             fitted_mpt_data = minimize(self.leastsq_errorfunc, params, method='leastsq', args=(self.df[i].w.values, self.df[i].re.values, self.df[i].im.values, circuit, weight_func), nan_policy=nan_policy, maxfev=9999990)
             self.Fit.append(fitted_mpt_data)
             #print(report_fit(self.Fit[i]))
@@ -492,15 +495,18 @@ class mpt_data:
     #Updated Guesser
     def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None):
         if circuit == 'R-RQ-RQ-Q':
-            Rs_guess = min(self.df_raw['re'])
-            R1_guess = max(self.df_raw['re'])//4
+            
+            Rs_guess = min(self.df[0]['re'])
+            R1_guess = max(self.df[0]['re'])//4
             n1_guess = .61219110 
             fs1_guess = 15320.8584 
-            R2_guess = 2*max(self.df_raw['re'])//4
+            R2_guess = 2*max(self.df[0]['re'])//4
             n2_guess = 0.92134519 
             fs2_guess = 20.0517197 
             Q3_guess = 10**-7
             n3_guess = .5
+
+            #print(Rs_guess,R1_guess,R2_guess)
 
             params = Parameters()
             params.add('Rs', value=Rs_guess, min=Rs_guess*.01, max=Rs_guess*100)
@@ -519,43 +525,43 @@ class mpt_data:
             params.add('n', value=n3_guess, min=.1, max=1)
 
             self.mpt_fit(params, circuit = 'R-RQ-RQ-Q')
-
+            
             counter = 0
 
             while self.low_error >= 10000 and counter <= 100:        
-                try:
-                    counter += 1
-                    #print('ITERATION NO. : ', counter)
-                    Rs_guess = self.fit_Rs[0]
+                #try:
+                counter += 1
+                #print('ITERATION NO. : ', counter)
+                Rs_guess = self.fit_Rs[0]
 
-                    R1_guess = self.fit_R1[0]
-                    n1_guess = self.fit_n1[0]
-                    Q1_guess = self.fit_fs1[0]
+                R1_guess = self.fit_R1[0]
+                n1_guess = self.fit_n1[0]
+                Q1_guess = self.fit_fs1[0]
 
-                    R2_guess = self.fit_R2[0]
-                    n2_guess = self.fit_n2[0]
-                    Q2_guess = self.fit_fs2[0]
+                R2_guess = self.fit_R2[0]
+                n2_guess = self.fit_n2[0]
+                Q2_guess = self.fit_fs2[0]
 
-                    n_guess = self.fit_n[0]
-                    Q_guess = self.fit_Q[0]
+                n_guess = self.fit_n[0]
+                Q_guess = self.fit_Q[0]
 
-                    guess_package = [Rs_guess, R1_guess, n1_guess, Q1_guess, R2_guess, n2_guess, Q2_guess, n_guess, Q_guess]
-                    #adding to the parameters package to send to the fitting function
-                    params = Parameters()
-                    params.add('Rs', value=guess_package[0], min=guess_package[0]*.01, max=guess_package[0]*100)
-                    params.add('R1', value=guess_package[1], min=guess_package[1]*.1, max=guess_package[1]*10)
-                    params.add('n1', value=guess_package[2], min=.65, max=1)
-                    params.add('fs1', value=guess_package[3], min=10**0.5, max=10**6)
-                    params.add('R2', value=guess_package[4], min=guess_package[4]*.1, max=guess_package[4]*10)
-                    params.add('n2', value=guess_package[5], min=.65, max=1)
-                    params.add('fs2', value=guess_package[6], min=10**-2, max=10**1)
-                    params.add('n', value=guess_package[7], min=.65, max=1)
-                    params.add('Q', value=guess_package[8], min=10**-2, max=10**1)
-                    self.mpt_fit(params, circuit = 'R-RQ-RQ-Q')
+                guess_package = [Rs_guess, R1_guess, n1_guess, Q1_guess, R2_guess, n2_guess, Q2_guess, n_guess, Q_guess]
+                #adding to the parameters package to send to the fitting function
+                params = Parameters()
+                params.add('Rs', value=guess_package[0], min=guess_package[0]*.01, max=guess_package[0]*100)
+                params.add('R1', value=guess_package[1], min=guess_package[1]*.1, max=guess_package[1]*10)
+                params.add('n1', value=guess_package[2], min=.65, max=1)
+                params.add('fs1', value=guess_package[3], min=10**0.5, max=10**6)
+                params.add('R2', value=guess_package[4], min=guess_package[4]*.1, max=guess_package[4]*10)
+                params.add('n2', value=guess_package[5], min=.65, max=1)
+                params.add('fs2', value=guess_package[6], min=10**-2, max=10**1)
+                params.add('n', value=guess_package[7], min=.65, max=1)
+                params.add('Q', value=guess_package[8], min=10**-2, max=10**1)
+                self.mpt_fit(params, circuit = 'R-RQ-RQ-Q')
+            
 
-
-                except KeyboardInterrupt:
-                    print('Interrupted!!')
+               # except KeyboardInterrupt:
+                    #print('Interrupted!!')
             #print(self.data)
             #print(self.fit_Rs,self.fit_R1,self.fit_n1,self.fit_fs1,self.fit_R2,self.fit_n2,self.fit_fs2, self.fit_n,self.fit_Q)
             self.fitted = pd.DataFrame({'file':self.data,
@@ -630,8 +636,8 @@ class mpt_data:
                     "fit_n1":self.fit_n1,
                     "fit_fs1":self.fit_fs1,
                     "fit_Q1":(1/(self.fit_R1[0]*(2*np.pi*self.fit_fs1[0])**self.fit_n1[0])),                   
-                    "fit_Q2":self.fit_Q2,
-                    "fit_n2":self.fit_n2})
+                    "fit_Q":self.fit_Q,
+                    "fit_n2":self.fit_n})
             out_name = 'fitted_' + self.data[0][:-4]
             if csv_container:
                 self.fitted.to_csv(csv_container+out_name, sep='\t')

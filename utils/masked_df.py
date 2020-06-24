@@ -23,7 +23,6 @@ if mask_choice == str(1):
     print(ex_mpt.fast_mask())
     masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
     print(masked_mpt.df[0][['f','re','im']])
-   
 elif mask_choice == str(2):
     print(ex_mpt.masker0())
     masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
@@ -31,6 +30,10 @@ elif mask_choice == str(2):
 elif mask_choice == str(3):
     print(ex_mpt.masker())
     masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
+    print(masked_mpt.df[0][['f','re','im']])
+elif mask_choice == str(4):
+    print(ex_mpt.masker())
+    masked_mpt = mpt_data(path, [data])
     print(masked_mpt.df[0][['f','re','im']])
 else:
     print("Error, not a Masking Function")

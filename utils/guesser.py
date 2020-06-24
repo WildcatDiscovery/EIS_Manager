@@ -13,7 +13,6 @@ sys.argv[2] = "/" + data_edit
 
 
 ex_mpt = mpt_data(path, [sys.argv[2]])
-
 if len(sys.argv) > 3:
     if len(sys.argv) > 4:
         masked_mpt = mpt_data(path, [sys.argv[2]], mask = sys.argv[4])
