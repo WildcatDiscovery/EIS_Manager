@@ -816,7 +816,7 @@ namespace EIS_Manager
                 {
                     if (word.Length > 1)
                     {
-                        MessageBox.Show("WORD: " + word);
+                        //MessageBox.Show("WORD: " + word);
                         dbl_prep.Enqueue(Convert.ToDouble(word));
                     }
                 }
@@ -976,7 +976,7 @@ namespace EIS_Manager
 
 
             
-            Console.WriteLine(String.Concat("[" + String.Join("\n", curr_mpt.mpt_dict.Values) + "]"));
+            //Console.WriteLine(String.Concat("[" + String.Join("\n", curr_mpt.mpt_dict.Values) + "]"));
             //Console.WriteLine(curr_mpt.mpt_dict.Count().ToString());
             //bad_ints.Clear();
                 
@@ -1135,34 +1135,24 @@ namespace EIS_Manager
 
             nvyquist.Series[1].Points.DataBindXY(fit_re, fit_im);
             first_twenty.Series[1].Points.DataBindXY(fit_re.GetRange(0,20), fit_im.GetRange(0,20));
-            
+
             foreach (string st0 in fit_coeffs_box.Lines)
             {
+                //Console.WriteLine(st0);
                 if (st0.Length > 0)
                 {
-                    string st1 = Regex.Replace(st0, "              ", ", ");
-                    string st2 = Regex.Replace(st1, "             ", ", ");
-                    string st3 = Regex.Replace(st2, "            ", ", ");
-                    string st4 = Regex.Replace(st3, "           ", ", ");
-                    string st5 = Regex.Replace(st4, "          ", ", ");
-                    string st6 = Regex.Replace(st5, "         ", ", ");
-                    string st7 = Regex.Replace(st6, "        ", ", ");
-                    string st8 = Regex.Replace(st7, "       ", ", ");
-                    string st9 = Regex.Replace(st8, "      ", ", ");
-                    string s10 = Regex.Replace(st9, "     ", ", ");
-                    string s11 = Regex.Replace(s10, "    ", ", ");
-                    string s12 = Regex.Replace(s11, "   ", ", ");
-                    string new_line = Regex.Replace(s12, "  ", ", ");
+                    
+                    string new_line = Regex.Replace(st0, @"\s+", ", ");
+
                     string striped_line = Regex.Replace(new_line, "/", "");
                       
                     to_export.Add(striped_line);
                     string[] ls = striped_line.Split(',');
-                    Console.WriteLine(ls.Length);
                     float x_int1 = float.Parse(ls[3]) + float.Parse(ls[7]);
                     float x_int2 = float.Parse(ls[2]) + float.Parse(ls[3]) + float.Parse(ls[7]);
                     nvyquist.Series[3].Points.AddXY(x_int1, 0);
                     nvyquist.Series[3].Points.AddXY(x_int2, 0);
-
+                    
                     string r1 = String.Concat("R1 = ", ls[2]);
                     ls[2] = r1;
                     string r2 = String.Concat(" , R2 = ", ls[3]);
