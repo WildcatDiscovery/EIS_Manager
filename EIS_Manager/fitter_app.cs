@@ -1037,7 +1037,7 @@ namespace EIS_Manager
                 if (recalibrated)
                 {
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
-                    MessageBox.Show(indices);
+                    //MessageBox.Show(indices);
                     recal_fit(raw_path, mpt_file, "1", indices);
                 }
                 else
