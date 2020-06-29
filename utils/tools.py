@@ -582,11 +582,11 @@ class mpt_data:
                 return self.fitted
             return self.fitted
         elif circuit == 'R-RQ-Q':
-            Rs_guess = min(self.df_raw['re'])
+            Rs_guess = min(self.df[0]['re'])
             Q_guess = 10**-5
             n_guess = .5
 
-            R1_guess = max(self.df_raw['re'])//2
+            R1_guess = max(self.df[0]['re'])//2
             n1_guess = .5
             fs1_guess = 10**3
 
