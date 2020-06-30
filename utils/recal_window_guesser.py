@@ -23,7 +23,7 @@ y_max = float(sys.argv[6])
 
 bad_inds = sys.argv[7]
 
-print(sys.argv)
+
 
 pre_inds = bad_inds.strip('][').split(',') 
 edited_inds = [int(i) for i in pre_inds]
@@ -42,8 +42,12 @@ for ind in edited_inds:
         continue
     else:
         ex_mpt.df[0] = ex_mpt.df[0].drop(ind)
+
 masker = window_masker(ex_mpt, x_window = [x_min, x_max], y_window = [y_min, y_max])
+
 masked_mpt = mpt_data(path, [data], mask = masker)
+
+#print(masked_mpt.df[0])
 print(masked_mpt.guesser())
 for i in masked_mpt.circuit_fit[0]:
         print(i.real, ", ", -i.imag)
