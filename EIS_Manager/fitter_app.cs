@@ -309,7 +309,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-            //MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices));
+            MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices));
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices);
             proc.Start();
 
@@ -329,6 +329,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
+            MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max, " ", indices));
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max, " ", indices);
             proc.Start();
 
@@ -543,17 +544,20 @@ namespace EIS_Manager
             recalibrated = true;
             int count = df_checkbox.Items.Count;
 
-            recal_ints.Clear();
-            bad_ints.Clear();
+            
 
             for (int index = count; index > 0; index--)
             {
                if (!df_checkbox.CheckedItems.Contains(df_checkbox.Items[index - 1]))
                 {
-                    recal_ints.Add((index-1));
-                    bad_ints.Add((index - 1));
-                    //df_checkbox.Items.RemoveAt(index - 1);
-                    
+                    if (!bad_ints.Contains(index - 1))
+                    {
+                        recal_ints.Add((index - 1));
+                        bad_ints.Add((index - 1));
+                        //df_checkbox.Items.RemoveAt(index - 1);
+                    }
+
+
                 }
 
             }
@@ -579,8 +583,8 @@ namespace EIS_Manager
                     first_twenty.Series[0].Points.AddXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
                 }
             }
-            recal_ints.Clear();
             MessageBox.Show("RECALIBRATED");
+            recal_ints.Clear();
         }
 
 
