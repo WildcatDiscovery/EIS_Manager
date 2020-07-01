@@ -32,13 +32,12 @@ def window_masker(self, x_window, y_window):
         adj_re = self.df[0][(self.df[0]['re']<x_window[1]) & (self.df[0]['re']>x_window[0])]
         adj_mpt = adj_re[(adj_re['im']<y_window[1]) & (adj_re['im']>y_window[0])]
         return [max(adj_mpt['f']), min(adj_mpt['f'])]
-
+#This object is to collect the mask
 ex_mpt = mpt_data(path, [data])
 
-
 masker = window_masker(ex_mpt, x_window = [x_min, x_max], y_window = [y_min, y_max])
-
-masked_mpt = mpt_data(path, [data], mask = masker)
+#This object is to actually fit on the dataframe
+ex_mpt2 = mpt_data(path, [data],mask = masker)
 
 
 for ind in edited_inds:
@@ -46,9 +45,23 @@ for ind in edited_inds:
         continue
     elif ind == "]":
         continue
-    else:
-        masked_mpt.df[0] = masked_mpt.df[0].drop(ind,axis=0)
+    else:      
+        if ind in ex_mpt2.df[0].index:  
+            ex_mpt2.df[0] = ex_mpt2.df[0].drop(ind,axis=0)
+        else:
+            continue
 
-print(masked_mpt.guesser())
-for i in masked_mpt.circuit_fit[0]:
+#print(ex_mpt2.df[0][['re', 'im']])
+
+#ex_mpt.mask = masker
+
+#masked_mpt = mpt_data(path, [data], mask = masker)
+#print('masked')
+#print(ex_mpt2.df[0])
+#print(masked_mpt.df[0])
+
+print(len(ex_mpt2.df[0]))
+print(ex_mpt2.guesser())
+print(len(ex_mpt2.circuit_fit[0]))
+for i in ex_mpt2.circuit_fit[0]:
         print(i.real, ", ", -i.imag)

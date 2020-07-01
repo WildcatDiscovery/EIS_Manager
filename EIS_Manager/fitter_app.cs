@@ -291,6 +291,8 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
+            //MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max));
+            //Console.WriteLine(string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max));
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max);
             proc.Start();
 
@@ -309,7 +311,7 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-            MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices));
+            //MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices));
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", mask_choice, " ", indices);
             proc.Start();
 
@@ -329,8 +331,8 @@ namespace EIS_Manager
             proc.StartInfo.FileName = "python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-            MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max, " ", indices));
-            Console.WriteLine(string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max, " ", indices));
+            //MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max, " ", indices));
+            //Console.WriteLine(string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max, " ", indices));
             proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max, " ", indices);
             proc.Start();
 
@@ -544,7 +546,12 @@ namespace EIS_Manager
         {
             recalibrated = true;
             int count = df_checkbox.Items.Count;
+            bad_ints.Clear();
 
+            if (df_checkbox.Items.Count == df_checkbox.CheckedItems.Count)
+            {
+                recalibrated = false;
+            }
             
 
             for (int index = count; index > 0; index--)
@@ -850,7 +857,7 @@ namespace EIS_Manager
             string fit_coeffs = pre[2];
             //Console.WriteLine(fit_label);
             
-            pre.RemoveRange(0, 3);
+            pre.RemoveRange(0, 2);
             string box_form = string.Join("\n", pre);
             //Console.WriteLine(box_form);
             //string box_form_mpt = string.Join("", masked_df);
@@ -889,6 +896,8 @@ namespace EIS_Manager
             string[] output = window_masked_fit(raw_path, mpt_file, xmin, xmax, ymin, ymax);
             //string[] masked_df = window_mask
             List<string> pre = output.ToList();
+            //MessageBox.Show(pre.Count.ToString());
+            Console.WriteLine(string.Join("\n", pre));
 
             //Console.WriteLine(string.Join("\n", pre));
             string fit_label = pre[1];
@@ -937,12 +946,12 @@ namespace EIS_Manager
             string[] output = recal_window_guesser(raw_path, mpt_file, xmin, xmax, ymin, ymax, indices);
             //string[] masked_df = window_mask
             List<string> pre = output.ToList();
-            //MessageBox.Show(string.Join("\n", pre));
+            //MessageBox.Show(pre.Count.ToString());
             //Console.WriteLine(string.Join("\n", pre));
             string fit_label = pre[1];
             //string fit_coeffs = pre[2];
 
-            pre.RemoveRange(0, 3);
+            pre.RemoveRange(0, 2);
             string box_form = string.Join("\n", pre);
             //Console.WriteLine(box_form);
             //string box_form_mpt = string.Join("", masked_df);
