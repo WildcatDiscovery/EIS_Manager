@@ -39,16 +39,16 @@ ex_mpt = mpt_data(path, [data])
 masker = window_masker(ex_mpt, x_window = [x_min, x_max], y_window = [y_min, y_max])
 
 masked_mpt = mpt_data(path, [data], mask = masker)
+
+
 for ind in edited_inds:
     if ind == "[":
         continue
     elif ind == "]":
         continue
     else:
-        masked_mpt.df[0] = masked_mpt.df[0].drop(ind)
+        masked_mpt.df[0] = masked_mpt.df[0].drop(ind,axis=0)
 
-
-#print(masked_mpt.df[0][['f', 're', 'im']])
 print(masked_mpt.guesser())
 for i in masked_mpt.circuit_fit[0]:
         print(i.real, ", ", -i.imag)

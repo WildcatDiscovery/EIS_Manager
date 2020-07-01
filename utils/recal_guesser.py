@@ -30,7 +30,7 @@ if mask_choice == str(1):
         elif ind == "]":
             continue
         else:
-            masked_mpt.df[0] = masked_mpt.df[0].drop(ind)
+            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
     print(masked_mpt.guesser())
     for i in masked_mpt.circuit_fit[0]:
             print(i.real, ", ", -i.imag)
@@ -42,7 +42,7 @@ elif mask_choice == str(2):
         elif ind == "]":
             continue
         else:
-            masked_mpt.df[0] = masked_mpt.df[0].drop(ind)
+            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
     print(masked_mpt.guesser())
     for i in masked_mpt.circuit_fit[0]:
             print(i.real, ", ", -i.imag)
@@ -54,7 +54,7 @@ elif mask_choice == str(3):
         elif ind == "]":
             continue
         else:
-            masked_mpt.df[0] = masked_mpt.df[0].drop(ind)
+            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
     print(masked_mpt.guesser())
     for i in masked_mpt.circuit_fit[0]:
             print(i.real, ", ", -i.imag)

@@ -26,7 +26,7 @@ ex_mpt = mpt_data(path, [data])
 #ex_mpt.mpt_plot()
 
 def window_masker(self, x_window, y_window):
-        adj_re = self.df_raw[(self.df_raw['re']<x_window[1]) & (self.df_raw['re']>x_window[0])]
+        adj_re = self.df[0][(self.df[0]['re']<x_window[1]) & (self.df[0]['re']>x_window[0])]
         adj_mpt = adj_re[(adj_re['im']<y_window[1]) & (adj_re['im']>y_window[0])]
         return [max(adj_mpt['f']), min(adj_mpt['f'])]
 
