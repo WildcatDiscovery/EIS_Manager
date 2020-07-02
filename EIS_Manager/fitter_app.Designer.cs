@@ -63,7 +63,6 @@
             this.export_button = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.fit_coeffs_label = new System.Windows.Forms.Label();
             this.python_scripts = new System.Windows.Forms.Button();
             this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
             this.first_twenty = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -73,6 +72,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.gen_graph_label = new System.Windows.Forms.Label();
             this.save_button = new System.Windows.Forms.Button();
+            this.no_of_pts = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nvyquist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.first_twenty)).BeginInit();
@@ -269,7 +269,7 @@
             this.nvyquist.Series.Add(series2);
             this.nvyquist.Series.Add(series3);
             this.nvyquist.Series.Add(series4);
-            this.nvyquist.Size = new System.Drawing.Size(771, 641);
+            this.nvyquist.Size = new System.Drawing.Size(771, 675);
             this.nvyquist.TabIndex = 70;
             this.nvyquist.Text = "Full Graph";
             this.nvyquist.Click += new System.EventHandler(this.nvyquist_Click);
@@ -277,11 +277,11 @@
             // fit_coeffs_box
             // 
             this.fit_coeffs_box.BackColor = System.Drawing.Color.MistyRose;
-            this.fit_coeffs_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fit_coeffs_box.Location = new System.Drawing.Point(172, 644);
+            this.fit_coeffs_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fit_coeffs_box.Location = new System.Drawing.Point(172, 647);
             this.fit_coeffs_box.Name = "fit_coeffs_box";
             this.fit_coeffs_box.ReadOnly = true;
-            this.fit_coeffs_box.Size = new System.Drawing.Size(1167, 43);
+            this.fit_coeffs_box.Size = new System.Drawing.Size(986, 40);
             this.fit_coeffs_box.TabIndex = 71;
             this.fit_coeffs_box.Text = "";
             // 
@@ -333,19 +333,6 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // fit_coeffs_label
-            // 
-            this.fit_coeffs_label.AutoSize = true;
-            this.fit_coeffs_label.BackColor = System.Drawing.Color.MistyRose;
-            this.fit_coeffs_label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.fit_coeffs_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fit_coeffs_label.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.fit_coeffs_label.Location = new System.Drawing.Point(172, 619);
-            this.fit_coeffs_label.Name = "fit_coeffs_label";
-            this.fit_coeffs_label.Size = new System.Drawing.Size(401, 22);
-            this.fit_coeffs_label.TabIndex = 76;
-            this.fit_coeffs_label.Text = "Fitted Coefficients  - R1, R2, n1, Q1, R3, n2, Q2, n3, Q3";
-            // 
             // python_scripts
             // 
             this.python_scripts.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -393,7 +380,7 @@
             // 
             // recal_button
             // 
-            this.recal_button.Location = new System.Drawing.Point(1172, 615);
+            this.recal_button.Location = new System.Drawing.Point(1172, 618);
             this.recal_button.Name = "recal_button";
             this.recal_button.Size = new System.Drawing.Size(167, 23);
             this.recal_button.TabIndex = 80;
@@ -449,12 +436,24 @@
             this.save_button.UseVisualStyleBackColor = true;
             this.save_button.Click += new System.EventHandler(this.save_button_Click);
             // 
+            // no_of_pts
+            // 
+            this.no_of_pts.BackColor = System.Drawing.Color.LightGreen;
+            this.no_of_pts.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.no_of_pts.Location = new System.Drawing.Point(1172, 647);
+            this.no_of_pts.Name = "no_of_pts";
+            this.no_of_pts.ReadOnly = true;
+            this.no_of_pts.Size = new System.Drawing.Size(167, 40);
+            this.no_of_pts.TabIndex = 85;
+            this.no_of_pts.Text = "";
+            // 
             // Fitter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1339, 687);
+            this.Controls.Add(this.no_of_pts);
             this.Controls.Add(this.save_button);
             this.Controls.Add(this.gen_graph_label);
             this.Controls.Add(this.label1);
@@ -463,7 +462,6 @@
             this.Controls.Add(this.df_checkbox);
             this.Controls.Add(this.first_twenty);
             this.Controls.Add(this.python_scripts);
-            this.Controls.Add(this.fit_coeffs_label);
             this.Controls.Add(this.export_button);
             this.Controls.Add(this.exported_label);
             this.Controls.Add(this.file_display_label);
@@ -519,7 +517,6 @@
         private System.Windows.Forms.Button export_button;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.Label fit_coeffs_label;
         private System.Windows.Forms.Button python_scripts;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog2;
         private System.Windows.Forms.DataVisualization.Charting.Chart first_twenty;
@@ -529,6 +526,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label gen_graph_label;
         private System.Windows.Forms.Button save_button;
+        private System.Windows.Forms.RichTextBox no_of_pts;
     }
 }
 

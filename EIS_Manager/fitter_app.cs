@@ -439,6 +439,7 @@ namespace EIS_Manager
             fit_coeffs_box.Clear();
             df_checkbox.Items.Clear();
             bad_ints.Clear();
+            no_of_pts.Clear();
             curr_mpt = new mpt();
 
 
@@ -996,6 +997,7 @@ namespace EIS_Manager
             string raw_path = curr_path;
             fit_re.Clear();
             fit_im.Clear();
+            no_of_pts.Clear();
 
             //Console.WriteLine(curr_mpt.mpt_dict.Count().ToString());
             //bad_ints.Clear();
@@ -1151,7 +1153,7 @@ namespace EIS_Manager
             }
 
             //Console.WriteLine(string.Join(", ", fit_re));
-            MessageBox.Show("Completed Fitting of " + fit_re.Count().ToString() + " values.");
+            no_of_pts.Text = (fit_re.Count().ToString() + " fitted values");
                 
 
             nvyquist.Series[1].Points.DataBindXY(fit_re, fit_im);

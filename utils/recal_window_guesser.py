@@ -60,8 +60,8 @@ for ind in edited_inds:
 #print(ex_mpt2.df[0])
 #print(masked_mpt.df[0])
 
-print(len(ex_mpt2.df[0]))
+#print(len(ex_mpt2.df[0]))
 print(ex_mpt2.guesser())
-print(len(ex_mpt2.circuit_fit[0]))
+#print(len(ex_mpt2.circuit_fit[0]))
 for i in ex_mpt2.circuit_fit[0]:
         print(i.real, ", ", -i.imag)
