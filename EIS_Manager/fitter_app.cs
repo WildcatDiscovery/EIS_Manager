@@ -548,13 +548,11 @@ namespace EIS_Manager
             recalibrated = true;
             int count = df_checkbox.Items.Count;
             bad_ints.Clear();
-
             if (df_checkbox.Items.Count == df_checkbox.CheckedItems.Count)
             {
                 recalibrated = false;
             }
             
-
             for (int index = count; index > 0; index--)
             {
                if (!df_checkbox.CheckedItems.Contains(df_checkbox.Items[index - 1]))
@@ -565,15 +563,9 @@ namespace EIS_Manager
                         bad_ints.Add((index - 1));
                         //df_checkbox.Items.RemoveAt(index - 1);
                     }
-
-
                 }
-
             }
-
-
             nvyquist.Series[0].Points.Clear();
-
             for (int i = 0; i < df_checkbox.Items.Count; i++)
             {
                 if (df_checkbox.GetItemCheckState(i) == CheckState.Checked)
@@ -582,9 +574,7 @@ namespace EIS_Manager
                 }
                 
             }
-
             first_twenty.Series[0].Points.Clear();
-
             for (int i = 0; i < 20; i++)
             {
                 if (df_checkbox.GetItemCheckState(i) == CheckState.Checked)
@@ -592,7 +582,7 @@ namespace EIS_Manager
                     first_twenty.Series[0].Points.AddXY(curr_mpt.mpt_dict.Values.ElementAt(i).Item1, curr_mpt.mpt_dict.Values.ElementAt(i).Item2);
                 }
             }
-            MessageBox.Show("RECALIBRATED");
+            //MessageBox.Show("RECALIBRATED");
             recal_ints.Clear();
         }
 
@@ -1217,9 +1207,6 @@ namespace EIS_Manager
                 //Console.WriteLine("reached the strt of the fit coeffs organizer");
             }
         }
-
-        
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             
@@ -1229,7 +1216,6 @@ namespace EIS_Manager
         {
             
         }
-
         private void export_button_Click(object sender, EventArgs e)
         {
             string curr;
