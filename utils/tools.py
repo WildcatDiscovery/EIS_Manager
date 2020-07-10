@@ -344,7 +344,7 @@ class mpt_data:
 
 
     #FITTING THE FREQUENCY ONTO THE GRAPH. FLIP SWITCH ON PLOT FUNCT TO DISPLAY
-    def mpt_fit(self, params, circuit, weight_func='modulus', nan_policy='raise'):
+    def mpt_fit(self, params, circuit, weight_func='modulus', nan_policy='raise', maxfev = 9999990):
         self.Fit = []
         self.circuit_fit = []
         self.fit_E = []
@@ -352,7 +352,7 @@ class mpt_data:
             #for ix in range(len(self.df[i].w.values)):
              #   print(self.df[i].re.values[ix], self.df[i].im.values[ix])
             #print(len(self.df[i].w.values), len(self.df[i].re.values), len(self.df[i].im.values))
-            fitted_mpt_data = minimize(self.leastsq_errorfunc, params, method='leastsq', args=(self.df[i].w.values, self.df[i].re.values, self.df[i].im.values, circuit, weight_func), nan_policy=nan_policy, maxfev=9999990)
+            fitted_mpt_data = minimize(self.leastsq_errorfunc, params, method='leastsq', args=(self.df[i].w.values, self.df[i].re.values, self.df[i].im.values, circuit, weight_func), nan_policy=nan_policy, maxfev=maxfev)
             self.Fit.append(fitted_mpt_data)
             #print(report_fit(self.Fit[i]))
             self.low_error = self.Fit[i].chisqr
@@ -493,7 +493,7 @@ class mpt_data:
         return S
     
     #Updated Guesser
-    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None):
+    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 9999990):
         if circuit == 'R-RQ-RQ-Q':
             
             Rs_guess = min(self.df[0]['re'])
@@ -524,7 +524,7 @@ class mpt_data:
             params.add('Q', value=Q3_guess, min=10**-10, max=10**0)
             params.add('n', value=n3_guess, min=.1, max=1)
 
-            self.mpt_fit(params, circuit = 'R-RQ-RQ-Q')
+            self.mpt_fit(params, circuit = 'R-RQ-RQ-Q', maxfev = no_of_fits)
             
             counter = 0
 
