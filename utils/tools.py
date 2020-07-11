@@ -341,6 +341,7 @@ class mpt_data:
                 imag.append(-i.imag)
             ax.plot(real, imag, lw=0, marker='o', ms=8, mec='r', mew=1, mfc='none', label='')
         plt.show()
+        ax.legend()
 
 
     #FITTING THE FREQUENCY ONTO THE GRAPH. FLIP SWITCH ON PLOT FUNCT TO DISPLAY
@@ -1025,5 +1026,4 @@ def auto_fit(path, entry, csv_container = None):
 
 def path_listing(path):
     path_files = [f for f in listdir(path) if isfile(join(path, f)) if f[-3:] == "mpt"]
-    for i in path_files:
-        print(i)
+    return path_files
