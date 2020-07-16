@@ -34,8 +34,8 @@ ex_mpt = mpt_data(path, [data])
 masker = window_masker(ex_mpt, x_window = [x_min, x_max], y_window = [y_min, y_max])
 masked_mpt = mpt_data(path, [data], mask = masker)
 
-print(len(masked_mpt.df[0][['re', 'im']]))
+#print(len(masked_mpt.df[0][['re', 'im']]))
 print(masked_mpt.guesser())
-print(len(masked_mpt.circuit_fit[0]))
+#print(len(masked_mpt.circuit_fit[0]))
 for i in masked_mpt.circuit_fit[0]:
         print(i.real, ", ", -i.imag)

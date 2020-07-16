@@ -39,6 +39,9 @@ namespace EIS_Manager
         List<int> bad_ints = new List<int>();
         List<int> recal_ints = new List<int>();
 
+        //AUTOMATION
+        Dictionary<string, Dictionary<string, float>> total_settings = new Dictionary<string,Dictionary<string, float>>();
+        Dictionary<string, float> single_file_settings = new Dictionary<string, float>();
         public class mpt
         {
             public string Name
@@ -111,7 +114,7 @@ namespace EIS_Manager
             first_twenty.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             first_twenty.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
 
-            python_script_location = "C:\\Users\\cjang.WILDCAT\\Desktop\\EIS_Manager\\utils";
+            python_script_location = "C:\\Users\\kcaroll\\Desktop\\EIS_Manager\\utils";
             to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
         }
         
@@ -794,25 +797,20 @@ namespace EIS_Manager
 
         private void masker_fit(string raw_path, string mpt_file, string masker_choice)
         {
-            string[] masked_df = masked_mpt(raw_path, mpt_file, masker_choice);
             string[] output = masked_guesser(raw_path, mpt_file, masker_choice);
             List<string> pre = output.ToList();
 
-            //Console.WriteLine(string.Join("\n", pre));
+            //
             string fit_label = pre[1];
             string fit_coeffs = pre[2];
+            fit_coeffs_box.AppendText(fit_label);
 
-            Console.WriteLine("0" + pre[0]);
-            Console.WriteLine("1" + pre[1]);
-            Console.WriteLine("2" + pre[2]);
-            Console.WriteLine("3" + pre[3]);
 
-            pre.RemoveRange(0, 3);
-
+            pre.RemoveRange(0,2);
+            //Console.WriteLine(string.Join("\n", pre));
             string box_form = string.Join("\n", pre);
             //Console.WriteLine(box_form);
-            string box_form_mpt = string.Join("", masked_df);
-            fit_coeffs_box.AppendText(fit_coeffs);
+            
             foreach (string sgl in pre)
             {
                 Queue<Double> dbl_prep = new Queue<double>();
@@ -848,6 +846,7 @@ namespace EIS_Manager
             string fit_coeffs = pre[2];
             //Console.WriteLine(fit_label);
             
+
             pre.RemoveRange(0, 2);
             string box_form = string.Join("\n", pre);
             //Console.WriteLine(box_form);
@@ -888,7 +887,7 @@ namespace EIS_Manager
             //string[] masked_df = window_mask
             List<string> pre = output.ToList();
             //MessageBox.Show(pre.Count.ToString());
-            Console.WriteLine(string.Join("\n", pre));
+            //Console.WriteLine(string.Join("\n", pre));
 
             //Console.WriteLine(string.Join("\n", pre));
             string fit_label = pre[1];
@@ -899,7 +898,7 @@ namespace EIS_Manager
             //Console.WriteLine("3" + pre[3]);
 
             pre.RemoveRange(0, 2);
-            
+            //Console.WriteLine(string.Join("\n", pre));
             //string box_form = string.Join("", pre);
             fit_coeffs_box.AppendText(fit_label);
 

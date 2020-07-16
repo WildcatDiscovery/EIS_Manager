@@ -16,7 +16,7 @@ mask_choice = sys.argv[3]
 data = sys.argv[2]
 
 
-print(sys.argv)
+#print(sys.argv)
 
 ex_mpt = mpt_data(path, [data])
 #ex_mpt.mpt_plot()
