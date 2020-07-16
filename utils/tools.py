@@ -929,4 +929,5 @@ def auto_fit(path, entry, csv_container = None):
 
 def path_listing(path):
     path_files = [f for f in listdir(path) if isfile(join(path, f)) if f[-3:] == "mpt"]
-    return path_files
+    for i in path_files:
+        print(i)

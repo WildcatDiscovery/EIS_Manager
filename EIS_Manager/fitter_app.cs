@@ -114,7 +114,7 @@ namespace EIS_Manager
             first_twenty.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             first_twenty.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
 
-            python_script_location = "C:\\Users\\kcaroll\\Desktop\\EIS_Manager\\utils";
+            python_script_location = "C:\\Users\\cjang.WILDCAT\\Desktop\\eis\\EIS_Manager\\utils";
             to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
         }
         
@@ -1001,8 +1001,8 @@ namespace EIS_Manager
                 {
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     recal_fit(raw_path, mpt_file, "4", indices);
-                    single_file_settings.Add("recal", indices);
-                    single_file_settings.Add("mask", "4");
+                    //single_file_settings.Add("recal", indices);
+                    //single_file_settings.Add("mask", "4");
                 }
                 else
                 {
@@ -1046,8 +1046,8 @@ namespace EIS_Manager
                         }
                     }*/
                     masker_fit(raw_path, mpt_file, "4");
-                    single_file_settings.Add("recal", "NaN");
-                    single_file_settings.Add("mask", "4");
+                    //single_file_settings.Add("recal", "NaN");
+                    //single_file_settings.Add("mask", "4");
                 }     
             }
             else if (masker1.Checked == true)
@@ -1057,14 +1057,14 @@ namespace EIS_Manager
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     //MessageBox.Show(indices);
                     recal_fit(raw_path, mpt_file, "1", indices);
-                    single_file_settings.Add("recal", indices);
-                    single_file_settings.Add("mask", "1");
+                    //single_file_settings.Add("recal", indices);
+                    //single_file_settings.Add("mask", "1");
                 }
                 else
                 {
                     masker_fit(raw_path, mpt_file, "1");
-                    single_file_settings.Add("recal", "NaN");
-                    single_file_settings.Add("mask", "1");
+                    //single_file_settings.Add("recal", "NaN");
+                    //single_file_settings.Add("mask", "1");
                 }
             }
             else if (masker2.Checked == true)
@@ -1073,14 +1073,14 @@ namespace EIS_Manager
                 {
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     recal_fit(raw_path, mpt_file, "2", indices);
-                    single_file_settings.Add("recal", indices);
-                    single_file_settings.Add("mask", "2");
+                    //single_file_settings.Add("recal", indices);
+                    //single_file_settings.Add("mask", "2");
                 }
                 else
                 {
                     masker_fit(raw_path, mpt_file, "2");
-                    single_file_settings.Add("recal", "NaN");
-                    single_file_settings.Add("mask", "2");
+                    //single_file_settings.Add("recal", "NaN");
+                    //single_file_settings.Add("mask", "2");
                 }
             }
             else if (masker3.Checked == true)
@@ -1090,14 +1090,14 @@ namespace EIS_Manager
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     //MessageBox.Show(indices);
                     recal_fit(raw_path, mpt_file, "3", indices);
-                    single_file_settings.Add("recal", indices);
-                    single_file_settings.Add("mask", "3");
+                    //single_file_settings.Add("recal", indices);
+                    //single_file_settings.Add("mask", "3");
                 }
                 else
                 {
                     masker_fit(raw_path, mpt_file, "3");
-                    single_file_settings.Add("recal", "NaN");
-                    single_file_settings.Add("mask", "3");
+                    //single_file_settings.Add("recal", "NaN");
+                    //single_file_settings.Add("mask", "3");
                 }
             }
             else if (window_masker.Checked == true)
@@ -1106,23 +1106,19 @@ namespace EIS_Manager
                 x_max.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum.ToString();
                 y_min.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum.ToString();
                 y_max.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum.ToString();
-                List<double> gph_window = new List<double>();
-                gph_window.Add(nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMinimum);
-                gph_window.Add(nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum);
-                gph_window.Add(nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum);
-                gph_window.Add(nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum);
+                
                 if (recalibrated)
                 {
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     //MessageBox.Show(indices);
                     recal_window_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text, indices);
-                    single_file_settings.Add("recal", indices);
-                    single_file_settings.Add("mask", gph_window);
+                    //single_file_settings.Add("recal", indices);
+                    //single_file_settings.Add("mask", gph_window);
                 }
                 else
                 {
-                    single_file_settings.Add("recal", "NaN");
-                    single_file_settings.Add("mask", gph_window);
+                    //single_file_settings.Add("recal", "NaN");
+                    //single_file_settings.Add("mask", gph_window);
                     window_masker_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text);
                 }
             }
@@ -1231,13 +1227,6 @@ namespace EIS_Manager
                 {
                     continue;
                 }
-                //Console.WriteLine("reached the strt of the fit coeffs organizer");
-                if (total_settings.ContainsKey(mpt_file)){
-                    MessageBox.Show("Replacing an already saved file...");
-                    total_settings.Remove(mpt_file);
-                    total_settings.Add(mpt_file, single_file_settings);
-                }
-                total_settings.Add(mpt_file, single_file_settings);
             }
         }
         private void timer1_Tick(object sender, EventArgs e)
@@ -1285,7 +1274,130 @@ namespace EIS_Manager
 
         private void save_button_Click(object sender, EventArgs e)
         {
-            saved_files.Add(curr_mpt);
+            fit_coeffs_box.Clear();
+            nvyquist.Series[2].Points.Clear();
+            nvyquist.Series[3].Points.Clear();
+
+            string mpt_file = file_display_label.Text;
+            string raw_path = curr_path;
+            fit_re.Clear();
+            fit_im.Clear();
+            no_of_pts.Clear();
+
+
+            if (entire_fit.Checked == true)
+            {
+                if (recalibrated)
+                {
+                    String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+                    single_file_settings.Add("recal", indices);
+                    single_file_settings.Add("mask", "4");
+                }
+                else
+                {
+                    single_file_settings.Add("recal", "NaN");
+                    single_file_settings.Add("mask", "4");
+                }
+            }
+            else if (masker1.Checked == true)
+            {
+                if (recalibrated)
+                {
+                    String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+                    //MessageBox.Show(indices);
+                    //recal_fit(raw_path, mpt_file, "1", indices);
+                    single_file_settings.Add("recal", indices);
+                    single_file_settings.Add("mask", "1");
+                }
+                else
+                {
+                    //masker_fit(raw_path, mpt_file, "1");
+                    single_file_settings.Add("recal", "NaN");
+                    single_file_settings.Add("mask", "1");
+                }
+            }
+            else if (masker2.Checked == true)
+            {
+                if (recalibrated)
+                {
+                    String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+                    //recal_fit(raw_path, mpt_file, "2", indices);
+                    single_file_settings.Add("recal", indices);
+                    single_file_settings.Add("mask", "2");
+                }
+                else
+                {
+                    //masker_fit(raw_path, mpt_file, "2");
+                    single_file_settings.Add("recal", "NaN");
+                    single_file_settings.Add("mask", "2");
+                }
+            }
+            else if (masker3.Checked == true)
+            {
+                if (recalibrated)
+                {
+                    String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+                    //MessageBox.Show(indices);
+                    //recal_fit(raw_path, mpt_file, "3", indices);
+                    single_file_settings.Add("recal", indices);
+                    single_file_settings.Add("mask", "3");
+                }
+                else
+                {
+                    //masker_fit(raw_path, mpt_file, "3");
+                    single_file_settings.Add("recal", "NaN");
+                    single_file_settings.Add("mask", "3");
+                }
+            }
+            else if (window_masker.Checked == true)
+            {
+                x_min.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMinimum.ToString();
+                x_max.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum.ToString();
+                y_min.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum.ToString();
+                y_max.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum.ToString();
+                List<double> gph_window = new List<double>();
+                gph_window.Add(nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMinimum);
+                gph_window.Add(nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum);
+                gph_window.Add(nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum);
+                gph_window.Add(nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum);
+                if (recalibrated)
+                {
+                    String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
+                    //MessageBox.Show(indices);
+                    //recal_window_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text, indices);
+                    single_file_settings.Add("recal", indices);
+                    single_file_settings.Add("mask", gph_window);
+                }
+                else
+                {
+                    single_file_settings.Add("recal", "NaN");
+                    single_file_settings.Add("mask", gph_window);
+                    //window_masker_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Bad Masking Choice");
+            }
+
+            if (total_settings.ContainsKey(mpt_file))
+            {
+                MessageBox.Show("Replacing an already saved file...");
+                total_settings.Remove(mpt_file);
+                total_settings.Add(mpt_file, single_file_settings);
+            }
+            else
+            {
+                total_settings.Add(mpt_file, single_file_settings);
+            }
+            foreach (KeyValuePair<string, Dictionary<string, object>> i in total_settings)
+            {
+                Console.WriteLine(i.Key.ToString());
+                foreach(KeyValuePair<string, object> j in i.Value)
+                {
+                    Console.WriteLine(j.ToString());
+                }
+            }
         }
     }
 }
