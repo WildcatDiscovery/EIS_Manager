@@ -30,16 +30,16 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Fitter));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pathbutton = new System.Windows.Forms.Button();
             this.title = new System.Windows.Forms.Label();
             this.logo = new System.Windows.Forms.PictureBox();
@@ -74,6 +74,7 @@
             this.save_button = new System.Windows.Forms.Button();
             this.no_of_pts = new System.Windows.Forms.RichTextBox();
             this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
+            this.export_settings_button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nvyquist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.first_twenty)).BeginInit();
@@ -239,37 +240,37 @@
             // 
             // nvyquist
             // 
-            chartArea5.Name = "ChartArea1";
-            this.nvyquist.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.nvyquist.Legends.Add(legend5);
+            chartArea3.Name = "ChartArea1";
+            this.nvyquist.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.nvyquist.Legends.Add(legend3);
             this.nvyquist.Location = new System.Drawing.Point(168, 0);
             this.nvyquist.Name = "nvyquist";
             this.nvyquist.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.EarthTones;
-            series13.ChartArea = "ChartArea1";
-            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series13.Legend = "Legend1";
-            series13.MarkerSize = 10;
-            series13.Name = "nvyquist";
-            series14.ChartArea = "ChartArea1";
-            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series14.Legend = "Legend1";
-            series14.MarkerSize = 10;
-            series14.Name = "Fitted_Nyvquist";
-            series15.ChartArea = "ChartArea1";
-            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series15.Legend = "Legend1";
-            series15.MarkerSize = 10;
-            series15.Name = "masked";
-            series16.ChartArea = "ChartArea1";
-            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series16.Legend = "Legend1";
-            series16.MarkerSize = 15;
-            series16.Name = "x_ints";
-            this.nvyquist.Series.Add(series13);
-            this.nvyquist.Series.Add(series14);
-            this.nvyquist.Series.Add(series15);
-            this.nvyquist.Series.Add(series16);
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series7.Legend = "Legend1";
+            series7.MarkerSize = 10;
+            series7.Name = "nvyquist";
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series8.Legend = "Legend1";
+            series8.MarkerSize = 10;
+            series8.Name = "Fitted_Nyvquist";
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series9.Legend = "Legend1";
+            series9.MarkerSize = 10;
+            series9.Name = "masked";
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series10.Legend = "Legend1";
+            series10.MarkerSize = 15;
+            series10.Name = "x_ints";
+            this.nvyquist.Series.Add(series7);
+            this.nvyquist.Series.Add(series8);
+            this.nvyquist.Series.Add(series9);
+            this.nvyquist.Series.Add(series10);
             this.nvyquist.Size = new System.Drawing.Size(771, 675);
             this.nvyquist.TabIndex = 70;
             this.nvyquist.Text = "Full Graph";
@@ -324,7 +325,7 @@
             this.export_button.Location = new System.Drawing.Point(5, 632);
             this.export_button.Margin = new System.Windows.Forms.Padding(2);
             this.export_button.Name = "export_button";
-            this.export_button.Size = new System.Drawing.Size(157, 44);
+            this.export_button.Size = new System.Drawing.Size(69, 44);
             this.export_button.TabIndex = 75;
             this.export_button.Text = "Export Coefficients";
             this.export_button.UseVisualStyleBackColor = true;
@@ -348,24 +349,24 @@
             // 
             // first_twenty
             // 
-            chartArea6.Name = "ChartArea1";
-            this.first_twenty.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            this.first_twenty.Legends.Add(legend6);
+            chartArea4.Name = "ChartArea1";
+            this.first_twenty.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.first_twenty.Legends.Add(legend4);
             this.first_twenty.Location = new System.Drawing.Point(760, 87);
             this.first_twenty.Name = "first_twenty";
-            series17.ChartArea = "ChartArea1";
-            series17.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series17.Legend = "Legend1";
-            series17.MarkerSize = 10;
-            series17.Name = "Fitted_Nyvquist";
-            series18.ChartArea = "ChartArea1";
-            series18.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series18.Legend = "Legend1";
-            series18.MarkerSize = 10;
-            series18.Name = "nvyquist";
-            this.first_twenty.Series.Add(series17);
-            this.first_twenty.Series.Add(series18);
+            series11.ChartArea = "ChartArea1";
+            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series11.Legend = "Legend1";
+            series11.MarkerSize = 10;
+            series11.Name = "Fitted_Nyvquist";
+            series12.ChartArea = "ChartArea1";
+            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series12.Legend = "Legend1";
+            series12.MarkerSize = 10;
+            series12.Name = "nvyquist";
+            this.first_twenty.Series.Add(series11);
+            this.first_twenty.Series.Add(series12);
             this.first_twenty.Size = new System.Drawing.Size(567, 554);
             this.first_twenty.TabIndex = 78;
             this.first_twenty.Text = "Full Graph";
@@ -448,12 +449,26 @@
             this.no_of_pts.TabIndex = 85;
             this.no_of_pts.Text = "";
             // 
+            // export_settings_button
+            // 
+            this.export_settings_button.ForeColor = System.Drawing.Color.SteelBlue;
+            this.export_settings_button.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.export_settings_button.Location = new System.Drawing.Point(74, 631);
+            this.export_settings_button.Margin = new System.Windows.Forms.Padding(2);
+            this.export_settings_button.Name = "export_settings_button";
+            this.export_settings_button.Size = new System.Drawing.Size(88, 44);
+            this.export_settings_button.TabIndex = 86;
+            this.export_settings_button.Text = "Export Settings";
+            this.export_settings_button.UseVisualStyleBackColor = true;
+            this.export_settings_button.Click += new System.EventHandler(this.export_settings_button_Click);
+            // 
             // Fitter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1339, 687);
+            this.Controls.Add(this.export_settings_button);
             this.Controls.Add(this.no_of_pts);
             this.Controls.Add(this.save_button);
             this.Controls.Add(this.gen_graph_label);
@@ -529,6 +544,7 @@
         private System.Windows.Forms.Button save_button;
         private System.Windows.Forms.RichTextBox no_of_pts;
         private System.Windows.Forms.SaveFileDialog saveFileDialog2;
+        private System.Windows.Forms.Button export_settings_button;
     }
 }
 

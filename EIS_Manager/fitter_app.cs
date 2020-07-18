@@ -1349,24 +1349,24 @@ namespace EIS_Manager
                 x_max.Text = nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum.ToString();
                 y_min.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum.ToString();
                 y_max.Text = nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum.ToString();
+                List<double> raw_window = new List<double>();
+                raw_window.Add(nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMinimum);
+                raw_window.Add(nvyquist.ChartAreas[0].AxisX.ScaleView.ViewMaximum);
+                raw_window.Add(nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMinimum);
+                raw_window.Add(nvyquist.ChartAreas[0].AxisY.ScaleView.ViewMaximum);
+                String gph_window = String.Concat("[" + String.Join(",", raw_window.Select(item => item.ToString()).ToArray()) + "]");
                 if (recalibrated)
                 {
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     //MessageBox.Show(indices);
                     //recal_window_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text, indices);
                     single_file_settings.Add(indices);
-                    single_file_settings.Add(x_min.Text);
-                    single_file_settings.Add(x_max.Text);
-                    single_file_settings.Add(y_min.Text);
-                    single_file_settings.Add(y_max.Text);
+                    single_file_settings.Add(gph_window);
                 }
                 else
                 {
                     single_file_settings.Add("NaN");
-                    single_file_settings.Add(x_min.Text);
-                    single_file_settings.Add(x_max.Text);
-                    single_file_settings.Add(y_min.Text);
-                    single_file_settings.Add(y_max.Text);
+                    single_file_settings.Add(gph_window);
                     //window_masker_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text);
                 }
             }
@@ -1387,12 +1387,17 @@ namespace EIS_Manager
             }
 
             
+            
+        }
+
+        private void export_settings_button_Click(object sender, EventArgs e)
+        {
             if (saveFileDialog2.ShowDialog() == DialogResult.OK)
             {
                 String csv = String.Join(
                 Environment.NewLine,
-                total_settings.Select(d => $"{d.Key};{String.Join(" ", d.Value)};"));
-                    System.IO.File.WriteAllText(saveFileDialog2.FileName, csv);
+                total_settings.Select(d => $"{d.Key} {String.Join(" ", d.Value)};"));
+                System.IO.File.WriteAllText(saveFileDialog2.FileName, csv);
             }
         }
     }
