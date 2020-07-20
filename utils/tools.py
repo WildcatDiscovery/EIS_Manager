@@ -333,7 +333,7 @@ class mpt_data:
                 self.label_im_1.append("Z'' ("+str(np.round(np.average(self.df[i].E_avg), 2))+' V)')
                 self.label_cycleno.append(str(np.round(np.average(self.df[i].E_avg), 2))+' V')
         ### Nyquist Plot
-        ax.plot(self.df[0].re, self.df[0].im, marker='o', ms=4, lw=2, color=colors[i], ls='-', label=self.label_cycleno[i])
+        ax.plot(self.df[0].re, self.df[0].im, marker='o', ms=4, lw=2, color=colors[i], ls='-', label='nvyquist_data')
         if fitting == 'on':
             real = []
             imag = []
@@ -342,7 +342,7 @@ class mpt_data:
                 real.append(i.real)
                 #print(i.imag)
                 imag.append(-i.imag)
-            ax.plot(real, imag, lw=0, marker='o', ms=8, mec='r', mew=1, mfc='none', label='')
+            ax.plot(real, imag, lw=0, marker='o', ms=8, mec='r', mew=1, mfc='none', label='fitted')
         plt.show()
         ax.legend()
 
