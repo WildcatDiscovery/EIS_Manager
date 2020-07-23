@@ -295,11 +295,11 @@ class mpt_data:
         return [max(adj_mpt['f']), min(adj_mpt['f'])]
     
     #PLOTTING FUNCTION
-    def mpt_plot(self, fitting='off', rr='off', legend='on', x_window = 'none', y_window = 'none'):
+    def mpt_plot(self, fitting='off', rr='off', legend='on', x_window = 'none', y_window = 'none', save_fig = False):
         
         #Figure Initialization
         
-        fig = plt.figure(dpi=120, figsize = [15, 15], facecolor='w', edgecolor='w')
+        fig = plt.figure(dpi=120, figsize = [20, 20], facecolor='w', edgecolor='w')
         fig.subplots_adjust(left=0.1, right=0.95, hspace=0.5, bottom=0.1, top=0.95)
         ax = fig.add_subplot(211, aspect='equal')
         
@@ -345,6 +345,8 @@ class mpt_data:
             ax.plot(real, imag, lw=0, marker='o', ms=8, mec='r', mew=1, mfc='none', label='fitted')
         plt.show()
         ax.legend()
+        if save_fig:
+            fig.savefig(r"C:\Users\cjang.WILDCAT\Desktop\eis\EIS_Manager\utils\fitted_pics\\"+self.data[0].strip('.mpt')+'_fitted.png')
 
 
     #FITTING THE FREQUENCY ONTO THE GRAPH. FLIP SWITCH ON PLOT FUNCT TO DISPLAY
@@ -498,7 +500,7 @@ class mpt_data:
         return S
     
     #Updated Guesser
-    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 25):
+    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 25, save_fig = False):
         start = time.time()
         if circuit == 'R-RQ-RQ-Q':
             init_guesses = []
@@ -531,7 +533,7 @@ class mpt_data:
                 init_guesses.append(self.low_error)
             params = param_list[init_guesses.index(min(init_guesses))]
             self.mpt_fit(params, circuit = 'R-RQ-RQ-Q',maxfev = 100)
-            self.mpt_plot(fitting = 'on')
+            #self.mpt_plot(fitting = 'on', save_fig = save_fig)
             self.fitted = pd.DataFrame({'file':self.data,
                         'fit_Rs':self.fit_Rs,
                     "fit_R1":self.fit_R1,
@@ -878,7 +880,7 @@ def the_ringer(path, single_file):
 #CSV_CONTAINER takes an additional path that leads to a separate folder which will contain all the fitted coefficients
 #if you want to just fit a single mpt or a list of mpts, you can use LST for specific fittings
 #TAKE_CSV for when you want to export a csv
-
+"""
 def auto_fit(path, entry, csv_container = None):
     bad_mpts = []
 
@@ -926,7 +928,7 @@ def auto_fit(path, entry, csv_container = None):
     
     to_export = pd.concat(fitteds)
     return to_export
-
+"""
 def path_listing(path):
     path_files = [f for f in listdir(path) if isfile(join(path, f)) if f[-3:] == "mpt"]
     for i in path_files:

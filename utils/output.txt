@@ -1,1 +1,73 @@
 ['copy.mpt']
+       file    fit_Rs      fit_R1    fit_n1  fit_fs1        fit_Q1  \
+0  copy.mpt  0.026666  474.470683  0.907606      NaN  8.125442e-09   
+
+       fit_R2    fit_n2  fit_fs2        fit_Q2    fit_Q3    fit_n3  
+0  732.219614  0.769847      NaN  2.528872e-07  0.000006  0.795323  
+['DE_104_10_30.mpt']
+               file      fit_Rs       fit_R1    fit_n1  fit_fs1        fit_Q1  \
+0  DE_104_10_30.mpt  145.085539  6717.108919  0.787956      NaN  9.394553e-09   
+
+         fit_R2    fit_n2  fit_fs2        fit_Q2    fit_Q3    fit_n3  
+0  90279.400344  0.999975      NaN  1.766946e-07  0.000002  0.572548  
+['DE_104_10_30orig.mpt']
+                   file      fit_Rs      fit_R1    fit_n1  fit_fs1  \
+0  DE_104_10_30orig.mpt  147.453117  6637.70139  0.790321      NaN   
+
+         fit_Q1        fit_R2    fit_n2  fit_fs2    fit_Q2        fit_Q3  \
+0  9.179325e-09  77839.173943  0.540637      NaN  0.000003  2.226180e-07   
+
+     fit_n3  
+0  0.915364  
+['DE_104_1_30.mpt']
+              file      fit_Rs       fit_R1    fit_n1  fit_fs1        fit_Q1  \
+0  DE_104_1_30.mpt  185.576223  6078.491192  0.766698      NaN  1.354980e-08   
+
+         fit_R2  fit_n2  fit_fs2        fit_Q2    fit_Q3    fit_n3  
+0  50379.994988     1.0      NaN  2.203334e-07  0.000001  0.611375  
+['DE_104_1_30_trimmed.mpt']
+                      file      fit_Rs       fit_R1    fit_n1  fit_fs1  \
+0  DE_104_1_30_trimmed.mpt  188.099395  6440.891076  0.757766      NaN   
+
+         fit_Q1        fit_R2    fit_n2  fit_fs2   fit_Q2        fit_Q3  \
+0  1.476303e-08  38349.035885  0.431764      NaN  0.00035  4.417039e-07   
+
+     fit_n3  
+0  0.719402  
+['DE_140_1_30.mpt']
+              file    fit_Rs       fit_R1    fit_n1  fit_fs1    fit_Q1  \
+0  DE_140_1_30.mpt  0.097885  1560.140557  0.596113      NaN  0.000001   
+
+        fit_R2    fit_n2  fit_fs2        fit_Q2    fit_Q3    fit_n3  
+0  1120.066525  0.744104      NaN  5.600573e-08  0.000005  0.783772  
+['DE_40_10_60.mpt']
+              file     fit_Rs     fit_R1   fit_n1  fit_fs1        fit_Q1  \
+0  DE_40_10_60.mpt  37.869983  71.550578  0.95851      NaN  4.346672e-09   
+
+      fit_R2    fit_n2  fit_fs2    fit_Q2        fit_Q3  fit_n3  
+0  79.971751  0.913445      NaN  0.000005  7.859523e-07     1.0  
+['DE_40_11_60.mpt']
+              file     fit_Rs      fit_R1    fit_n1  fit_fs1    fit_Q1  \
+0  DE_40_11_60.mpt  39.443761  180.923609  0.877858      NaN  0.000009   
+
+      fit_R2  fit_n2  fit_fs2        fit_Q2    fit_Q3    fit_n3  
+0  69.556614     1.0      NaN  2.259241e-09  0.000001  0.914147  
+['DE_40_12_60.mpt']
+              file     fit_Rs    fit_R1  fit_n1  fit_fs1   fit_Q1     fit_R2  \
+0  DE_40_12_60.mpt  46.115918  14.12633     1.0      NaN  0.00001  24.764392   
+
+   fit_n2  fit_fs2        fit_Q2    fit_Q3    fit_n3  
+0     1.0      NaN  7.348764e-09  0.000002  0.945867  
+['DE_40_13_60.mpt']
+              file    fit_Rs     fit_R1  fit_n1  fit_fs1        fit_Q1  \
+0  DE_40_13_60.mpt  0.049487  75.871293     1.0      NaN  1.462807e-09   
+
+      fit_R2    fit_n2  fit_fs2    fit_Q2    fit_Q3    fit_n3  
+0  14.883087  0.991923      NaN  0.000012  0.000002  0.911994  
+['DE_40_14_60.mpt']
+              file    fit_Rs     fit_R1    fit_n1  fit_fs1  fit_Q1     fit_R2  \
+0  DE_40_14_60.mpt  0.799787  40.504085  0.073486      NaN   0.001  33.681977   
+
+   fit_n2  fit_fs2        fit_Q2    fit_Q3    fit_n3  
+0     1.0      NaN  3.866671e-09  0.000002  0.937257  
+['DE_40_15_60.mpt']
