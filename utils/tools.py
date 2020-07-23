@@ -299,7 +299,7 @@ class mpt_data:
         
         #Figure Initialization
         
-        fig = plt.figure(dpi=120, figsize = [self.width, self.height], facecolor='w', edgecolor='w')
+        fig = plt.figure(dpi=120, figsize = [15, 15], facecolor='w', edgecolor='w')
         fig.subplots_adjust(left=0.1, right=0.95, hspace=0.5, bottom=0.1, top=0.95)
         ax = fig.add_subplot(211, aspect='equal')
         
@@ -498,7 +498,7 @@ class mpt_data:
         return S
     
     #Updated Guesser
-    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 10):
+    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 25):
         start = time.time()
         if circuit == 'R-RQ-RQ-Q':
             init_guesses = []
