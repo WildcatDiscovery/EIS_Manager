@@ -299,7 +299,7 @@ class mpt_data:
         
         #Figure Initialization
         
-        fig = plt.figure(dpi=120, figsize = [20, 20], facecolor='w', edgecolor='w')
+        fig = plt.figure(dpi=120, figsize = [15, 25], facecolor='w', edgecolor='w')
         fig.subplots_adjust(left=0.1, right=0.95, hspace=0.5, bottom=0.1, top=0.95)
         ax = fig.add_subplot(211, aspect='equal')
         
@@ -333,6 +333,7 @@ class mpt_data:
                 self.label_im_1.append("Z'' ("+str(np.round(np.average(self.df[i].E_avg), 2))+' V)')
                 self.label_cycleno.append(str(np.round(np.average(self.df[i].E_avg), 2))+' V')
         ### Nyquist Plot
+        ax.set_title(self.data)
         ax.plot(self.df[0].re, self.df[0].im, marker='o', ms=4, lw=2, color=colors[i], ls='-', label='nvyquist_data')
         if fitting == 'on':
             real = []
@@ -346,7 +347,7 @@ class mpt_data:
         plt.show()
         ax.legend()
         if save_fig:
-            fig.savefig(r"C:\Users\cjang.WILDCAT\Desktop\eis\EIS_Manager\utils\fitted_pics\\"+self.data[0].strip('.mpt')+'_fitted.png')
+            fig.savefig(r"C:\Users\cjang.WILDCAT\Desktop\eis\EIS_Manager\utils\fitted_folder\\"+self.data[0].strip('.mpt')+'_fitted.png')
 
 
     #FITTING THE FREQUENCY ONTO THE GRAPH. FLIP SWITCH ON PLOT FUNCT TO DISPLAY
@@ -500,7 +501,7 @@ class mpt_data:
         return S
     
     #Updated Guesser
-    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 25, save_fig = False):
+    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 50, save_fig = False):
         start = time.time()
         if circuit == 'R-RQ-RQ-Q':
             init_guesses = []

@@ -114,7 +114,7 @@ namespace EIS_Manager
             first_twenty.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             first_twenty.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
 
-            python_script_location = "C:\\Users\\cjang.WILDCAT\\Desktop\\eis\\EIS_Manager\\utils";
+            python_script_location = "C:\\Users\\kcarroll\\Desktop\\eis\\EIS_Manager\\utils";
             to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
         }
         

@@ -4,6 +4,7 @@ import logging
 logging.getLogger().setLevel(logging.CRITICAL)
 import math
 def auto_fit(path, csv, save_fig = False):
+    final_coeffs = []
     for i in range(len(csv)):
         #print(i)
         mpt = mpt_data(path = path, data = [csv.iloc[i].name])
@@ -32,7 +33,8 @@ def auto_fit(path, csv, save_fig = False):
                 else:
                     #print('guessing...')
                     continue
-                print(masked_mpt.guesser(save_fig = save_fig))
+                #print(masked_mpt.guesser(save_fig = save_fig))
+                final_coeffs.append(masked_mpt.guesser())
                 masked_mpt.mpt_plot(fitting = 'on', save_fig = True)
             elif (csv.iloc[i].mask_choice.strip('[')).strip('];') == "2":
                 mask_choice = mpt.masker0()
@@ -56,7 +58,8 @@ def auto_fit(path, csv, save_fig = False):
                 else:
                     #print('guessing...')
                     continue
-                print(masked_mpt.guesser(save_fig = save_fig))
+                #print(masked_mpt.guesser(save_fig = save_fig))
+                final_coeffs.append(masked_mpt.guesser())
                 masked_mpt.mpt_plot(fitting = 'on', save_fig = True)
             elif (csv.iloc[i].mask_choice.strip('[')).strip('];') == "3":
                 mask_choice = mpt.masker()
@@ -80,7 +83,8 @@ def auto_fit(path, csv, save_fig = False):
                 else:
                     #print('guessing...')
                     continue
-                print(masked_mpt.guesser(save_fig = save_fig))
+                #print(masked_mpt.guesser(save_fig = save_fig))
+                final_coeffs.append(masked_mpt.guesser())
                 masked_mpt.mpt_plot(fitting = 'on', save_fig = True)
             elif (csv.iloc[i].mask_choice.strip('[')).strip('];') == "4":
                 if type((csv.iloc[i].recal_indices)) == str:
@@ -102,7 +106,8 @@ def auto_fit(path, csv, save_fig = False):
                 else:
                     #print('guessing...')
                     continue
-                print(mpt.guesser(save_fig = save_fig))
+                #print(mpt.guesser(save_fig = save_fig))
+                final_coeffs.append(masked_mpt.guesser())
                 masked_mpt.mpt_plot(fitting = 'on', save_fig = True)
             else:
                 print('bad masking choice')
@@ -128,9 +133,12 @@ def auto_fit(path, csv, save_fig = False):
                             masked_mpt.df[0] = masked_mpt.df[0].drop(ind,axis=0)
                         else:
                             continue
-                print(masked_mpt.guesser(save_fig = save_fig))
+                #print(masked_mpt.guesser(save_fig = save_fig))
+                final_coeffs.append(masked_mpt.guesser())
                 masked_mpt.mpt_plot(fitting = 'on', save_fig = True)
             else:
-                print(masked_mpt.guesser(save_fig = save_fig))
+                #print(masked_mpt.guesser(save_fig = save_fig))
+                final_coeffs.append(masked_mpt.guesser())
                 masked_mpt.mpt_plot(fitting = 'on', save_fig = True)
+    return final_coeffs
         
