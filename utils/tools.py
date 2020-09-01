@@ -503,6 +503,7 @@ class mpt_data:
     #Updated Guesser
     def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 50, save_fig = False):
         start = time.time()
+        print(sys.version)
         if circuit == 'R-RQ-RQ-Q':
             init_guesses = []
             param_list = []
@@ -549,10 +550,11 @@ class mpt_data:
                     "fit_n3":self.fit_n,})
             out_name = 'fitted_' + self.data[0][:-4]
             end = time.time()
-            #print(end - start)
+            print(end - start)
             if csv_container:
                 self.fitted.to_csv(csv_container+out_name, sep='\t')
                 return self.fitted
+            self.mpt_plot(fitting = "on")
             return self.fitted
     
     #Guess and Plot; who knows if i'll use it

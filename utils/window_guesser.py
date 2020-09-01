@@ -39,3 +39,4 @@ print(masked_mpt.guesser())
 #print(len(masked_mpt.circuit_fit[0]))
 for i in masked_mpt.circuit_fit[0]:
         print(i.real, ", ", -i.imag)
+masked_mpt.mpt_plot(fitting = 'on')

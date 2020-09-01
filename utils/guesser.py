@@ -11,7 +11,7 @@ data = sys.argv[2]
 data_edit = data.strip('\n')
 sys.argv[2] = "/" + data_edit
 
-
+#print(sys.version)
 ex_mpt = mpt_data(path, [sys.argv[2]])
 if len(sys.argv) > 3:
     if len(sys.argv) > 4:
@@ -23,3 +23,4 @@ else:
     print(ex_mpt.guesser())
     for i in ex_mpt.circuit_fit[0]:
             print(i.real, ", ", -i.imag)
+ex_mpt.mpt_plot(fitting = 'on')

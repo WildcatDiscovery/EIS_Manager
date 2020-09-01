@@ -345,6 +345,27 @@ namespace EIS_Manager
             return output;
         }
 
+        private string[] batch_fit(string path, string exported_settings)
+        {
+            string pt1 = python_script_location;
+            string progToRun = pt1 + "\\autofit.py";
+            char[] splitter = { '\r' };
+
+            Process proc = new Process();
+            proc.StartInfo.FileName = "python.exe";
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.UseShellExecute = false;
+            //MessageBox.Show(string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max, " ", indices));
+            //Console.WriteLine(string.Concat(progToRun, " ", path, " ", mpt_file, " ", x_min, " ", x_max, " ", y_min, " ", y_max, " ", indices));
+            proc.StartInfo.Arguments = string.Concat(progToRun, " ", path, " ", exported_settings);
+            proc.Start();
+
+            StreamReader sReader = proc.StandardOutput;
+            string[] output = sReader.ReadToEnd().Split(splitter);
+
+            return output;
+        }
+
         private void btnFit_Click(object sender, EventArgs e)
         {
         }
@@ -444,6 +465,14 @@ namespace EIS_Manager
             bad_ints.Clear();
             no_of_pts.Clear();
             curr_mpt = new mpt();
+            masker1.Checked = false;
+            masker2.Checked = false;
+            masker3.Checked = false;
+            window_masker.Checked = false;
+            x_min.Clear();
+            x_max.Clear();
+            y_min.Clear();
+            y_max.Clear();
 
 
 

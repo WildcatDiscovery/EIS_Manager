@@ -65,3 +65,4 @@ print(ex_mpt2.guesser())
 #print(len(ex_mpt2.circuit_fit[0]))
 for i in ex_mpt2.circuit_fit[0]:
         print(i.real, ", ", -i.imag)
+ex_mpt2.mpt_plot(fitting = 'on')

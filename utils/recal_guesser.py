@@ -71,3 +71,4 @@ elif mask_choice == str(4):
             print(i.real, ", ", -i.imag)
 else:
     print("Incorrect Input")
+ex_mpt.mpt_plot(fitting = 'on')
