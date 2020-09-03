@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MPT DATAFRAME</title>
+</head>
+<body>
+<h1>
+   {{ df_head }}
+   Nvyquist Impedance Dataframe
+</h1>
+{% for table in tables %}
+            {{titles[loop.index]}}
+            {{ table|safe }}
+{% endfor %}
+</body>
+</html>

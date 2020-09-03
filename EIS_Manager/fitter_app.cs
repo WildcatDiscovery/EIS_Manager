@@ -1030,53 +1030,10 @@ namespace EIS_Manager
                 {
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     recal_fit(raw_path, mpt_file, "4", indices);
-                    //single_file_settings.Add("recal", indices);
-                    //single_file_settings.Add("mask", "4");
                 }
                 else
                 {
-                    //MessageBox.Show("HERE");
-                    //MessageBox.Show(mpt_file, raw_path);
-                    /*
-                    string[] output = guesser(raw_path, mpt_file);
-                    List<string> pre = output.ToList();
-                    
-                        
-                    string fit_label = pre[0];
-                    string fit_coeffs = pre[1];
-                    pre.RemoveRange(0, 3);
-                    fit_coeffs_box.AppendText(fit_coeffs);
-                        
-                      
-
-                    string box_form = string.Join("", pre);
-
-                    foreach (string sgl in pre)
-                    {
-                        Queue<Double> dbl_prep = new Queue<double>();
-                        foreach (var word in sgl.Split(','))
-                        {
-                            if (word.Length > 1)
-                            {
-                                dbl_prep.Enqueue(Convert.ToDouble(word));
-                            }
-                        }
-                        if (dbl_prep.Count == 2)
-                        {
-                            fit_re.Add(dbl_prep.Dequeue());
-                            fit_im.Add(dbl_prep.Dequeue());
-                        }
-                        else
-                        {
-                            foreach (var word in dbl_prep)
-                            {
-                                MessageBox.Show("Ununsual Value: " + word.ToString());
-                            }
-                        }
-                    }*/
                     masker_fit(raw_path, mpt_file, "4");
-                    //single_file_settings.Add("recal", "NaN");
-                    //single_file_settings.Add("mask", "4");
                 }     
             }
             else if (masker1.Checked == true)
@@ -1084,16 +1041,11 @@ namespace EIS_Manager
                 if (recalibrated)
                 {
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
-                    //MessageBox.Show(indices);
                     recal_fit(raw_path, mpt_file, "1", indices);
-                    //single_file_settings.Add("recal", indices);
-                    //single_file_settings.Add("mask", "1");
                 }
                 else
                 {
                     masker_fit(raw_path, mpt_file, "1");
-                    //single_file_settings.Add("recal", "NaN");
-                    //single_file_settings.Add("mask", "1");
                 }
             }
             else if (masker2.Checked == true)
@@ -1102,14 +1054,10 @@ namespace EIS_Manager
                 {
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
                     recal_fit(raw_path, mpt_file, "2", indices);
-                    //single_file_settings.Add("recal", indices);
-                    //single_file_settings.Add("mask", "2");
                 }
                 else
                 {
                     masker_fit(raw_path, mpt_file, "2");
-                    //single_file_settings.Add("recal", "NaN");
-                    //single_file_settings.Add("mask", "2");
                 }
             }
             else if (masker3.Checked == true)
@@ -1117,16 +1065,11 @@ namespace EIS_Manager
                 if (recalibrated)
                 {
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
-                    //MessageBox.Show(indices);
                     recal_fit(raw_path, mpt_file, "3", indices);
-                    //single_file_settings.Add("recal", indices);
-                    //single_file_settings.Add("mask", "3");
                 }
                 else
                 {
                     masker_fit(raw_path, mpt_file, "3");
-                    //single_file_settings.Add("recal", "NaN");
-                    //single_file_settings.Add("mask", "3");
                 }
             }
             else if (window_masker.Checked == true)
@@ -1139,15 +1082,10 @@ namespace EIS_Manager
                 if (recalibrated)
                 {
                     String indices = String.Concat("[" + String.Join(",", bad_ints.Select(item => item.ToString()).ToArray()) + "]");
-                    //MessageBox.Show(indices);
                     recal_window_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text, indices);
-                    //single_file_settings.Add("recal", indices);
-                    //single_file_settings.Add("mask", gph_window);
                 }
                 else
                 {
-                    //single_file_settings.Add("recal", "NaN");
-                    //single_file_settings.Add("mask", gph_window);
                     window_masker_fit(raw_path, mpt_file, x_min.Text, x_max.Text, y_min.Text, y_max.Text);
                 }
             }
@@ -1427,6 +1365,16 @@ namespace EIS_Manager
                 Environment.NewLine,
                 total_settings.Select(d => $"{d.Key} {String.Join(" ", d.Value)};"));
                 System.IO.File.WriteAllText(saveFileDialog2.FileName, csv);
+            }
+        }
+
+        private void export_path_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(python_script_location);
+            if (folderBrowserDialog3.ShowDialog() == DialogResult.OK)
+            {
+                python_script_location = folderBrowserDialog3.SelectedPath.ToString();
+                MessageBox.Show(python_script_location);
             }
         }
     }
