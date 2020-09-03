@@ -38,6 +38,7 @@ namespace EIS_Manager
         public bool recalibrated = new bool();
         List<int> bad_ints = new List<int>();
         List<int> recal_ints = new List<int>();
+        public string path;
 
         //AUTOMATION
         Dictionary<string, List<string>> total_settings = new Dictionary<string,List<string>>();
@@ -114,17 +115,23 @@ namespace EIS_Manager
             first_twenty.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             first_twenty.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
 
-            python_script_location = "C:\\Users\\kcarroll\\Desktop\\eis\\EIS_Manager\\utils";
             to_export.Add("index, file, fit_R, fit_Rs, fit_n, fit_Q, fit_R2, fit_n2, fit_Q2, fit_n3, fit_Q3");
+            path = Directory.GetCurrentDirectory();
+            if (File.Exists(path + "\\util_path.txt"))
+            {
+                MessageBox.Show("TEST FILE READ");
+                python_script_location = System.IO.File.ReadAllText(path + "\\util_path.txt");
+            }
+           
         }
         
         private void python_scripts_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(python_script_location);
+            MessageBox.Show("Select your Utils Folder and save for next time!");
             if (folderBrowserDialog2.ShowDialog() == DialogResult.OK)
             {
                 python_script_location = folderBrowserDialog2.SelectedPath.ToString();
-                MessageBox.Show(python_script_location);
+                System.IO.File.WriteAllText(path + "\\util_path.txt", python_script_location);
             }
         }
 
@@ -1376,6 +1383,11 @@ namespace EIS_Manager
                 python_script_location = folderBrowserDialog3.SelectedPath.ToString();
                 MessageBox.Show(python_script_location);
             }
+            if (saveFileDialog3.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.File.WriteAllText(path + "\\util_path.txt", python_script_location);
+            }
+
         }
     }
 }

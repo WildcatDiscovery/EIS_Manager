@@ -30,16 +30,16 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Fitter));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pathbutton = new System.Windows.Forms.Button();
             this.title = new System.Windows.Forms.Label();
             this.logo = new System.Windows.Forms.PictureBox();
@@ -78,6 +78,7 @@
             this.autofit = new System.Windows.Forms.Button();
             this.export_path = new System.Windows.Forms.Button();
             this.folderBrowserDialog3 = new System.Windows.Forms.FolderBrowserDialog();
+            this.saveFileDialog3 = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.logo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nvyquist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.first_twenty)).BeginInit();
@@ -86,7 +87,7 @@
             // pathbutton
             // 
             this.pathbutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pathbutton.Location = new System.Drawing.Point(1, 152);
+            this.pathbutton.Location = new System.Drawing.Point(1, 141);
             this.pathbutton.Margin = new System.Windows.Forms.Padding(2);
             this.pathbutton.Name = "pathbutton";
             this.pathbutton.Size = new System.Drawing.Size(162, 22);
@@ -121,7 +122,7 @@
             // 
             this.x_max.Enabled = false;
             this.x_max.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_max.Location = new System.Drawing.Point(60, 518);
+            this.x_max.Location = new System.Drawing.Point(69, 507);
             this.x_max.Name = "x_max";
             this.x_max.Size = new System.Drawing.Size(60, 20);
             this.x_max.TabIndex = 45;
@@ -131,7 +132,7 @@
             // 
             this.x_min.Enabled = false;
             this.x_min.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x_min.Location = new System.Drawing.Point(-2, 518);
+            this.x_min.Location = new System.Drawing.Point(7, 507);
             this.x_min.Name = "x_min";
             this.x_min.Size = new System.Drawing.Size(56, 20);
             this.x_min.TabIndex = 44;
@@ -143,7 +144,7 @@
             this.file_display.Items.AddRange(new object[] {
             "option1",
             "option2"});
-            this.file_display.Location = new System.Drawing.Point(1, 179);
+            this.file_display.Location = new System.Drawing.Point(1, 168);
             this.file_display.Name = "file_display";
             this.file_display.Size = new System.Drawing.Size(162, 21);
             this.file_display.TabIndex = 43;
@@ -154,7 +155,7 @@
             // 
             this.masker3.AutoSize = true;
             this.masker3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.masker3.Location = new System.Drawing.Point(0, 472);
+            this.masker3.Location = new System.Drawing.Point(0, 461);
             this.masker3.Name = "masker3";
             this.masker3.Size = new System.Drawing.Size(69, 17);
             this.masker3.TabIndex = 42;
@@ -166,7 +167,7 @@
             // 
             this.masker2.AutoSize = true;
             this.masker2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.masker2.Location = new System.Drawing.Point(76, 449);
+            this.masker2.Location = new System.Drawing.Point(76, 438);
             this.masker2.Name = "masker2";
             this.masker2.Size = new System.Drawing.Size(69, 17);
             this.masker2.TabIndex = 41;
@@ -178,7 +179,7 @@
             // 
             this.masker1.AutoSize = true;
             this.masker1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.masker1.Location = new System.Drawing.Point(1, 449);
+            this.masker1.Location = new System.Drawing.Point(1, 438);
             this.masker1.Name = "masker1";
             this.masker1.Size = new System.Drawing.Size(69, 17);
             this.masker1.TabIndex = 40;
@@ -189,7 +190,7 @@
             // fit_function
             // 
             this.fit_function.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.fit_function.Location = new System.Drawing.Point(0, 562);
+            this.fit_function.Location = new System.Drawing.Point(0, 551);
             this.fit_function.Name = "fit_function";
             this.fit_function.Size = new System.Drawing.Size(68, 26);
             this.fit_function.TabIndex = 38;
@@ -201,7 +202,7 @@
             // 
             this.entire_fit.AutoSize = true;
             this.entire_fit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.entire_fit.Location = new System.Drawing.Point(75, 472);
+            this.entire_fit.Location = new System.Drawing.Point(75, 461);
             this.entire_fit.Name = "entire_fit";
             this.entire_fit.Size = new System.Drawing.Size(68, 17);
             this.entire_fit.TabIndex = 63;
@@ -213,7 +214,7 @@
             // 
             this.y_min.Enabled = false;
             this.y_min.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_min.Location = new System.Drawing.Point(-2, 536);
+            this.y_min.Location = new System.Drawing.Point(7, 525);
             this.y_min.Name = "y_min";
             this.y_min.Size = new System.Drawing.Size(56, 20);
             this.y_min.TabIndex = 64;
@@ -223,7 +224,7 @@
             // 
             this.y_max.Enabled = false;
             this.y_max.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.y_max.Location = new System.Drawing.Point(60, 536);
+            this.y_max.Location = new System.Drawing.Point(69, 525);
             this.y_max.Name = "y_max";
             this.y_max.Size = new System.Drawing.Size(60, 20);
             this.y_max.TabIndex = 65;
@@ -233,7 +234,7 @@
             // 
             this.window_masker.AutoSize = true;
             this.window_masker.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.window_masker.Location = new System.Drawing.Point(0, 495);
+            this.window_masker.Location = new System.Drawing.Point(0, 484);
             this.window_masker.Name = "window_masker";
             this.window_masker.Size = new System.Drawing.Size(102, 17);
             this.window_masker.TabIndex = 66;
@@ -243,37 +244,37 @@
             // 
             // nvyquist
             // 
-            chartArea5.Name = "ChartArea1";
-            this.nvyquist.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.nvyquist.Legends.Add(legend5);
+            chartArea3.Name = "ChartArea1";
+            this.nvyquist.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.nvyquist.Legends.Add(legend3);
             this.nvyquist.Location = new System.Drawing.Point(168, 0);
             this.nvyquist.Name = "nvyquist";
             this.nvyquist.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.EarthTones;
-            series13.ChartArea = "ChartArea1";
-            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series13.Legend = "Legend1";
-            series13.MarkerSize = 10;
-            series13.Name = "nvyquist";
-            series14.ChartArea = "ChartArea1";
-            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series14.Legend = "Legend1";
-            series14.MarkerSize = 10;
-            series14.Name = "Fitted_Nyvquist";
-            series15.ChartArea = "ChartArea1";
-            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series15.Legend = "Legend1";
-            series15.MarkerSize = 10;
-            series15.Name = "masked";
-            series16.ChartArea = "ChartArea1";
-            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series16.Legend = "Legend1";
-            series16.MarkerSize = 15;
-            series16.Name = "x_ints";
-            this.nvyquist.Series.Add(series13);
-            this.nvyquist.Series.Add(series14);
-            this.nvyquist.Series.Add(series15);
-            this.nvyquist.Series.Add(series16);
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series7.Legend = "Legend1";
+            series7.MarkerSize = 10;
+            series7.Name = "nvyquist";
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series8.Legend = "Legend1";
+            series8.MarkerSize = 10;
+            series8.Name = "Fitted_Nyvquist";
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series9.Legend = "Legend1";
+            series9.MarkerSize = 10;
+            series9.Name = "masked";
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series10.Legend = "Legend1";
+            series10.MarkerSize = 15;
+            series10.Name = "x_ints";
+            this.nvyquist.Series.Add(series7);
+            this.nvyquist.Series.Add(series8);
+            this.nvyquist.Series.Add(series9);
+            this.nvyquist.Series.Add(series10);
             this.nvyquist.Size = new System.Drawing.Size(771, 675);
             this.nvyquist.TabIndex = 70;
             this.nvyquist.Text = "Full Graph";
@@ -294,7 +295,7 @@
             // 
             this.path_list_box.BackColor = System.Drawing.Color.LightSkyBlue;
             this.path_list_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.path_list_box.Location = new System.Drawing.Point(0, 226);
+            this.path_list_box.Location = new System.Drawing.Point(0, 215);
             this.path_list_box.Name = "path_list_box";
             this.path_list_box.ReadOnly = true;
             this.path_list_box.Size = new System.Drawing.Size(162, 217);
@@ -306,7 +307,7 @@
             this.file_display_label.AutoSize = true;
             this.file_display_label.BackColor = System.Drawing.Color.Magenta;
             this.file_display_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.file_display_label.Location = new System.Drawing.Point(1, 203);
+            this.file_display_label.Location = new System.Drawing.Point(1, 192);
             this.file_display_label.Name = "file_display_label";
             this.file_display_label.Size = new System.Drawing.Size(101, 20);
             this.file_display_label.TabIndex = 73;
@@ -325,10 +326,10 @@
             // export_button
             // 
             this.export_button.ForeColor = System.Drawing.Color.Red;
-            this.export_button.Location = new System.Drawing.Point(0, 585);
+            this.export_button.Location = new System.Drawing.Point(0, 582);
             this.export_button.Margin = new System.Windows.Forms.Padding(2);
             this.export_button.Name = "export_button";
-            this.export_button.Size = new System.Drawing.Size(68, 43);
+            this.export_button.Size = new System.Drawing.Size(68, 35);
             this.export_button.TabIndex = 75;
             this.export_button.Text = "Export Coefficients";
             this.export_button.UseVisualStyleBackColor = true;
@@ -352,24 +353,24 @@
             // 
             // first_twenty
             // 
-            chartArea6.Name = "ChartArea1";
-            this.first_twenty.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            this.first_twenty.Legends.Add(legend6);
+            chartArea4.Name = "ChartArea1";
+            this.first_twenty.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.first_twenty.Legends.Add(legend4);
             this.first_twenty.Location = new System.Drawing.Point(760, 87);
             this.first_twenty.Name = "first_twenty";
-            series17.ChartArea = "ChartArea1";
-            series17.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series17.Legend = "Legend1";
-            series17.MarkerSize = 10;
-            series17.Name = "Fitted_Nyvquist";
-            series18.ChartArea = "ChartArea1";
-            series18.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series18.Legend = "Legend1";
-            series18.MarkerSize = 10;
-            series18.Name = "nvyquist";
-            this.first_twenty.Series.Add(series17);
-            this.first_twenty.Series.Add(series18);
+            series11.ChartArea = "ChartArea1";
+            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series11.Legend = "Legend1";
+            series11.MarkerSize = 10;
+            series11.Name = "Fitted_Nyvquist";
+            series12.ChartArea = "ChartArea1";
+            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series12.Legend = "Legend1";
+            series12.MarkerSize = 10;
+            series12.Name = "nvyquist";
+            this.first_twenty.Series.Add(series11);
+            this.first_twenty.Series.Add(series12);
             this.first_twenty.Size = new System.Drawing.Size(567, 554);
             this.first_twenty.TabIndex = 78;
             this.first_twenty.Text = "Full Graph";
@@ -433,7 +434,7 @@
             // save_button
             // 
             this.save_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.save_button.Location = new System.Drawing.Point(69, 562);
+            this.save_button.Location = new System.Drawing.Point(69, 551);
             this.save_button.Name = "save_button";
             this.save_button.Size = new System.Drawing.Size(88, 26);
             this.save_button.TabIndex = 84;
@@ -456,10 +457,10 @@
             // 
             this.export_settings_button.ForeColor = System.Drawing.Color.SteelBlue;
             this.export_settings_button.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.export_settings_button.Location = new System.Drawing.Point(69, 585);
+            this.export_settings_button.Location = new System.Drawing.Point(69, 582);
             this.export_settings_button.Margin = new System.Windows.Forms.Padding(2);
             this.export_settings_button.Name = "export_settings_button";
-            this.export_settings_button.Size = new System.Drawing.Size(88, 43);
+            this.export_settings_button.Size = new System.Drawing.Size(88, 35);
             this.export_settings_button.TabIndex = 86;
             this.export_settings_button.Text = "Export Settings";
             this.export_settings_button.UseVisualStyleBackColor = true;
@@ -470,9 +471,9 @@
             this.autofit.BackColor = System.Drawing.Color.Red;
             this.autofit.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.autofit.ForeColor = System.Drawing.Color.Yellow;
-            this.autofit.Location = new System.Drawing.Point(0, 633);
+            this.autofit.Location = new System.Drawing.Point(0, 618);
             this.autofit.Name = "autofit";
-            this.autofit.Size = new System.Drawing.Size(159, 52);
+            this.autofit.Size = new System.Drawing.Size(159, 67);
             this.autofit.TabIndex = 87;
             this.autofit.Text = "BATCH FIT";
             this.autofit.UseVisualStyleBackColor = false;
@@ -484,7 +485,7 @@
             this.export_path.Location = new System.Drawing.Point(2, 113);
             this.export_path.Margin = new System.Windows.Forms.Padding(2);
             this.export_path.Name = "export_path";
-            this.export_path.Size = new System.Drawing.Size(160, 35);
+            this.export_path.Size = new System.Drawing.Size(160, 24);
             this.export_path.TabIndex = 88;
             this.export_path.Text = "Save Path";
             this.export_path.UseVisualStyleBackColor = true;
@@ -578,6 +579,7 @@
         private System.Windows.Forms.Button autofit;
         private System.Windows.Forms.Button export_path;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog3;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog3;
     }
 }
 
