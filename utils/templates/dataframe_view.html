@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <style>
     body {background-color: powderblue;}
-    h1   {color: blue;}
-    p    {color: red;}
+    h1   {color: rgb(0, 81, 255);}
+    p    {color: rgb(228, 176, 35);}
     
     </style>
 <html lang="en">
@@ -15,13 +15,14 @@
    {{ df_head }}
 </h1>
 <h1>Nvyquist Impedance Dataframe</h1>
-
-
-
-
-
 {% block content %}
 {{data | safe}}
 {% endblock %}
 </body>
+
+<form action = "http://localhost:5000/upload">
+    <p><input type = "submit" value = "UPLOAD ANOTHER MPT FILE" /></p>
+
+</html>
+
 </html>

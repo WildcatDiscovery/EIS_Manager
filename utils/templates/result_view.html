@@ -1,25 +1,27 @@
 <!DOCTYPE html>
+<style>
+    body {background-color: powderblue;}
+    h1   {color: rgb(0, 81, 255);}
+    p    {color: rgb(228, 176, 35);}
+    
+    </style>
 <html lang="en">
+    
 <head>
     <meta charset="UTF-8">
-    <title>MPT DATAFRAME</title>
+    <title>MPT DATAFRAMES</title>
 </head>
 <body>
 
-<h1>
-   {{ df_head }}
-</h1>
-
-
-
-<h2>Nvyquist Impedance Dataframe</h2>
-{% block content %}
-{{data | safe}}
-{% endblock %}
+<ul>
+{% for file in filenames %}
+    <li><a href="{{url_for('uploaded_file', filename=file)}}">{{file}}</a></li>
+{% endfor %}
+</ul>
 </body>
 
 
 <form action = "http://localhost:5000/upload">
     <p><input type = "submit" value = "UPLOAD ANOTHER MPT FILE" /></p>
-    
+
 </html>

@@ -1,14 +1,23 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from werkzeug.utils import secure_filename
-app = Flask(__name__)
 from tools import *
-
 import os
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = './uploads/'
+app.config['ALLOWED_EXTENSIONS'] = set(['mpt'])
+
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 def find(name, path):
     for root, dirs, files in os.walk(path):
         if name in files:
             return os.path.join(root, name)
+
 
 @app.route('/')
 def welcome():
@@ -18,16 +27,29 @@ def welcome():
 def upload_file():
    return render_template('upload_view.html')
 	
-@app.route('/uploader', methods = ['GET', 'POST'])
+@app.route('/uploader', methods = ['POST'])
 def upload_filer():
+   uploaded_files = request.files.getlist("file[]")
+   filenames = []
+   for file in uploaded_files:
+      if file and allowed_file(file.filename):
+         filename = secure_filename(file.filename)
+         file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+         filenames.append(filename)
+   # This line is essential, store the data in session
+   session['filenames'] = filenames
+   return render_template('result_view.html', filenames = filenames)
+
+@app.route('/displaydf', methods = ['GET', 'POST'])
+def display_mpt():
    if request.method == 'POST':
       f = request.files['file']
       f.save(secure_filename(f.filename))
       mpt = mpt_data(r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\", [f.filename])
       df = mpt.df_raw[['f', 're', 'im']]
-      mpt.mpt_plot(save_fig = "on")
+      #mpt.mpt_plot(save_fig = "on")
       return render_template('result_view.html', data = df.to_html(), df_head = str(f.filename))
-
 		
 if __name__ == '__main__':
+   app.secret_key = 'asdw34gegasdgf'
    app.run(debug = True)
