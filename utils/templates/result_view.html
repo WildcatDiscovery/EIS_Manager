@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MPT DATAFRAME</title>
+</head>
+<body>
+
+<h1>
+   {{ df_head }}
+</h1>
+
+
+
+<h2>Nvyquist Impedance Dataframe</h2>
+{% block content %}
+{{data | safe}}
+{% endblock %}
+</body>
+
+
+<form action = "http://localhost:5000/upload">
+    <p><input type = "submit" value = "UPLOAD ANOTHER MPT FILE" /></p>
+    
+</html>

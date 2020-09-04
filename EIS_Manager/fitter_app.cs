@@ -97,8 +97,6 @@ namespace EIS_Manager
             nvyquist.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
             nvyquist.ChartAreas[0].AxisY2.ScaleView.Zoomable = true;
 
-
-
             first_twenty.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
             first_twenty.ChartAreas[0].CursorX.IsUserEnabled = true;
             first_twenty.ChartAreas[0].CursorX.LineColor = Color.Transparent;
@@ -119,10 +117,18 @@ namespace EIS_Manager
             path = Directory.GetCurrentDirectory();
             if (File.Exists(path + "\\util_path.txt"))
             {
-                MessageBox.Show("TEST FILE READ");
                 python_script_location = System.IO.File.ReadAllText(path + "\\util_path.txt");
+                string script_confirmation = "There is currently a util_path in this directory. \n" +
+                    "If the path below is correct proceed. \n" +
+                    "If not, please click the 'SELECT PYTHON SCRIPTS' button to select your utils folder path and save it.\n\n\nCURRENT PATH:\n" + python_script_location;
+                MessageBox.Show(script_confirmation);
             }
-           
+            else
+            {
+                string script_confirmation = "There is currently no util_path in this directory. \n" +
+                   "please click the 'SELECT PYTHON SCRIPTS' button to select your utils folder path and save it";
+                MessageBox.Show(script_confirmation);
+            }
         }
         
         private void python_scripts_Click(object sender, EventArgs e)
@@ -132,6 +138,7 @@ namespace EIS_Manager
             {
                 python_script_location = folderBrowserDialog2.SelectedPath.ToString();
                 System.IO.File.WriteAllText(path + "\\util_path.txt", python_script_location);
+                MessageBox.Show("Saved for later!");
             }
         }
 
@@ -1373,21 +1380,6 @@ namespace EIS_Manager
                 total_settings.Select(d => $"{d.Key} {String.Join(" ", d.Value)};"));
                 System.IO.File.WriteAllText(saveFileDialog2.FileName, csv);
             }
-        }
-
-        private void export_path_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(python_script_location);
-            if (folderBrowserDialog3.ShowDialog() == DialogResult.OK)
-            {
-                python_script_location = folderBrowserDialog3.SelectedPath.ToString();
-                MessageBox.Show(python_script_location);
-            }
-            if (saveFileDialog3.ShowDialog() == DialogResult.OK)
-            {
-                System.IO.File.WriteAllText(path + "\\util_path.txt", python_script_location);
-            }
-
         }
     }
 }

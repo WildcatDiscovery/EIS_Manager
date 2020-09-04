@@ -347,8 +347,10 @@ class mpt_data:
         plt.show()
         ax.legend()
         if save_fig:
-            fig.savefig(r"C:\Users\cjang.WILDCAT\Desktop\eis\EIS_Manager\utils\fitted_folder\\"+self.data[0].strip('.mpt')+'_fitted.png')
-
+            if fitting == "on":
+                fig.savefig(r"C:\Users\cjang.WILDCAT\Desktop\eis\EIS_Manager\utils\fitted_folder\\"+self.data[0].strip('.mpt')+'_fitted.png')
+            else:
+                fig.savefig(r"C:\Users\cjang.WILDCAT\Desktop\eis\EIS_Manager\uploads\\"+self.data[0].strip('.mpt')+'.png')
 
     #FITTING THE FREQUENCY ONTO THE GRAPH. FLIP SWITCH ON PLOT FUNCT TO DISPLAY
     def mpt_fit(self, params, circuit, weight_func='modulus', nan_policy='raise', maxfev = 10):
