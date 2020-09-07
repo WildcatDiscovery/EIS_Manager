@@ -1,27 +1,21 @@
 <!DOCTYPE html>
-<style>
-    body {background-color: powderblue;}
-    h1   {color: rgb(0, 81, 255);}
-    p    {color: rgb(228, 176, 35);}
-    
-    </style>
 <html lang="en">
-    
-<head>
-    <meta charset="UTF-8">
-    <title>MPT DATAFRAMES</title>
-</head>
-<body>
 
-<ul>
-{% for file in filenames %}
-    <li><a href="{{url_for('uploaded_file', filename=file)}}">{{file}}</a></li>
-{% endfor %}
-</ul>
-</body>
-
-
-<form action = "http://localhost:5000/upload">
-    <p><input type = "submit" value = "UPLOAD ANOTHER MPT FILE" /></p>
-
+ <body>
+  <div class="container">
+   <div class="header">
+    <h3 class="text-muted">Uploaded files</h3>
+   </div>
+   <hr/>
+   <div>
+   This is a list of the files you just uploaded, click on them to view Nvyquist Impedance Dataframe
+   <ul>
+    {% for file in filenames %}
+     <li><a href="{{url_for('display_mpt', mpt=file)}}">{{file}}</a></li>
+    {% endfor %}
+   </ul>
+   <hr/>
+   </div>
+  </div>
+ </body>
 </html>
