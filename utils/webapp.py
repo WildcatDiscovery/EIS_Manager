@@ -47,7 +47,7 @@ def upload():
 
 @app.route('/displaydf/<mpt>', methods = ['GET', 'POST'])
 def display_mpt(mpt):
-   mpt = mpt_data(r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\", [mpt])
+   mpt = mpt_data(os.getcwd()+"/", [mpt])
    df = mpt.df_raw[['f', 're', 'im']]
    #mpt.mpt_plot(save_fig = "on")
    return render_template('dataframe_view.html', data = df.to_html(), df_head = (mpt.data))
