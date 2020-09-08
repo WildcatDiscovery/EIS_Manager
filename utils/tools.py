@@ -51,18 +51,18 @@ pd.options.mode.chained_assignment = None
 
 
 #TAKEN FROM PYEIS LIBRARY
-def extract_mpt(path, EIS_name):
+def extract_mpt(EIS_name, path = None):
     '''
     Extracting PEIS and GEIS data files from EC-lab '.mpt' format, coloums are renames following correct_text_EIS()
     
     Kristian B. Knudsen (kknu@berkeley.edu || kristianbknudsen@gmail.com)
     '''
-    EIS_init = pd.read_csv(path+EIS_name, sep='\\', nrows=1,header=0,names=['err'], encoding='latin1') #findes line that states skiplines
-    EIS_test_header_names = pd.read_csv(path+EIS_name, sep='\t', skiprows=int(EIS_init.err[0][18:-1])-1, encoding='latin1') #locates number of skiplines
+    EIS_init = pd.read_csv(EIS_name, sep='\\', nrows=1,header=0,names=['err'], encoding='latin1') #findes line that states skiplines
+    EIS_test_header_names = pd.read_csv(EIS_name, sep='\t', skiprows=int(EIS_init.err[0][18:-1])-1, encoding='latin1') #locates number of skiplines
     names_EIS = []
     for j in range(len(EIS_test_header_names.columns)):
         names_EIS.append(correct_text_EIS(EIS_test_header_names.columns[j])) #reads coloumn text
-    return pd.read_csv(path+EIS_name, sep='\t', skiprows=int(EIS_init.err[0][18:-1]), names=names_EIS, encoding='latin1')
+    return pd.read_csv(EIS_name, sep='\t', skiprows=int(EIS_init.err[0][18:-1]), names=names_EIS, encoding='latin1')
 
 #TAKEN FROM PYEIS LIBRARY
 def correct_text_EIS(text_header):

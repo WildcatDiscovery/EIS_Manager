@@ -36,12 +36,8 @@ def upload():
                file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
                filenames.append(filename)
       # This line is essential, store the data in session
-      if session['filenames']:
-         session['filenames'] = session['filenames'].extend(filenames)
-         return render_template('result_view.html', filenames=session['filenames'])
-      else:
-         session['filenames'] = filenames
-         return render_template('result_view.html', filenames=filenames)
+      session['filenames'] = filenames
+      return render_template('result_view.html', filenames=filenames)
    else:
       return render_template('result_view.html', filenames=session['filenames'])
 
