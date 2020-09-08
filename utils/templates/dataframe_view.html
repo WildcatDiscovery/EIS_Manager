@@ -3,8 +3,7 @@
     body {background-color: powderblue;}
     h1   {color: rgb(0, 81, 255);}
     p    {color: rgb(228, 176, 35);}
-    
-    </style>
+</style>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,16 +13,14 @@
 <h1>
    {{ df_head }}
 </h1>
+<p><a href="{{url_for('plot', mpt=file)}}">View Plot</a></p>
+<p><a href="{{ url_for('upload') }}">Go back to all uploads</a></p>
+<form action = "http://localhost:5000/upload">
+    <p><input type = "submit" value = "UPLOAD ANOTHER SET OF MPT FILES" /></p>
 <h1>Nvyquist Impedance Dataframe</h1>
 {% block content %}
 {{data | safe}}
 {% endblock %}
 </body>
-
-<p><a href="{{ url_for('upload') }}">Go back to all uploads</a></p>
-<form action = "http://localhost:5000/upload">
-    <p><input type = "submit" value = "UPLOAD ANOTHER SET OF MPT FILES" /></p>
-
 </html>
-
 </html>

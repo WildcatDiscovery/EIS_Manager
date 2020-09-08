@@ -45,17 +45,24 @@ def upload():
 
 @app.route('/displaydf/<mpt>', methods = ['GET', 'POST'])
 def display_mpt(mpt):
-   mpt = mpt_data(r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\", [mpt])
-   df = mpt.df_raw[['f', 're', 'im']]
+   ex_mpt = mpt_data(r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\", [mpt])
+   df = ex_mpt.df_raw[['f', 're', 'im']]
    #plot(df['re'], df['im'])
-   return plot(df['re'], df['im'], mpt.data[0])
-   #return render_template('dataframe_view.html', data = df.to_html(), df_head = (mpt.data))
+   #return plot(df['re'], df['im'], mpt.data[0])
+   return render_template('dataframe_view.html', data = df.to_html(), df_head = (ex_mpt.data), file = ex_mpt.data[0])
 
-def plot(xs, ys, title):
 
+@app.route('/plot_mpt/<mpt>')
+def plot(mpt):
+   ex_mpt = mpt_data(r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\", [mpt])
+   xs = ex_mpt.df_raw['re']
+   ys = ex_mpt.df_raw['im']
+   title = ex_mpt.data[0]
    fig = Figure(dpi=120, figsize = [15, 25], facecolor='w', edgecolor='w')
    fig.subplots_adjust(left=0.1, right=0.95, hspace=0.5, bottom=0.1, top=0.95)
    ax = fig.add_subplot(211, aspect='equal')
+   ax.set_xlabel('Re(Z)/Ohm')
+   ax.set_ylabel('-Im(Z)/Ohm')
    ax.plot(xs, ys, marker='o', ms=4, lw=2, ls='-', label = "Nvyquist Impedance Data")
    ax.legend()
    ax.set_title(title)
