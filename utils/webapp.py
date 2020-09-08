@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session,make_response
 from werkzeug.utils import secure_filename
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
 from tools import *
 import os
+import StringIO
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './uploads/'
@@ -36,12 +39,8 @@ def upload():
                file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
                filenames.append(filename)
       # This line is essential, store the data in session
-      if session['filenames']:
-         session['filenames'] = session['filenames'].extend(filenames)
-         return render_template('result_view.html', filenames=session['filenames'])
-      else:
-         session['filenames'] = filenames
-         return render_template('result_view.html', filenames=filenames)
+      session['filenames'] = filenames
+      return render_template('result_view.html', filenames=filenames)
    else:
       return render_template('result_view.html', filenames=session['filenames'])
 
@@ -49,9 +48,20 @@ def upload():
 def display_mpt(mpt):
    mpt = mpt_data(r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\", [mpt])
    df = mpt.df_raw[['f', 're', 'im']]
-   #mpt.mpt_plot(save_fig = "on")
+   mpt.mpt_plot()
    return render_template('dataframe_view.html', data = df.to_html(), df_head = (mpt.data))
-		
+
+def plot(xs, ys):
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    axis.plot(xs, ys)
+    canvas = FigureCanvas(fig)
+    output = StringIO.StringIO()
+    canvas.print_png(output)
+    response = make_response(output.getvalue())
+    response.mimetype = 'image/png'
+    return response
+
 if __name__ == '__main__':
    app.secret_key = 'asdw34gegasdgf'
    app.run(debug = True)
