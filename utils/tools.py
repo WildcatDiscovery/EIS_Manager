@@ -512,10 +512,10 @@ class mpt_data:
             for i in range(no_of_fits):
                 #print(i)
                 Rs_guess = min(self.df[0]['re'])
-                R1_guess = max(self.df[0]['re'])//4
+                R1_guess = max(self.df[0]['re'])//10
                 n1_guess = random.uniform(0, 1)
                 q1_guess = random.uniform(0, .001)
-                R2_guess = 2*max(self.df[0]['re'])//4
+                R2_guess = 2*max(self.df[0]['re'])//8
                 n2_guess = random.uniform(0, 1)
                 q2_guess = random.uniform(0, .001)
                 Q3_guess = random.uniform(0, .001)
