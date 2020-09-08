@@ -4,7 +4,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from tools import *
 import os
-import StringIO
+import io
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './uploads/'
@@ -48,7 +48,7 @@ def upload():
 def display_mpt(mpt):
    mpt = mpt_data(r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\", [mpt])
    df = mpt.df_raw[['f', 're', 'im']]
-   mpt.mpt_plot()
+   plot(df['re'], df['im'])
    return render_template('dataframe_view.html', data = df.to_html(), df_head = (mpt.data))
 
 def plot(xs, ys):
