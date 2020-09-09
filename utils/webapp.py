@@ -179,9 +179,9 @@ def mask_mpt_guesser(mpt, mask):
    path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
    data = mpt
    ex_mpt = mpt_data(path, [mpt])
+   re = []
+   im = []
    if mask == str(1):
-      re = []
-      im = []
       masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
       masked_mpt.guesser(no_of_fits=500)
       for i in masked_mpt.circuit_fit[0]:
@@ -192,7 +192,6 @@ def mask_mpt_guesser(mpt, mask):
       result = df.to_json(orient="index",indent = 2)
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(2):
-      #print(ex_mpt.masker0())
       masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
       masked_mpt.guesser(no_of_fits=500)
       for i in masked_mpt.circuit_fit[0]:
@@ -203,7 +202,6 @@ def mask_mpt_guesser(mpt, mask):
       result = df.to_json(orient="index",indent = 2)
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(3):
-      #print(ex_mpt.masker())
       masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
       masked_mpt.guesser(no_of_fits=500)
       for i in masked_mpt.circuit_fit[0]:
@@ -214,7 +212,6 @@ def mask_mpt_guesser(mpt, mask):
       result = df.to_json(orient="index",indent = 2)
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(4):
-      #print(ex_mpt.masker())
       masked_mpt = mpt_data(path, [data])
       masked_mpt.guesser(no_of_fits=500)
       for i in masked_mpt.circuit_fit[0]:

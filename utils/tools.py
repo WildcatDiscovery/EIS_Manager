@@ -503,9 +503,9 @@ class mpt_data:
         return S
     
     #Updated Guesser
-    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 50, save_fig = False):
+    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 500, save_fig = False):
         start = time.time()
-        print(sys.version)
+        print('running on ', sys.version)
         if circuit == 'R-RQ-RQ-Q':
             init_guesses = []
             param_list = []
@@ -533,10 +533,10 @@ class mpt_data:
                 params.add('Q', value=Q3_guess, min=0, max=.001)
                 params.add('n', value=n3_guess, min=.01, max=1)
                 param_list.append(params)
-                self.mpt_fit(params, circuit = 'R-RQ-RQ-Q', maxfev = 10)
+                self.mpt_fit(params, circuit = 'R-RQ-RQ-Q', maxfev = 500)
                 init_guesses.append(self.low_error)
             params = param_list[init_guesses.index(min(init_guesses))]
-            self.mpt_fit(params, circuit = 'R-RQ-RQ-Q',maxfev = 100)
+            self.mpt_fit(params, circuit = 'R-RQ-RQ-Q',maxfev = 1000)
             #self.mpt_plot(fitting = 'on', save_fig = save_fig)
             self.fitted = pd.DataFrame({'file':self.data,
                         'fit_Rs':self.fit_Rs,
@@ -552,7 +552,7 @@ class mpt_data:
                     "fit_n3":self.fit_n,})
             out_name = 'fitted_' + self.data[0][:-4]
             end = time.time()
-            print(end - start)
+            print('time to calculate: ',end - start)
             if csv_container:
                 self.fitted.to_csv(csv_container+out_name, sep='\t')
                 return self.fitted
