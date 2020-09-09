@@ -46,14 +46,11 @@ def upload():
       return render_template('result_view.html', filenames=session['filenames'])
 
 
-@app.route('/displaydf/<mpt>', methods = ['GET', 'POST'])
+@app.route('/display_mpt/<mpt>', methods = ['GET', 'POST'])
 def display_mpt(mpt):
    ex_mpt = mpt_data(r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\", [mpt])
    df = ex_mpt.df_raw[['f', 're', 'im']]
-   #plot(df['re'], df['im'])
-   #return plot(df['re'], df['im'], mpt.data[0])
    result = df.to_json(orient="index",indent = 2)
-   #output = json.dumps(result, indent = 10)
    return json.loads(result.replace('\\n', '\\\\n'))
 
 @app.route('/plot_mpt/<mpt>')
@@ -79,6 +76,43 @@ def plot(mpt):
    response = make_response(output.getvalue())
    response.mimetype = 'image/png'
    return response
+
+@app.route('/mask_mpt/<mpt>/<mask>')
+def mask_mpt(mpt, mask):
+   path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
+   data = mpt
+   ex_mpt = mpt_data(path, [mpt])
+   if mask == str(1):
+      #print(ex_mpt.fast_mask())
+      masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
+      #print(masked_mpt.df[0][['f','re','im']])
+      df = masked_mpt.df[0][['f','re','im']]
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   elif mask == str(2):
+      #print(ex_mpt.masker0())
+      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
+      #print(masked_mpt.df[0][['f','re','im']])
+      df = masked_mpt.df[0][['f','re','im']]
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   elif mask == str(3):
+      #print(ex_mpt.masker())
+      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
+      #print(masked_mpt.df[0][['f','re','im']])
+      df = masked_mpt.df[0][['f','re','im']]
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   elif mask == str(4):
+      #print(ex_mpt.masker())
+      masked_mpt = mpt_data(path, [data])
+      #print(masked_mpt.df[0][['f','re','im']])
+      df = masked_mpt.df[0][['f','re','im']]
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   else:
+      return ("Error, not a Masking Function")
+   
 
 if __name__ == '__main__':
    app.secret_key = 'asdw34gegasdgf'
