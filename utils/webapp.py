@@ -1,13 +1,15 @@
-from flask import Flask, render_template, request, session,make_response
+from flask import Flask, render_template, request, session,make_response,jsonify
 from werkzeug.utils import secure_filename
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from tools import *
 import os
 import io
+import json
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './uploads/'
 app.config['ALLOWED_EXTENSIONS'] = set(['mpt'])
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -50,8 +52,9 @@ def display_mpt(mpt):
    df = ex_mpt.df_raw[['f', 're', 'im']]
    #plot(df['re'], df['im'])
    #return plot(df['re'], df['im'], mpt.data[0])
-   return render_template('dataframe_view.html', data = df.to_html(), df_head = (ex_mpt.data), file = ex_mpt.data[0])
-
+   result = df.to_json(orient="index",indent = 2)
+   #output = json.dumps(result, indent = 10)
+   return json.loads(result.replace('\\n', '\\\\n'))
 
 @app.route('/plot_mpt/<mpt>')
 def plot(mpt):
