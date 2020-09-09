@@ -112,6 +112,68 @@ def mask_mpt(mpt, mask):
       return json.loads(result.replace('\\n', '\\\\n'))
    else:
       return ("Error, not a Masking Function")
+
+@app.route('/recal_mpt/<mpt>/<mask>/<bad_inds>')
+def recal_mpt(mpt, mask, bad_inds):
+   path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
+   data = mpt
+   ex_mpt = mpt_data(path, [mpt])
+   pre_inds = bad_inds.strip('][').split(',') 
+   edited_inds = [int(i) for i in pre_inds]
+
+   if mask == str(1):
+      masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
+      for ind in edited_inds:
+        if ind == "[":
+            continue
+        elif ind == "]":
+            continue
+        else:
+            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
+      df = masked_mpt.df[0][['f','re','im']]
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   elif mask == str(2):
+      #print(ex_mpt.masker0())
+      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
+      for ind in edited_inds:
+        if ind == "[":
+            continue
+        elif ind == "]":
+            continue
+        else:
+            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
+      df = masked_mpt.df[0][['f','re','im']]
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   elif mask == str(3):
+      #print(ex_mpt.masker())
+      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
+      for ind in edited_inds:
+        if ind == "[":
+            continue
+        elif ind == "]":
+            continue
+        else:
+            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
+      df = masked_mpt.df[0][['f','re','im']]
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   elif mask == str(4):
+      #print(ex_mpt.masker())
+      masked_mpt = mpt_data(path, [data])
+      for ind in edited_inds:
+        if ind == "[":
+            continue
+        elif ind == "]":
+            continue
+        else:
+            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
+      df = masked_mpt.df[0][['f','re','im']]
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   else:
+      return ("Error, not a Masking Function")
    
 
 if __name__ == '__main__':
