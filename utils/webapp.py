@@ -120,7 +120,6 @@ def recal_mpt(mpt, mask, bad_inds):
    ex_mpt = mpt_data(path, [mpt])
    pre_inds = bad_inds.strip('][').split(',') 
    edited_inds = [int(i) for i in pre_inds]
-
    if mask == str(1):
       masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
       for ind in edited_inds:
@@ -175,6 +174,58 @@ def recal_mpt(mpt, mask, bad_inds):
    else:
       return ("Error, not a Masking Function")
    
+@app.route('/mask_mpt_guesser/<mpt>/<mask>')
+def mask_mpt_guesser(mpt, mask):
+   path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
+   data = mpt
+   ex_mpt = mpt_data(path, [mpt])
+   if mask == str(1):
+      re = []
+      im = []
+      masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
+      masked_mpt.guesser(no_of_fits=500)
+      for i in masked_mpt.circuit_fit[0]:
+         re.append(i.real)
+         im.append(-i.imag)
+      df_dict = {"REAL":re, "IMAGINARY":im}
+      df = pd.DataFrame.from_dict(df_dict)
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   elif mask == str(2):
+      #print(ex_mpt.masker0())
+      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
+      masked_mpt.guesser(no_of_fits=500)
+      for i in masked_mpt.circuit_fit[0]:
+         re.append(i.real)
+         im.append(-i.imag)
+      df_dict = {"REAL":re, "IMAGINARY":im}
+      df = pd.DataFrame.from_dict(df_dict)
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   elif mask == str(3):
+      #print(ex_mpt.masker())
+      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
+      masked_mpt.guesser(no_of_fits=500)
+      for i in masked_mpt.circuit_fit[0]:
+         re.append(i.real)
+         im.append(-i.imag)
+      df_dict = {"REAL":re, "IMAGINARY":im}
+      df = pd.DataFrame.from_dict(df_dict)
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   elif mask == str(4):
+      #print(ex_mpt.masker())
+      masked_mpt = mpt_data(path, [data])
+      masked_mpt.guesser(no_of_fits=500)
+      for i in masked_mpt.circuit_fit[0]:
+         re.append(i.real)
+         im.append(-i.imag)
+      df_dict = {"REAL":re, "IMAGINARY":im}
+      df = pd.DataFrame.from_dict(df_dict)
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   else:
+      return ("Error, not a Masking Function")
 
 if __name__ == '__main__':
    app.secret_key = 'asdw34gegasdgf'
