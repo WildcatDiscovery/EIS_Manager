@@ -307,8 +307,8 @@ class mpt_data:
         ### Figure specifics
         if legend == 'on': 
             ax.legend(loc='best', fontsize=12, frameon=False)
-        ax.set_xlabel("Z' [$\Omega$]",fontsize=40)
-        ax.set_ylabel("-Z'' [$\Omega$]",fontsize=40)
+        ax.set_xlabel("Z' [K$\Omega$]",fontsize=40)
+        ax.set_ylabel("-Z'' [K$\Omega$]",fontsize=40)
         if x_window != 'none':
             ax.set_xlim(x_window[0], x_window[1])
         if y_window != 'none':
@@ -335,18 +335,18 @@ class mpt_data:
                 self.label_cycleno.append(str(np.round(np.average(self.df[i].E_avg), 2))+' V')
         ### Nyquist Plot
         ax.set_title(self.data)
-        ax.plot(self.df[0].re, self.df[0].im, marker='o', ms=4, lw=2, color=colors[i], ls='-', markersize = 20, label='nvyquist_data')
+        ax.plot(self.df[0].re/1000, self.df[0].im/1000, marker='o', ms=4, lw=2, color=colors[i], ls='-',mfc = 'none', markersize = 15, label='nvyquist_data')
         if fitting == 'on':
             real = []
             imag = []
             for i in self.circuit_fit[0]:
                 #print(i.real)
-                real.append(i.real)
+                real.append(i.real/1000)
                 #print(i.imag)
-                imag.append(-i.imag)
-            ax.plot(real, imag, lw=0, marker='o', ms=8, mec='r', mew=1, mfc='none', markersize = 20, label='fitted')
-        plt.show()
-        ax.legend()
+                imag.append(-i.imag/1000)
+            ax.plot(real, imag,color='red',label='fitted')
+            plt.show()
+            ax.legend()
         if save_fig:
             if fitting == "on":
                 fig.savefig(r"C:\Users\cjang.WILDCAT\Desktop\eis\EIS_Manager\utils\fitted_folder\\"+self.data[0].strip('.mpt')+'_fitted.png')
