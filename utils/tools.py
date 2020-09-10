@@ -336,11 +336,11 @@ class mpt_data:
         if prettify:
             ax.set_xlabel("Z' [$\Omega$]",fontsize=40)
             ax.set_ylabel("-Z'' [$\Omega$]",fontsize=40)
-            ax.plot(self.df[0].re, self.df[0].im, marker='o', ms=4, lw=2, color=colors[i], ls='-', markersize = 20, label='nvyquist_data')
+            ax.plot(self.df[0].re/1000, self.df[0].im/1000, marker='o', ms=4, lw=2, color=colors[i], ls='-', markersize = 20, label='nvyquist_data')
         else:
             ax.set_xlabel("Z' [$\Omega$]",fontsize=40)
             ax.set_ylabel("-Z'' [$\Omega$]",fontsize=40)
-            ax.plot(self.df[0].re/1000, self.df[0].im/1000, marker='o', ms=4, lw=2, color=colors[i], ls='-', markersize = 20, label='nvyquist_data')
+            ax.plot(self.df[0].re, self.df[0].im, marker='o', ms=4, lw=2, color=colors[i], ls='-', markersize = 8, label='nvyquist_data')
         if fitting == 'on':
             real = []
             imag = []
@@ -351,10 +351,7 @@ class mpt_data:
                 else:
                     real.append(i.real)
                     imag.append(-i.imag)
-            if prettify:
-                ax.plot(real, imag, color = 'red', markersize = 20, label='fitted')
-            else:
-                ax.plot(real, imag, lw=0, marker='o', ms=8, mec='r', mew=1, mfc='none', markersize = 20, label='fitted')
+            ax.plot(real, imag, color = 'red', markersize = 20, label='fitted')
         plt.show()
         ax.legend()
         if save_fig:
