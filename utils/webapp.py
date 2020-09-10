@@ -181,48 +181,55 @@ def mask_mpt_guesser(mpt, mask):
    ex_mpt = mpt_data(path, [mpt])
    re = []
    im = []
-   if mask == str(1):
-      masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
-      masked_mpt.guesser(no_of_fits=500)
-      for i in masked_mpt.circuit_fit[0]:
-         re.append(i.real)
-         im.append(-i.imag)
-      df_dict = {"REAL":re, "IMAGINARY":im}
-      df = pd.DataFrame.from_dict(df_dict)
-      result = df.to_json(orient="index",indent = 2)
-      return json.loads(result.replace('\\n', '\\\\n'))
-   elif mask == str(2):
-      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
-      masked_mpt.guesser(no_of_fits=500)
-      for i in masked_mpt.circuit_fit[0]:
-         re.append(i.real)
-         im.append(-i.imag)
-      df_dict = {"REAL":re, "IMAGINARY":im}
-      df = pd.DataFrame.from_dict(df_dict)
-      result = df.to_json(orient="index",indent = 2)
-      return json.loads(result.replace('\\n', '\\\\n'))
-   elif mask == str(3):
-      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
-      masked_mpt.guesser(no_of_fits=500)
-      for i in masked_mpt.circuit_fit[0]:
-         re.append(i.real)
-         im.append(-i.imag)
-      df_dict = {"REAL":re, "IMAGINARY":im}
-      df = pd.DataFrame.from_dict(df_dict)
-      result = df.to_json(orient="index",indent = 2)
-      return json.loads(result.replace('\\n', '\\\\n'))
-   elif mask == str(4):
-      masked_mpt = mpt_data(path, [data])
-      masked_mpt.guesser(no_of_fits=500)
-      for i in masked_mpt.circuit_fit[0]:
-         re.append(i.real)
-         im.append(-i.imag)
-      df_dict = {"REAL":re, "IMAGINARY":im}
-      df = pd.DataFrame.from_dict(df_dict)
-      result = df.to_json(orient="index",indent = 2)
-      return json.loads(result.replace('\\n', '\\\\n'))
+   if mpt in session:
+      return session[mpt]
    else:
-      return ("Error, not a Masking Function")
+      if mask == str(1):
+         masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
+         masked_mpt.guesser(no_of_fits=500)
+         for i in masked_mpt.circuit_fit[0]:
+            re.append(i.real)
+            im.append(-i.imag)
+         df_dict = {"REAL":re, "IMAGINARY":im}
+         df = pd.DataFrame.from_dict(df_dict)
+         result = df.to_json(orient="index",indent = 2)
+         session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
+         return json.loads(result.replace('\\n', '\\\\n'))
+      elif mask == str(2):
+         masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
+         masked_mpt.guesser(no_of_fits=500)
+         for i in masked_mpt.circuit_fit[0]:
+            re.append(i.real)
+            im.append(-i.imag)
+         df_dict = {"REAL":re, "IMAGINARY":im}
+         df = pd.DataFrame.from_dict(df_dict)
+         result = df.to_json(orient="index",indent = 2)
+         session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
+         return json.loads(result.replace('\\n', '\\\\n'))
+      elif mask == str(3):
+         masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
+         masked_mpt.guesser(no_of_fits=500)
+         for i in masked_mpt.circuit_fit[0]:
+            re.append(i.real)
+            im.append(-i.imag)
+         df_dict = {"REAL":re, "IMAGINARY":im}
+         df = pd.DataFrame.from_dict(df_dict)
+         result = df.to_json(orient="index",indent = 2)
+         session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
+         return json.loads(result.replace('\\n', '\\\\n'))
+      elif mask == str(4):
+         masked_mpt = mpt_data(path, [data])
+         masked_mpt.guesser(no_of_fits=500)
+         for i in masked_mpt.circuit_fit[0]:
+            re.append(i.real)
+            im.append(-i.imag)
+         df_dict = {"REAL":re, "IMAGINARY":im}
+         df = pd.DataFrame.from_dict(df_dict)
+         result = df.to_json(orient="index",indent = 2)
+         session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
+         return json.loads(result.replace('\\n', '\\\\n'))
+      else:
+         return ("Error, not a Masking Function")
 
 @app.route('/recal_mpt_guesser/<mpt>/<mask>/<bad_inds>')
 def recal_mpt_guesser(mpt, mask,bad_inds):
@@ -249,6 +256,7 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
       df_dict = {"REAL":re, "IMAGINARY":im}
       df = pd.DataFrame.from_dict(df_dict)
       result = df.to_json(orient="index",indent = 2)
+      session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(2):
       masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
@@ -266,6 +274,7 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
       df_dict = {"REAL":re, "IMAGINARY":im}
       df = pd.DataFrame.from_dict(df_dict)
       result = df.to_json(orient="index",indent = 2)
+      session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(3):
       masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
@@ -283,6 +292,7 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
       df_dict = {"REAL":re, "IMAGINARY":im}
       df = pd.DataFrame.from_dict(df_dict)
       result = df.to_json(orient="index",indent = 2)
+      session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(4):
       masked_mpt = mpt_data(path, [data])
@@ -300,6 +310,7 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
       df_dict = {"REAL":re, "IMAGINARY":im}
       df = pd.DataFrame.from_dict(df_dict)
       result = df.to_json(orient="index",indent = 2)
+      session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
       return json.loads(result.replace('\\n', '\\\\n'))
    else:
       return ("Error, not a Masking Function")
