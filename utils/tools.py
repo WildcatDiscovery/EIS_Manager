@@ -302,12 +302,13 @@ class mpt_data:
         fig = plt.figure(dpi=120, figsize = [15, 25], facecolor='w', edgecolor='w')
         fig.subplots_adjust(left=0.1, right=0.95, hspace=0.5, bottom=0.1, top=0.95)
         ax = fig.add_subplot(211, aspect='equal')
-        
+        ax.tick_params(axis='both', which='major', labelsize=20)
+        ax.tick_params(axis='both', which='minor', labelsize=20)
         ### Figure specifics
         if legend == 'on': 
-            ax.legend(loc='best', fontsize=10, frameon=False)
-        ax.set_xlabel("Z' [$\Omega$]")
-        ax.set_ylabel("-Z'' [$\Omega$]")
+            ax.legend(loc='best', fontsize=12, frameon=False)
+        ax.set_xlabel("Z' [$\Omega$]",fontsize=40)
+        ax.set_ylabel("-Z'' [$\Omega$]",fontsize=40)
         if x_window != 'none':
             ax.set_xlim(x_window[0], x_window[1])
         if y_window != 'none':
@@ -334,7 +335,7 @@ class mpt_data:
                 self.label_cycleno.append(str(np.round(np.average(self.df[i].E_avg), 2))+' V')
         ### Nyquist Plot
         ax.set_title(self.data)
-        ax.plot(self.df[0].re, self.df[0].im, marker='o', ms=4, lw=2, color=colors[i], ls='-', label='nvyquist_data')
+        ax.plot(self.df[0].re, self.df[0].im, marker='o', ms=4, lw=2, color=colors[i], ls='-', markersize = 20, label='nvyquist_data')
         if fitting == 'on':
             real = []
             imag = []
@@ -343,7 +344,7 @@ class mpt_data:
                 real.append(i.real)
                 #print(i.imag)
                 imag.append(-i.imag)
-            ax.plot(real, imag, lw=0, marker='o', ms=8, mec='r', mew=1, mfc='none', label='fitted')
+            ax.plot(real, imag, lw=0, marker='o', ms=8, mec='r', mew=1, mfc='none', markersize = 20, label='fitted')
         plt.show()
         ax.legend()
         if save_fig:
@@ -503,7 +504,7 @@ class mpt_data:
         return S
     
     #Updated Guesser
-    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 500, save_fig = False):
+    def guesser(self, circuit = 'R-RQ-RQ-Q', csv_container = None, no_of_fits = 100, save_fig = False):
         start = time.time()
         print('running on ', sys.version)
         if circuit == 'R-RQ-RQ-Q':
@@ -552,7 +553,7 @@ class mpt_data:
                     "fit_n3":self.fit_n,})
             out_name = 'fitted_' + self.data[0][:-4]
             end = time.time()
-            print('time to calculate: ',end - start)
+            print('time to calculate: ',end - start, ' seconds')
             if csv_container:
                 self.fitted.to_csv(csv_container+out_name, sep='\t')
                 return self.fitted

@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "c:\\Users\\cjang.WILDCAT\\Desktop\\eis\\EIS_Manager\\utils\\ENV_DIR\\Scripts\\python.exe"
+    "python.pythonPath": "Scripts\\python.exe",
+    "git.ignoreLimitWarning": true,
+    "python.dataScience.jupyterServerURI": "local"
 }
