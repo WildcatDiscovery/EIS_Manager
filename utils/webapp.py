@@ -10,7 +10,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './uploads/'
 app.config['ALLOWED_EXTENSIONS'] = set(['mpt'])
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
@@ -314,6 +313,16 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
       return json.loads(result.replace('\\n', '\\\\n'))
    else:
       return ("Error, not a Masking Function")
+
+@app.route('/eisfitter/fit/<mpt>/<mask>/<bad_inds>')
+def main_guesser(mpt, mask, bad_inds):
+   try:
+      if bad_inds == '[]':
+         return mask_mpt_guesser(mpt,mask)
+      else:
+         return recal_mpt_guesser(mpt, mask,bad_inds)
+   except:
+      return str(mpt) + str(mask) + str(bad_inds)   
 
 if __name__ == '__main__':
    app.secret_key = 'asdw34gegasdgf'
