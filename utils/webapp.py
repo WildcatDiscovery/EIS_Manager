@@ -47,7 +47,7 @@ def upload():
 
 @app.route('/display_mpt/<mpt>', methods = ['GET', 'POST'])
 def display_mpt(mpt):
-   ex_mpt = mpt_data(r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\", [mpt])
+   ex_mpt = mpt_data([mpt])
    df = ex_mpt.df_raw[['f', 're', 'im']]
    result = df.to_json(orient="index",indent = 2)
    return json.loads(result.replace('\\n', '\\\\n'))

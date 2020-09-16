@@ -171,8 +171,7 @@ def cir_RQ(w, R='none', Q='none', n='none', fs='none'):
 
 
 class mpt_data:
-    def __init__(self, path, data, cycle='off', mask=['none','none'], gph_width = 6.4, gph_height = 4.8):
-        self.path = path
+    def __init__(self, data, cycle='off', mask=['none','none'], gph_width = 6.4, gph_height = 4.8):
         self.data = data
         self.width = gph_width
         self.height = gph_height
@@ -836,7 +835,7 @@ def cir_RsRQRQ2(w, Rs, R='none', Q='none', n='none', fs='none', R2='none', Q2='n
 def cir_RsRQRQQ(w, Rs,Q, n, R1='none', Q1='none', n1='none', fs1='none', R2='none', Q2='none', n2='none', fs2='none'):
     return Rs + cir_RQ(w, R=R1, Q=Q1, n=n1, fs=fs1) + cir_RQ(w, R=R2, Q=Q2, n=n2, fs=fs2) + elem_Q(w,Q,n)
 
-
+#OUTDATED FUNCTION
 def full_graphing(path, lst = None):
     bad_mpts = []
     if not lst:
@@ -868,7 +867,7 @@ def full_graphing(path, lst = None):
             if bad_mpts:
                 print(bad_mpts, " are a list of bad mpts. You may want to take a closer look at them")
                 
-
+#OUTDATED FUNCTION
 def the_ringer(path, single_file):
         print('WHOLE THING')
         ex_mpt = mpt_data(path,[single_file])
@@ -942,6 +941,7 @@ def auto_fit(path, entry, csv_container = None):
     to_export = pd.concat(fitteds)
     return to_export
 """
+#OUTDATED FUNCTION
 def path_listing(path):
     path_files = [f for f in listdir(path) if isfile(join(path, f)) if f[-3:] == "mpt"]
     for i in path_files:
