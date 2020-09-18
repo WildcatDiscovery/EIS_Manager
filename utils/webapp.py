@@ -28,7 +28,7 @@ def welcome():
 def upload_file():
    return render_template('upload_view.html')
 	
-@app.route('/uploader', methods=['GET','POST'])
+@app.route('/index', methods=['GET','POST'])
 def upload():
    if request.method == "POST":
       uploaded_files = request.files.getlist("file[]")
@@ -54,7 +54,7 @@ def display_mpt(mpt):
 
 @app.route('/plot_mpt/<mpt>')
 def plot(mpt):
-   ex_mpt = mpt_data(r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\", [mpt])
+   ex_mpt = mpt_data([mpt])
    xs = ex_mpt.df_raw['re']
    ys = ex_mpt.df_raw['im']
    title = ex_mpt.data[0]
@@ -78,9 +78,9 @@ def plot(mpt):
 
 @app.route('/mask_mpt/<mpt>/<mask>')
 def mask_mpt(mpt, mask):
-   path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
+   #path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
    data = mpt
-   ex_mpt = mpt_data(path, [mpt])
+   ex_mpt = mpt_data([data])
    if mask == str(1):
       #print(ex_mpt.fast_mask())
       masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
@@ -114,13 +114,13 @@ def mask_mpt(mpt, mask):
 
 @app.route('/recal_mpt/<mpt>/<mask>/<bad_inds>')
 def recal_mpt(mpt, mask, bad_inds):
-   path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
+   #path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
    data = mpt
-   ex_mpt = mpt_data(path, [mpt])
+   ex_mpt = mpt_data([mpt])
    pre_inds = bad_inds.strip('][').split(',') 
    edited_inds = [int(i) for i in pre_inds]
    if mask == str(1):
-      masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
+      masked_mpt = mpt_data([data], mask = ex_mpt.fast_mask())
       for ind in edited_inds:
         if ind == "[":
             continue
@@ -133,7 +133,7 @@ def recal_mpt(mpt, mask, bad_inds):
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(2):
       #print(ex_mpt.masker0())
-      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
+      masked_mpt = mpt_data([data], mask = ex_mpt.masker0())
       for ind in edited_inds:
         if ind == "[":
             continue
@@ -146,7 +146,7 @@ def recal_mpt(mpt, mask, bad_inds):
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(3):
       #print(ex_mpt.masker())
-      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
+      masked_mpt = mpt_data([data], mask = ex_mpt.masker())
       for ind in edited_inds:
         if ind == "[":
             continue
@@ -159,7 +159,7 @@ def recal_mpt(mpt, mask, bad_inds):
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(4):
       #print(ex_mpt.masker())
-      masked_mpt = mpt_data(path, [data])
+      masked_mpt = mpt_data([data])
       for ind in edited_inds:
         if ind == "[":
             continue
@@ -175,126 +175,105 @@ def recal_mpt(mpt, mask, bad_inds):
    
 @app.route('/mask_mpt_guesser/<mpt>/<mask>')
 def mask_mpt_guesser(mpt, mask):
-   path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
+   #path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
    data = mpt
-   ex_mpt = mpt_data(path, [mpt])
+   ex_mpt = mpt_data([mpt])
    re = []
    im = []
-   if mpt in session:
-      return session[mpt]
-   else:
-      if mask == str(1):
-         masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
-         masked_mpt.guesser(no_of_fits=500)
-         for i in masked_mpt.circuit_fit[0]:
-            re.append(i.real)
-            im.append(-i.imag)
-         df_dict = {"REAL":re, "IMAGINARY":im}
-         df = pd.DataFrame.from_dict(df_dict)
-         result = df.to_json(orient="index",indent = 2)
-         session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
-         return json.loads(result.replace('\\n', '\\\\n'))
-      elif mask == str(2):
-         masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
-         masked_mpt.guesser(no_of_fits=500)
-         for i in masked_mpt.circuit_fit[0]:
-            re.append(i.real)
-            im.append(-i.imag)
-         df_dict = {"REAL":re, "IMAGINARY":im}
-         df = pd.DataFrame.from_dict(df_dict)
-         result = df.to_json(orient="index",indent = 2)
-         session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
-         return json.loads(result.replace('\\n', '\\\\n'))
-      elif mask == str(3):
-         masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
-         masked_mpt.guesser(no_of_fits=500)
-         for i in masked_mpt.circuit_fit[0]:
-            re.append(i.real)
-            im.append(-i.imag)
-         df_dict = {"REAL":re, "IMAGINARY":im}
-         df = pd.DataFrame.from_dict(df_dict)
-         result = df.to_json(orient="index",indent = 2)
-         session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
-         return json.loads(result.replace('\\n', '\\\\n'))
-      elif mask == str(4):
-         masked_mpt = mpt_data(path, [data])
-         masked_mpt.guesser(no_of_fits=500)
-         for i in masked_mpt.circuit_fit[0]:
-            re.append(i.real)
-            im.append(-i.imag)
-         df_dict = {"REAL":re, "IMAGINARY":im}
-         df = pd.DataFrame.from_dict(df_dict)
-         result = df.to_json(orient="index",indent = 2)
-         session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
-         return json.loads(result.replace('\\n', '\\\\n'))
-      else:
-         return ("Error, not a Masking Function")
-
-@app.route('/recal_mpt_guesser/<mpt>/<mask>/<bad_inds>')
-def recal_mpt_guesser(mpt, mask,bad_inds):
-   path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
-   data = mpt
-   ex_mpt = mpt_data(path, [mpt])
-   re = []
-   im = []
-   pre_inds = bad_inds.strip('][').split(',') 
-   edited_inds = [int(i) for i in pre_inds]
    if mask == str(1):
       masked_mpt = mpt_data(path, [data], mask = ex_mpt.fast_mask())
-      for ind in edited_inds:
-         if ind == "[":
-            continue
-         elif ind == "]":
-            continue
-         else:
-            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
       masked_mpt.guesser(no_of_fits=500)
       for i in masked_mpt.circuit_fit[0]:
          re.append(i.real)
          im.append(-i.imag)
       df_dict = {"REAL":re, "IMAGINARY":im}
-      df = pd.DataFrame.from_dict(df_dict)
+      df = pd.DataFrame({'file':masked_mpt.data,
+                     'fit_Rs':masked_mpt.fit_Rs,
+                  "fit_R1":masked_mpt.fit_R1,
+                  "fit_n1":masked_mpt.fit_n1,
+                  "fit_Q1":masked_mpt.fit_Q1,                   
+                  "fit_R2":masked_mpt.fit_R2,
+                  "fit_n2":masked_mpt.fit_n2,
+                  "fit_Q2":masked_mpt.fit_Q2,
+                  "fit_Q3":masked_mpt.fit_Q,
+                  "fit_n3":masked_mpt.fit_n,})
       result = df.to_json(orient="index",indent = 2)
       session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(2):
       masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker0())
-      for ind in edited_inds:
-         if ind == "[":
-            continue
-         elif ind == "]":
-            continue
-         else:
-            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
       masked_mpt.guesser(no_of_fits=500)
       for i in masked_mpt.circuit_fit[0]:
          re.append(i.real)
          im.append(-i.imag)
       df_dict = {"REAL":re, "IMAGINARY":im}
-      df = pd.DataFrame.from_dict(df_dict)
+      df = pd.DataFrame({'file':masked_mpt.data,
+                     'fit_Rs':masked_mpt.fit_Rs,
+                  "fit_R1":masked_mpt.fit_R1,
+                  "fit_n1":masked_mpt.fit_n1,
+                  "fit_Q1":masked_mpt.fit_Q1,                   
+                  "fit_R2":masked_mpt.fit_R2,
+                  "fit_n2":masked_mpt.fit_n2,
+                  "fit_Q2":masked_mpt.fit_Q2,
+                  "fit_Q3":masked_mpt.fit_Q,
+                  "fit_n3":masked_mpt.fit_n,})
       result = df.to_json(orient="index",indent = 2)
       session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(3):
-      masked_mpt = mpt_data(path, [data], mask = ex_mpt.masker())
-      for ind in edited_inds:
-         if ind == "[":
-            continue
-         elif ind == "]":
-            continue
-         else:
-            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
+      masked_mpt = mpt_data([data], mask = ex_mpt.masker())
       masked_mpt.guesser(no_of_fits=500)
       for i in masked_mpt.circuit_fit[0]:
          re.append(i.real)
          im.append(-i.imag)
       df_dict = {"REAL":re, "IMAGINARY":im}
-      df = pd.DataFrame.from_dict(df_dict)
+      df = pd.DataFrame({'file':masked_mpt.data,
+                     'fit_Rs':masked_mpt.fit_Rs,
+                  "fit_R1":masked_mpt.fit_R1,
+                  "fit_n1":masked_mpt.fit_n1,
+                  "fit_Q1":masked_mpt.fit_Q1,                   
+                  "fit_R2":masked_mpt.fit_R2,
+                  "fit_n2":masked_mpt.fit_n2,
+                  "fit_Q2":masked_mpt.fit_Q2,
+                  "fit_Q3":masked_mpt.fit_Q,
+                  "fit_n3":masked_mpt.fit_n,})
       result = df.to_json(orient="index",indent = 2)
       session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
       return json.loads(result.replace('\\n', '\\\\n'))
    elif mask == str(4):
       masked_mpt = mpt_data(path, [data])
+      masked_mpt.guesser(no_of_fits=500)
+      for i in masked_mpt.circuit_fit[0]:
+         re.append(i.real)
+         im.append(-i.imag)
+      df_dict = {"REAL":re, "IMAGINARY":im}
+      df = pd.DataFrame({'file':masked_mpt.data,
+                     'fit_Rs':masked_mpt.fit_Rs,
+                  "fit_R1":masked_mpt.fit_R1,
+                  "fit_n1":masked_mpt.fit_n1,
+                  "fit_Q1":masked_mpt.fit_Q1,                   
+                  "fit_R2":masked_mpt.fit_R2,
+                  "fit_n2":masked_mpt.fit_n2,
+                  "fit_Q2":masked_mpt.fit_Q2,
+                  "fit_Q3":masked_mpt.fit_Q,
+                  "fit_n3":masked_mpt.fit_n,})
+      result = df.to_json(orient="index",indent = 2)
+      session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
+      return json.loads(result.replace('\\n', '\\\\n'))
+   else:
+      return ("Error, not a Masking Function")
+
+@app.route('/recal_mpt_guesser/<mpt>/<mask>/<bad_inds>')
+def recal_mpt_guesser(mpt, mask,bad_inds):
+   #path = r"C:\Users\cjang.WILDCAT\Desktop\eis\eis_manager\data\\"
+   data = mpt
+   ex_mpt = mpt_data([mpt])
+   re = []
+   im = []
+   pre_inds = bad_inds.strip('][').split(',') 
+   edited_inds = [int(i) for i in pre_inds]
+   if mask == str(1):
+      masked_mpt = mpt_data([data], mask = ex_mpt.fast_mask())
       for ind in edited_inds:
          if ind == "[":
             continue
@@ -302,15 +281,37 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
             continue
          else:
             masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
-      masked_mpt.guesser(no_of_fits=500)
-      for i in masked_mpt.circuit_fit[0]:
-         re.append(i.real)
-         im.append(-i.imag)
-      df_dict = {"REAL":re, "IMAGINARY":im}
-      df = pd.DataFrame.from_dict(df_dict)
-      result = df.to_json(orient="index",indent = 2)
-      session[masked_mpt.data[0]] = json.loads(result.replace('\\n', '\\\\n'))
-      return json.loads(result.replace('\\n', '\\\\n'))
+      return mask_mpt_guesser(masked_mpt, 1)
+   elif mask == str(2):
+      masked_mpt = mpt_data([data], mask = ex_mpt.masker0())
+      for ind in edited_inds:
+         if ind == "[":
+            continue
+         elif ind == "]":
+            continue
+         else:
+            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
+      return mask_mpt_guesser(masked_mpt, 2)
+   elif mask == str(3):
+      masked_mpt = mpt_data([data], mask = ex_mpt.masker())
+      for ind in edited_inds:
+         if ind == "[":
+            continue
+         elif ind == "]":
+            continue
+         else:
+            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
+      return mask_mpt_guesser(masked_mpt, 3)
+   elif mask == str(4):
+      masked_mpt = mpt_data([data])
+      for ind in edited_inds:
+         if ind == "[":
+            continue
+         elif ind == "]":
+            continue
+         else:
+            masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
+      return mask_mpt_guesser(masked_mpt, 4)
    else:
       return ("Error, not a Masking Function")
 
@@ -325,5 +326,5 @@ def main_guesser(mpt, mask, bad_inds):
       return str(mpt) + str(mask) + str(bad_inds)   
 
 if __name__ == '__main__':
-   app.secret_key = 'asdw34gegasdgf'
+   app.secret_key = 'asdfaf23'
    app.run(debug = True)
