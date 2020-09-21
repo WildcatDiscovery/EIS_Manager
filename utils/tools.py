@@ -339,7 +339,7 @@ class mpt_data:
         else:
             ax.set_xlabel("Z' [$\Omega$]",fontsize=40)
             ax.set_ylabel("-Z'' [$\Omega$]",fontsize=40)
-            ax.plot(self.df[0].re, self.df[0].im, marker='o', ms=4, lw=2, color=colors[i], ls='-', markersize = 8, label='nvyquist_data')
+            ax.plot(self.df[0].re, self.df[0].im, marker='o', lw=2, color=colors[i], ls='-', markersize = 8, label='nvyquist_data')
         if fitting == 'on':
             real = []
             imag = []
@@ -895,7 +895,6 @@ def the_ringer(path, single_file):
 """
 def auto_fit(path, entry, csv_container = None):
     bad_mpts = []
-
     fitteds = []
     if type(entry) == list:
         for i in entry:
