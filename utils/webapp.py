@@ -185,7 +185,7 @@ def mask_mpt_guesser(mpt, mask):
 
    if mask == str(1):
       masked_mpt = mpt_data([data], mask = ex_mpt.fast_mask())
-      masked_mpt.guesser(no_of_fits=500)
+      masked_mpt.guesser(no_of_fits=1)
       for i in masked_mpt.circuit_fit[0]:
          re.append(i.real)
          im.append(-i.imag)
@@ -275,7 +275,7 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
             continue
          else:
             masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
-      masked_mpt.guesser(no_of_fits=500)
+      masked_mpt.guesser(no_of_fits=1)
       for i in masked_mpt.circuit_fit[0]:
          re.append(i.real)
          im.append(-i.imag)
@@ -372,24 +372,27 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
 
 @app.route('/eisfitter/fit/<mpt>/<mask>/<bad_inds>')
 def main_guesser(mpt, mask, bad_inds):
-   try:
-      if bad_inds == '[]':
-         return mask_mpt_guesser(mpt,mask)
-      else:
-         return recal_mpt_guesser(mpt, mask,bad_inds)
-   except:
-      return str(mpt) + str(mask) + str(bad_inds)   
-
+   if bad_inds == '[]':
+      df = mask_mpt_guesser(mpt,mask)
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+   else:
+      df = recal_mpt_guesser(mpt, mask,bad_inds)
+      result = df.to_json(orient="index",indent = 2)
+      return json.loads(result.replace('\\n', '\\\\n'))
+  
 @app.route('/eisfitter/fit')
 def auto_guesser():
-   try:
-      to_return = {}
-      for single_file in session['filenames']:
-         print('fitting ' + single_file)
-         to_return.update(main_guesser(single_file, '1', '[]'))
-      return str(to_return)
-   except:
-      return "Files could not be fit"
+   dict_to_return = {}
+   counter = 0
+   for single_file in session['filenames']:
+      counter += 1 
+      to_add = {counter:main_guesser(single_file, '1', '[]')}
+      dict_to_return.update(to_add)
+   df = pd.DataFrame.from_dict(dict_to_return)
+   result = df.to_json(orient="index",indent = 2)
+   return json.loads(result.replace('\\n', '\\\\n'))
+  
 
 if __name__ == '__main__':
    app.secret_key = 'asdw34gegasdgf'
