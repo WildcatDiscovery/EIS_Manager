@@ -372,14 +372,16 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
 
 @app.route('/eisfitter/fit/<mpt>/<mask>/<bad_inds>')
 def main_guesser(mpt, mask, bad_inds):
+   dict_to_return = {}
    if bad_inds == '[]':
       df = mask_mpt_guesser(mpt,mask)
-      #df.index = df['file']
-      result = df.to_json(orient="index",indent = 2)
+      df.index = df['file']
+      #return str(df)
+      result = df.to_json(orient = 'index', indent = 2)
       return json.loads(result.replace('\\n', '\\\\n'))
    else:
       df = recal_mpt_guesser(mpt, mask,bad_inds)
-      #df.index = df['file']
+      df.index = df['file']
       result = df.to_json(orient="index",indent = 2)
       return json.loads(result.replace('\\n', '\\\\n'))
   
