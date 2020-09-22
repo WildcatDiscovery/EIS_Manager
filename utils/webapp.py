@@ -374,25 +374,27 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
 def main_guesser(mpt, mask, bad_inds):
    if bad_inds == '[]':
       df = mask_mpt_guesser(mpt,mask)
+      #df.index = df['file']
       result = df.to_json(orient="index",indent = 2)
       return json.loads(result.replace('\\n', '\\\\n'))
    else:
       df = recal_mpt_guesser(mpt, mask,bad_inds)
+      #df.index = df['file']
       result = df.to_json(orient="index",indent = 2)
       return json.loads(result.replace('\\n', '\\\\n'))
   
 @app.route('/eisfitter/fit')
 def auto_guesser():
    dict_to_return = {}
-   counter = 0
    for single_file in session['filenames']:
-      counter += 1 
-      to_add = {counter:main_guesser(single_file, '1', '[]')}
+      to_add = {single_file:list(main_guesser(single_file, '1', '[]').values())[0]}
       dict_to_return.update(to_add)
    df = pd.DataFrame.from_dict(dict_to_return)
-   result = df.to_json(orient="index",indent = 2)
+   #return str(dict_to_return)
+   #result = df.reset_index().to_json(orient='records', indent = 2)
+   result = df.to_json(indent = 2)
    return json.loads(result.replace('\\n', '\\\\n'))
-  
+   #return df.to_string(index=False)
 
 if __name__ == '__main__':
    app.secret_key = 'asdw34gegasdgf'
