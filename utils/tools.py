@@ -28,7 +28,7 @@ pd.set_option('display.max_columns', None)
 #Plotting
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-mpl.use("Agg")
+#mpl.use("Agg")
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import seaborn as sns
 import matplotlib.ticker as mtick

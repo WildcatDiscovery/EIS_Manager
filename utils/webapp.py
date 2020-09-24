@@ -185,7 +185,7 @@ def mask_mpt_guesser(mpt, mask):
 
    if mask == str(1):
       masked_mpt = mpt_data([data], mask = ex_mpt.fast_mask())
-      masked_mpt.guesser(no_of_fits=1)
+      masked_mpt.guesser(no_of_fits=500)
       for i in masked_mpt.circuit_fit[0]:
          re.append(i.real)
          im.append(-i.imag)
@@ -275,7 +275,7 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
             continue
          else:
             masked_mpt.df[0] = masked_mpt.df[0].drop(ind, axis = 0)
-      masked_mpt.guesser(no_of_fits=1)
+      masked_mpt.guesser(no_of_fits=500)
       for i in masked_mpt.circuit_fit[0]:
          re.append(i.real)
          im.append(-i.imag)
