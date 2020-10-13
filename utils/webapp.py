@@ -370,7 +370,7 @@ def recal_mpt_guesser(mpt, mask,bad_inds):
    else:
       return ("Error, not a Masking Function")
 
-@app.route('/eisfitter/fit/<mpt>/<mask>/<bad_inds>')
+@app.route('/local/eisfitter/fit/<mpt>/<mask>/<bad_inds>')
 def main_guesser(mpt, mask, bad_inds):
    dict_to_return = {}
    if bad_inds == '[]':
@@ -385,7 +385,7 @@ def main_guesser(mpt, mask, bad_inds):
       result = df.to_json(orient="index",indent = 2)
       return json.loads(result.replace('\\n', '\\\\n'))
   
-@app.route('/eisfitter/fit')
+@app.route('/local/eisfitter/fit')
 def auto_guesser():
    dict_to_return = {}
    for single_file in session['filenames']:
