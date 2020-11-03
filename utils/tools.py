@@ -387,13 +387,21 @@ class mpt_data:
             self.fit_Q1 = []
             for i in range(len(self.df)):
                 if "'fs1'" in str(self.Fit[i].params.keys()):
-                    self.circuit_fit.append(cir_RsRQQ(w=self.df[i].w, Rs=self.Fit[i].params.get('Rs').value, n=self.Fit[i].params.get('n').value, R1=self.Fit[i].params.get('R1').value, Q=self.Fit[i].params.get('Q').value, n1=self.Fit[i].params.get('n1').value, fs1=self.Fit[i].params.get('fs1').value))
+                    self.circuit_fit.append(cir_RsRQQ(w=self.df[i].w, Rs=self.Fit[i].params.get('Rs').value, Q=self.Fit[i].params.get('Q').value, n=self.Fit[i].params.get('n').value, R1=self.Fit[i].params.get('R1').value, Q1='none', n1=self.Fit[i].params.get('n1').value, fs1=self.Fit[i].params.get('fs1').value))
                     self.fit_Rs.append(self.Fit[i].params.get('Rs').value)
                     self.fit_Q.append(self.Fit[i].params.get('Q').value)
                     self.fit_n.append(self.Fit[i].params.get('n').value)
                     self.fit_R1.append(self.Fit[i].params.get('R1').value)
                     self.fit_n1.append(self.Fit[i].params.get('n1').value)
                     self.fit_fs1.append(self.Fit[i].params.get('fs1').value)
+                elif "'Q1'" in str(self.Fit[i].params.keys()):
+                    self.circuit_fit.append(cir_RsRQQ(w=self.df[i].w, Rs=self.Fit[i].params.get('Rs').value, Q=self.Fit[i].params.get('Q').value, n=self.Fit[i].params.get('n').value, R1=self.Fit[i].params.get('R1').value, Q1=self.Fit[i].params.get('Q1').value, n1=self.Fit[i].params.get('n1').value, fs1='none'))
+                    self.fit_Rs.append(self.Fit[i].params.get('Rs').value)
+                    self.fit_Q.append(self.Fit[i].params.get('Q').value)
+                    self.fit_n.append(self.Fit[i].params.get('n').value)
+                    self.fit_R1.append(self.Fit[i].params.get('R1').value)
+                    self.fit_n1.append(self.Fit[i].params.get('n1').value)
+                    self.fit_Q1.append(self.Fit[i].params.get('Q1').value)
         elif circuit == 'R-RQ-RQ':
             self.fit_Rs = []
             self.fit_R = []
@@ -591,6 +599,53 @@ class mpt_data:
                 return self.fitted
             self.mpt_plot(fitting = "on")
             return self.fitted
+        elif circuit == "R-RQ-Q":
+            init_guesses = []
+            param_list = []
+            for i in range(no_of_fits):
+                #print(i)
+                Rs_guess = min(self.df[0]['re'])
+                R1_guess = max(self.df[0]['re'])//4
+                n1_guess = random.uniform(0, 1)
+                q1_guess = random.uniform(0, .001)
+                #R2_guess = 2*max(self.df[0]['re'])//4
+                n2_guess = random.uniform(0, 1)
+                q2_guess = random.uniform(0, .001)
+                #Q3_guess = random.uniform(0, .001)
+                #n3_guess = random.uniform(0, 1)
+                params = Parameters()
+                params.add('Rs', value=Rs_guess, min=Rs_guess*.001, max=Rs_guess*10)
+                params.add('R1', value=R1_guess, min=R1_guess*.001, max=R1_guess*10)
+                params.add('n', value=n1_guess, min=0, max=1)
+                #params.add('fs1', value=fs1_guess, min=10**-2, max=10**10)
+                params.add('Q', value=q1_guess, min=0, max=.001)
+                #params.add('R2', value=R2_guess, min=R2_guess*.001, max=R2_guess*10)
+                params.add('n1', value=n2_guess, min=.01, max=1)
+                #params.add('fs2', value=fs2_guess, min=fs2_guess**.1, max=10**10)
+                params.add('Q1', value=q2_guess, min=0, max=.001)
+                #params.add('Q', value=Q3_guess, min=0, max=.001)
+                #params.add('n', value=n3_guess, min=.01, max=1)
+                param_list.append(params)
+                self.mpt_fit(params, circuit = 'R-RQ-Q', maxfev = 500)
+                init_guesses.append(self.low_error)
+            params = param_list[init_guesses.index(min(init_guesses))]
+            self.mpt_fit(params, circuit = 'R-RQ-Q',maxfev = 2000)
+            #self.mpt_plot(fitting = 'on', save_fig = save_fig)
+            self.fitted = pd.DataFrame({'file':self.data,
+                    'fit_Rs':self.fit_Rs,
+                    "fit_R1":self.fit_R1,
+                    "fit_n1":self.fit_n,
+                    "fit_Q1":self.fit_Q,                   
+                   "fit_n2":self.fit_n1,
+                    "fit_Q2":self.fit_Q1})
+            out_name = 'fitted_' + self.data[0][:-4]
+            end = time.time()
+            print('time to calculate: ',end - start, ' seconds')
+            if csv_container:
+                self.fitted.to_csv(csv_container+out_name, sep='\t')
+                return self.fitted
+            self.mpt_plot(fitting = "on")
+            return self.fitted
     
     #Guess and Plot; who knows if i'll use it
     def guess_and_plot(self, csv_container = None, mask = None):
@@ -603,6 +658,11 @@ class mpt_data:
             self.mpt_plot(fitting = 'on')
 
 def cir_RsRQQ_fit(params, w):
+    '''
+    Fit Function: -Rs-RQ-Q-
+    
+    See cir_RsRQQ() for details
+    '''
     Rs = params['Rs']
     Q = params['Q']
     n = params['n']
@@ -765,6 +825,7 @@ def cir_RsRQQ(w, Rs, Q, n, R1='none', Q1='none', n1='none', fs1='none'):
     Q1 = Constant phase element in (RQ) circuit [s^n/ohm]
     n1 = Constant phase elelment exponent in (RQ) circuit [-]
     fs1 = Summit frequency of RQ circuit [Hz]
+
     Q = Constant phase element of series Q [s^n/ohm]
     n = Constant phase elelment exponent of series Q [-]
     '''
