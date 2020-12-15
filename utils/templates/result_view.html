@@ -1,27 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
  <body>
-  <div class="container">
-   <div class="header">
-    <h3 class="text-muted">Uploaded files</h3>
-   </div>
-   <hr/>
-   <div>
-   This is a list of the files you just uploaded, click on them to view Nvyquist Impedance Dataframe
    <ul>
     {% for file in filenames %}
      <li><a href="{{url_for('display_mpt', mpt=file)}}">{{file}}</a></li>
     {% endfor %}
    </ul>
-   <hr/>
-   </div>
-  </div>
-
-  <p><a href="{{ url_for('upload') }}">Go back to all uploads</a></p>
 <form action = "http://localhost:5000/upload">
     <p><input type = "submit" value = "UPLOAD ANOTHER SET OF MPT FILES" /></p>
 
-    
+
  </body>
 </html>
